@@ -1,0 +1,177 @@
+[
+    {
+        "id": "coins",
+        "name": "Coins",
+        "sprite": "coins",
+        "stack": 100
+    },
+
+    {
+        "id": "phat_red",
+        "name": "Red partyhat",
+        "sprite": "phat/red",
+        "equip": {
+            "slot": "helm",
+            "sprite": ["phat", 0]
+        }
+    },
+
+    {
+        "id": "phat_yellow",
+        "name": "Yellow partyhat",
+        "sprite": "phat/yellow",
+        "equip": {
+            "slot": "helm",
+            "sprite": ["phat", 1]
+        }
+    },
+
+    {
+        "id": "phat_blue",
+        "name": "Blue partyhat",
+        "sprite": "phat/blue",
+        "equip": {
+            "slot": "helm",
+            "sprite": ["phat", 2]
+        }
+    },
+
+    {
+        "id": "phat_purple",
+        "name": "Purple partyhat",
+        "sprite": "phat/purple",
+        "equip": {
+            "slot": "helm",
+            "sprite": ["phat", 3]
+        }
+    },
+
+    {
+        "id": "phat_green",
+        "name": "Green partyhat",
+        "sprite": "phat/green",
+        "equip": {
+            "slot": "helm",
+            "sprite": ["phat", 4]
+        }
+    },
+
+    {
+        "id": "phat_white",
+        "name": "White partyhat",
+        "sprite": "phat/white",
+        "equip": {
+            "slot": "helm",
+            "sprite": ["phat", 5]
+        }
+    },
+
+    {
+        "id": "axe_crude",
+        "name": "Crude axe",
+        "sprite": "axe"
+    },
+
+    {
+        "id": "pickaxe_crude",
+        "name": "Crude pickaxe",
+        "sprite": "pickaxe"
+    }, 
+
+    {
+        "id": "ore_copper",
+        "name": "Copper ore",
+        "sprite": "copper"
+    },
+
+    {
+        "id": "ingot_copper",
+        "name": "Copper ingot",
+        "sprite": "copper_ingot"
+    },
+
+    {
+        "id": "sword_copper",
+        "name": "Copper sword",
+        "sprite": "copper_sword",
+        "equip": {
+            "slot": "sword",
+
+            "bonuses": {
+                "accuracy": 5,
+                "damage": 5
+            }
+        }
+    },
+
+    {
+        "id": "helm_copper",
+        "name": "Copper helmet",
+        "sprite": "copper_helm",
+        "equip": {
+            "slot": "helm",
+            "sprite": ["copper", 1],
+
+            "bonuses": {
+                "defence": 1
+            }
+        }
+    },
+
+    {
+        "id": "plate_copper",
+        "name": "Copper platebody",
+        "sprite": "copper_plate",
+        "equip": {
+            "slot": "plate",
+            "sprite": ["copper", 2],
+
+            "bonuses": {
+                "speed_move": -1,
+                "defence": 4
+            }
+        }
+    },
+
+    {
+        "id": "legs_copper",
+        "name": "Copper platelegs",
+        "sprite": "copper_legs",
+        "equip": {
+            "slot": "legs",
+            "sprite": ["copper", 3],
+
+            "bonuses": {
+                "speed_move": -1,
+                "defence": 2
+            }
+        }
+    },
+
+    {
+        "id": "shield_copper",
+        "name": "Copper shield",
+        "sprite": "copper_shield",
+        "equip": {
+            "slot": "shield",
+            "sprite": ["copper", 0],
+
+            "bonuses": {
+                "defence": 3
+            }
+        }
+    },
+
+    {
+        "id": "apple",
+        "name": "Apple",
+        "sprite": "apple"
+    },
+
+    {
+        "id": "log_common",
+        "name": "Log",
+        "sprite": "log"
+    }
+
+]

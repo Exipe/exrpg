@@ -1,0 +1,30 @@
+[
+    {
+        "id": "cat_white",
+        "name": "Cat",
+        "sprite": "cat",
+        "walkRadius": 0,
+
+        "options": [
+            "Pet"
+        ]
+    },
+
+    {
+        "id": "goblin_weak",
+        "name": "Goblin",
+        "sprite": "goblin",
+        "walkRadius": 3
+    },
+
+    {
+        "id": "t_t_c",
+        "name": "Tony Tony Copper",
+        "sprite": "tony",
+        "walkRadius": 4,
+
+        "options": [
+            "Talk-to"
+        ]
+    }
+]

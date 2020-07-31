@@ -1,0 +1,25 @@
+
+<!doctype html>
+<html>
+    <head>
+        <title>ExRPG - Development</title>
+        <link href="main.css" rel="stylesheet" />
+        <link href="menu.css" rel="stylesheet" />
+        <link href="favicon.png" rel="icon" type="image/png" />
+    </head>
+
+    <body>
+        <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+        <div id="container"></div>
+
+        <script>
+            window.protocol = "ws";
+            window.address = "localhost";
+            window.port = 80;
+        </script>
+
+        <script src="./script.js"></script>
+    </body>
+</html>

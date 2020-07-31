@@ -1,0 +1,33 @@
+1.3
+- Stackable items
+- Commands
+- Variable movement speed
+- Attributes (visible in equipment screen)
+- Equipment bonuses
+- Left click to interact with NPCs
+- Fixed a bug where equipment would not display
+- Made path finding more consistent
+- Fixed a bug where NPCs would sometimes no-clip
+
+1.2
+- Following players
+- Interacting with NPCs
+- Dialogues
+- Registering/Logging in
+- Saving progress
+
+1.1.1
+- Players can be clicked through again
+- Stopped generating an error when clicking an object without options
+
+1.1
+- Interacting with objects
+- Search crates
+- Chop wood
+- Mine copper
+
+1.0.1
+- Enter to focus on chat
+- Items have names
+- Left click to take items from the ground
+- Fixed a bug where items would remain after leaving a map

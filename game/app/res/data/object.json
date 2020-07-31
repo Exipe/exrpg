@@ -1,0 +1,69 @@
+[
+    {
+        "id": "tree_common",
+        "name": "Tree",
+        "sprite": "tree",
+
+        "options": [
+            "Chop down"
+        ]
+    },
+
+    {
+        "id": "stump_common",
+        "name": "Tree stump",
+        "sprite": "stump"
+    },
+
+    {
+        "id": "ore_copper",
+        "name": "Copper ore",
+        "sprite": "copper",
+        "width": 2,
+
+        "options": [
+            "Mine"
+        ]
+    },
+
+    {
+        "id": "ore_depleted",
+        "name": "Rubble",
+        "sprite": "rubble",
+        "width": 2
+    },
+
+    {
+        "id": "anvil",
+        "name": "Anvil",
+        "sprite": "anvil"
+    },
+
+    {
+        "id": "furnace",
+        "name": "Furnace",
+        "sprite": "furnace",
+        "width": 2
+    },
+
+    {
+        "id": "crate_small",
+        "name": "Crate",
+        "sprite": "crate",
+
+        "options": [
+            "Search"
+        ]
+    },
+
+    {
+        "id": "car",
+        "name": "Car",
+        "sprite": "car",
+        "width": 2,
+
+        "options": [
+            "Drive"
+        ]
+    }
+]
