@@ -10,7 +10,7 @@ export interface EquipmentProps {
 }
 
 interface EquipmentSlotProps {
-    id: string,
+    slot: string,
     item: ItemData,
     unequip: (id: string) => void
 }
@@ -19,15 +19,17 @@ function EquipmentSlot(props: EquipmentSlotProps) {
     const item = props.item
 
     let style = {} as React.CSSProperties
-    let onClick = () => {}
+    let onClick: () => void
 
     if(item != null) {
         style.backgroundImage = `url('${ item.spritePath }')`
         onClick = () => { props.unequip(item.id) }
+    } else {
+        style.backgroundImage = `url('ui/equip/${ props.slot }.png')`
+        onClick = () => {}
     }
 
     return <div
-        id={props.id}
         style={style}
         onClick={onClick}
     />
@@ -83,18 +85,22 @@ export function Equipment(props: EquipmentProps) {
         }
     })
 
+    const createSlot = (slot: string) => (
+        <EquipmentSlot slot={slot} item={equippedItems.get(slot)} unequip={ id => unequip(id, slot) } />
+    )
+
     return <div id="equipment">
         <div id="equipmentGrid">
             <div /> 
-            <EquipmentSlot id="helmSlot" item={equippedItems.helm} unequip={ id => unequip(id, "helm") } />
+            {createSlot("helm")}
             <div />
 
-            <EquipmentSlot id="swordSlot" item={equippedItems.sword} unequip={ id => unequip(id, "sword") } />
-            <EquipmentSlot id="plateSlot" item={equippedItems.plate} unequip={ id => unequip(id, "plate") } />
-            <EquipmentSlot id="shieldSlot" item={equippedItems.shield} unequip={ id => unequip(id, "shield") } />
+            {createSlot("sword")}
+            {createSlot("plate")}
+            {createSlot("shield")}
 
             <div /> 
-            <EquipmentSlot id="legsSlot" item={equippedItems.legs} unequip={ id => unequip(id, "legs") } />
+            {createSlot("legs")}
             <div />
         </div>
 

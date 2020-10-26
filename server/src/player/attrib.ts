@@ -1,8 +1,15 @@
 
-import { AttribHandler, AttribId, ATTRIBUTES } from "../character/attrib";
 import { Player } from "./player";
 import { UpdateAttribPacket } from "../connection/outgoing-packet";
 import { ItemData } from "../item/item-data";
+
+export type AttribId = "accuracy" | "damage" | "defence" | "speed_attack" | "speed_move"
+
+export const ATTRIBUTES = [ "accuracy", "damage", "defence", "speed_attack", "speed_move" ] as AttribId[]
+
+export function isAttribId(id: string): id is AttribId {
+    return ATTRIBUTES.includes(id as AttribId)
+}
 
 interface PlayerAttrib {
     base: number,
@@ -11,7 +18,7 @@ interface PlayerAttrib {
 
 export type ChangeListener = (value: number) => void
 
-export class PlayerAttribHandler implements AttribHandler {
+export class PlayerAttribHandler {
 
     private readonly player: Player
 
@@ -36,6 +43,10 @@ export class PlayerAttribHandler implements AttribHandler {
     public get(id: AttribId): number {
         const attrib = this.attribs.get(id)
         return attrib.base + attrib.armor
+    }
+
+    public getBase(id: AttribId): number {
+        return this.attribs.get(id).base
     }
 
     public update() {

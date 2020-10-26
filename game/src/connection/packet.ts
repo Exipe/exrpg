@@ -129,6 +129,15 @@ export class FollowPlayerPacket implements Packet {
     }
 }
 
+export class AttackPlayerPacket implements Packet {
+    public readonly id = "ATTACK_PLAYER"
+    public readonly data: any
+
+    constructor(id: number) {
+        this.data = id
+    }
+}
+
 export class NpcActionPacket implements Packet {
     public readonly id = "NPC_ACTION"
     public readonly data: any

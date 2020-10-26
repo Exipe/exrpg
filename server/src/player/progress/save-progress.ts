@@ -1,7 +1,9 @@
 
 import { Player } from "../player";
-import { Progress } from "./progress";
-import { ATTRIBUTES } from "../../character/attrib";
+import { Progress, SaveAttrib, SaveEquip, SaveItem } from "./progress";
+import { EQUIP_SLOTS } from "../../item/equipment";
+import { INVENTORY_SIZE } from "../../item/inventory";
+import { ATTRIBUTES } from "../attrib";
 
 export function saveProgress(player: Player): Progress {
     const position = {
@@ -10,17 +12,23 @@ export function saveProgress(player: Player): Progress {
         map: player.map.id
     }
 
-    const inventory = player.inventory.itemIds
+    const inventory: SaveItem[] = Array.from({ length: INVENTORY_SIZE }, (_, slot) => {
+        const item = player.inventory.get(slot)
+        return item != null ? {
+            id: item.id,
+            amount: item.amount
+        } : null
+    })
+    
+    const equipment: SaveEquip[] = EQUIP_SLOTS.map(slot => ({
+        slot: slot,
+        id: player.equipment.idOf(slot)
+    }))
 
-    const equipment = {
-        helm: player.equipment.idOf("helm"),
-        plate: player.equipment.idOf("plate"),
-        legs: player.equipment.idOf("legs"),
-        shield: player.equipment.idOf("shield")
-    }
-
-    const attributes = ATTRIBUTES.map(attrib => 
-        [attrib, player.attributes.get(attrib)] as [string, number])
+    const attributes: SaveAttrib[] = ATTRIBUTES.map(attrib => ({
+        id: attrib,
+        base: player.attributes.getBase(attrib)
+    }))
 
     return {
         position: position,

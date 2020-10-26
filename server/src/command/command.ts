@@ -1,8 +1,8 @@
 
+import { ATTRIBUTES, isAttribId } from "../player/attrib";
 import { Player } from "../player/player";
-import { playerHandler, itemDataHandler, commandHandler } from "../world";
-import { isAttribId, ATTRIBUTES } from "../character/attrib";
 import { formatStrings } from "../util";
+import { playerHandler, itemDataHandler, commandHandler } from "../world";
 
 function onItem(player: Player, args: string[]) {
     if(args.length == 0) {

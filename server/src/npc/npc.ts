@@ -2,9 +2,9 @@
 import { Character } from "../character/character";
 import { NpcDataHandler, NpcData } from "./npc-data";
 import { MoveNpcPacket } from "../connection/outgoing-packet";
-import { Scene } from "../scene/scene";
-import { Task } from "../character/task";
+import { MapId } from "../scene/map-id";
 import { randomChance, randomOffset } from "../util";
+import { NpcCombatHandler } from "../combat/npc-combat";
 
 export class NpcHandler {
 
@@ -21,7 +21,15 @@ export class NpcHandler {
         return this.npcMap.get(id)
     }
 
-    public create(dataId: string, map: Scene, x: number, y: number) {
+    public spawnAll() {
+        this.npcMap.forEach(npc => npc.spawn())
+    }
+
+    public tick() {
+        this.npcMap.forEach(npc => npc.tick())
+    }
+
+    public create(dataId: string, map: MapId, x: number, y: number) {
         const data = this.npcDataHandler.get(dataId)
         if(data == null) {
             return null
@@ -40,45 +48,49 @@ export class Npc extends Character {
     public readonly id: number
     public readonly data: NpcData
 
-    private readonly centerX: number
-    private readonly centerY: number
+    private readonly mapId: MapId
+    private readonly spawnX: number
+    private readonly spawnY: number
 
-    constructor(id: number, data: NpcData, map: Scene, x: number, y: number) {
-        super(0.85, map, x, y)
-        this.centerX = x
-        this.centerY = y
+    constructor(id: number, data: NpcData, map: MapId, x: number, y: number) {
+        super("npc", id, data.walkSpeed)
+        this.mapId = map
+        this.spawnX = x
+        this.spawnY = y
         this.id = id
         this.data = data
+
+        if(this.data.combatData != null) {
+            this.combatHandler = new NpcCombatHandler(this)
+        }
+    }
+
+    public get alive() {
+        return this.map != null
     }
 
     public walkable(x: number, y: number) {
         return !this.map.isNpcBlocked(x, y)
     }
 
-    private idleTask: Task = {
-        timer: 250,
-
-        tick: () => {
-            if(!randomChance(5)) {
-                return
-            }
-
-            const rad = this.data.walkRadius
-            const goalX = randomOffset(this.centerX, rad)
-            const goalY = randomOffset(this.centerY, rad)
-
-            this.walking.clear()
-            this.walking.addSteps(goalX, goalY)
-        }
-    };
-
-    public ready() {
-        this.walking.idle = () => {
-            this.taskHandler.setTask(this.idleTask)
-        }
+    public spawn() {
+        this.goTo(this.mapId, this.spawnX, this.spawnY)
     }
 
-    public enterMap() {
+    public tick() {
+        if(!this.alive || !this.still || !randomChance(5)) {
+            return
+        }
+
+        const radius = this.data.walkRadius
+        const goalX = randomOffset(this.spawnX, radius)
+        const goalY = randomOffset(this.spawnY, radius)
+
+        this.walking.clear()
+        this.walking.addSteps(goalX, goalY)
+    }
+
+    protected enterMap() {
         this.map.addNpc(this)
     }
 
@@ -87,7 +99,7 @@ export class Npc extends Character {
     }
     
     protected onMove(animate: boolean) {
-        this.map.broadcast(new MoveNpcPacket(this.id, this.x, this.y, animate ? this.walkDelay : -1))
+        this.map.broadcast(new MoveNpcPacket(this.id, this.x, this.y, animate ? this.predictWalkDelay : -1))
     }
 
 }

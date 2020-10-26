@@ -21,7 +21,7 @@ interface TabProps {
 function Tab(props: TabProps) {
     return <div 
         onClick={ () => props.setTab(props.id) }
-        style={ { backgroundImage: `url('res/ui/${props.id}.png')` } }
+        style={ { backgroundImage: `url('ui/${props.id}.png')` } }
     />
 }
 

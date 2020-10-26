@@ -16,6 +16,9 @@ export async function initNpcs(resPath: string) {
             throw "IMPORTANT - duplicate NPC id: " + id
         }
 
+        if(npcData.combat != null) {
+            options.unshift(["Attack", "__attack"])
+        }
         npcMap.set(id, new NpcData(id, npcData.name, resPath + "/char/" + sprite + ".png", options))
     })
 

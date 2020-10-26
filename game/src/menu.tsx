@@ -8,7 +8,7 @@ export interface MenuProps {
     setState: (state: StateId) => void
 }
 
-const BACKGROUND = "res/menu_bg.png"
+const BACKGROUND = "menu_bg.png"
 
 const VERSION_MAJOR = 3
 const VERSION_MINOR = 0
@@ -43,6 +43,12 @@ function LoginMenu(properties: { props: MenuStateProps }) {
     const props = properties.props
     const [username, setUsername] = React.useState("")
     const [password, setPassword] = React.useState("")
+    const userRef = React.useRef(null as HTMLInputElement)
+    const passRef = React.useRef(null as HTMLInputElement)
+
+    React.useEffect(() => {
+        userRef.current.focus()
+    }, [])
 
     const login = () => {
         if(username == "") {
@@ -59,10 +65,12 @@ function LoginMenu(properties: { props: MenuStateProps }) {
     }
 
     return <>
-        <input className="menuInput" placeholder="Username"
-            value={username} onChange={ e => setUsername(e.target.value) } />
-        <input className="menuInput" type="password" placeholder="Password" autoComplete="off" 
-            value={password} onChange={ e => setPassword(e.target.value) } />
+        <input ref={userRef} className="menuInput" placeholder="Username"
+            value={username} onChange={ e => setUsername(e.target.value) } 
+            onKeyDown={(e) => { if(e.key == "Enter" && username.length > 0) passRef.current.focus() }} />
+        <input ref={passRef} className="menuInput" type="password" placeholder="Password" autoComplete="off" 
+            value={password} onChange={ e => setPassword(e.target.value) }
+            onKeyDown={(e) => { if(e.key == "Enter" && password.length > 0) login() }} />
 
         <div className="menuRow">
             <div className="menuButton"

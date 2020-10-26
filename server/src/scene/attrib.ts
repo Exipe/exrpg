@@ -1,5 +1,6 @@
 
 import { Player } from "../player/player";
+import { MapId } from "./map-id";
 
 export abstract class Attrib {
 
@@ -9,11 +10,11 @@ export abstract class Attrib {
 
 export class WarpAttrib extends Attrib {
     
-    private readonly mapId: string
+    private readonly mapId: MapId
     private readonly x: number
     private readonly y: number
 
-    constructor(mapId: string, x: number, y: number) {
+    constructor(mapId: MapId, x: number, y: number) {
         super()
 
         this.mapId = mapId

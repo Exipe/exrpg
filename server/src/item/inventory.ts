@@ -47,37 +47,24 @@ export class Inventory {
     }
 
     private update() {
-        this.player.send(new UpdateInventoryPacket(this.itemIds))
-    }
-
-    public seItemIds(itemIds: [string, number][], update = true) {
-        if(itemIds.length != INVENTORY_SIZE) {
-            throw `The length of the id array must match the size of the inventory (${itemIds.length} / ${INVENTORY_SIZE})`
-        }
-
-        for(let i = 0; i < INVENTORY_SIZE; i++) {
-            const itemId = itemIds[i]
-            if(itemId == null) {
-                this.items[i] = null
-            } else {
-                this.items[i] = new Item(itemId[0], itemId[1])
-            }
-        }
-
-        if(update) {
-            this.update()
-        }
-    }
-
-    public get itemIds() {
-        return this.items.map(item => (
+        const itemIds = this.items.map(item => (
             item != null ? ([item.id, item.amount] as [string, number]) : null
         ))
+        this.player.send(new UpdateInventoryPacket(itemIds))
     }
 
     private checkRange(slot: number) {
         if(slot < 0 || slot >= INVENTORY_SIZE) {
             throw `Slot must be in range of 0-${INVENTORY_SIZE}` 
+        }
+    }
+
+    public set(slot: number, item: Item, update = true) {
+        this.checkRange(slot)
+        this.items[slot] = item
+
+        if(update) {
+            this.update()
         }
     }
 

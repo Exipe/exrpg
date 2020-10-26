@@ -1,55 +1,34 @@
-
-function currentTime() {
-    return (new Date()).getTime()
-}
+import { Character } from "./character"
 
 export interface Task {
     tick: () => void,
-    timer: number
+    delay: number,
+    lastExecution: number
 }
 
-export class TaskHandler {
+/**
+ * Represents a character's primary task
+ * this is used for things like combat and skilling, which share a common timer
+ * (ie. you can not cut a tree one millisecond, then mine a rock the very next one)
+ */
+export abstract class PrimaryTask implements Task {
 
-    private lastExecution = -1
+    protected readonly character: Character
 
-    private task: Task
-
-    private timeout: NodeJS.Timeout = null
-
-    private setTimeout(timer: number) {
-        this.timeout = setTimeout(() => this.executeTask(), timer)
+    constructor(character: Character) {
+        this.character = character
     }
 
-    public setTask(task: Task) {
-        if(this.task == task) {
-            return
-        }
+    abstract tick(): void
+    
+    abstract get delay(): number
 
-        clearTimeout(this.timeout)
-        this.task = task
-
-        const timePassed = currentTime() - this.lastExecution
-        if(timePassed >= task.timer) {
-            this.executeTask()
-        } else {
-            this.setTimeout(task.timer - timePassed)
-        }
+    public set lastExecution(lastExecution: number) {
+        this.character.lastPrimaryExecution = lastExecution
     }
 
-    public stopTask(task: Task = this.task) {
-        if(this.task != task) {
-            return
-        }
-
-        clearTimeout(this.timeout)
-        this.task = null
-    }
-
-    private executeTask() {
-        this.lastExecution = currentTime()
-        this.setTimeout(this.task.timer)
-
-        this.task.tick()
+    public get lastExecution() {
+        return this.character.lastPrimaryExecution
     }
 
 }

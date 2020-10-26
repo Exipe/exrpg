@@ -1,4 +1,7 @@
-import { AttribId } from "../character/attrib"
+
+import { CharacterType } from "../character/character"
+import { EquipSlot } from "../item/equipment"
+import { AttribId } from "../player/attrib"
 
 export interface Packet {
     id: string,
@@ -41,10 +44,7 @@ export interface OutgoingPlayer {
     name: string,
     x: number,
     y: number,
-    shield: string,
-    helm: string,
-    plate: string,
-    legs: string,
+    equipment: string[]
 }
 
 export class AddPlayerPacket implements Packet {
@@ -86,13 +86,10 @@ export class UpdatePlayerAppearancePacket implements Packet {
     public readonly id = "PLAYER_APPEARANCE"
     public readonly data: any
 
-    constructor(id: number, shield: string, helm: string, plate: string, legs: string) {
+    constructor(id: number, equipment: string[]) {
         this.data = {
             id: id,
-            shield: shield,
-            helm: helm,
-            plate: plate,
-            legs: legs
+            equipment: equipment
         }
     }
 }
@@ -172,16 +169,10 @@ export class UpdateInventoryPacket implements Packet {
 
 export class UpdateEquipmentPacket implements Packet {
     public readonly id = "EQUIPMENT"
-    public readonly data: any
+    public readonly data: [EquipSlot, string][]
 
-    constructor(helm: string, plate: string, legs: string, shield: string, sword: string) {
-        this.data = {
-            helm: helm,
-            plate: plate,
-            legs: legs,
-            shield: shield,
-            sword: sword
-        }
+    constructor(equipment: [EquipSlot, string][]) {
+        this.data = equipment
     }
 }
 
@@ -189,14 +180,40 @@ export class SwingItemPacket implements Packet {
     public readonly id = "SWING_ITEM"
     public readonly data: any
 
-    constructor(itemId: string, x: number, y: number, offX: number, offY: number, duration: number) {
+    constructor(itemId: string, character: CharacterType, characterId: number, offX: number, offY: number, duration: number) {
         this.data = {
             itemId: itemId,
-            x: x,
-            y: y,
+            character: character,
+            characterId: characterId,
             offX: offX,
             offY: offY,
             duration: duration
+        }
+    }
+}
+
+export class HitSplatPacket implements Packet {
+    public readonly id = "HIT_SPLAT"
+    public readonly data: any
+
+    constructor(character: CharacterType, characterId: number, damage: number) {
+        this.data = {
+            character: character,
+            characterId: characterId,
+            damage: damage
+        }
+    }
+}
+
+export class HealthBarPacket implements Packet {
+    public readonly id = "HEALTH_BAR"
+    public readonly data: any
+
+    constructor(character: CharacterType, characterId: number, ratio: number) {
+        this.data = {
+            character: character,
+            characterId: characterId,
+            ratio: ratio
         }
     }
 }

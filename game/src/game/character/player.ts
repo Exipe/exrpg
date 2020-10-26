@@ -1,24 +1,22 @@
 
-import { Sprite } from "exrpg"
-import { Entity } from "exrpg/dist/entity/entity"
+import { EquipmentData, Sprite } from "exrpg"
 import { Game } from "../game"
-import { Walking } from "./walking"
 import { PlayerSprite } from "./player-sprite"
 import { Goal } from "./path-finder"
-import { FollowPlayerPacket } from "../../connection/packet"
+import { AttackPlayerPacket, FollowPlayerPacket } from "../../connection/packet"
+import { Character } from "./character"
 
-export class Player extends Entity {
+export class Player extends Character {
 
     public readonly id: number
     public readonly name: string
     public readonly sprite: PlayerSprite
 
-    private walking: Walking = null
-
     private _onContext: (player: Player) => void
 
-    constructor(playerSprite: PlayerSprite, id: number, name: string, x: number, y: number, onContext: (player: Player) => void) {
-        super(x, y, playerSprite.width, playerSprite.height)
+    constructor(game: Game, playerSprite: PlayerSprite, id: number, name: string, x: number, y: number, onContext: (player: Player) => void) {
+        super(game, x, y, playerSprite.width, playerSprite.height)
+        this.setNameTag("playerName", name)
         
         this.id = id
         this.name = name
@@ -30,29 +28,8 @@ export class Player extends Entity {
         this._onContext(this)
     }
 
-    public animate(dt: number) {
-        if(this.walking == null) {
-            return
-        }
-
-        if(this.walking.animate(dt)) {
-            this.walking = null
-        }
-    }
-
-    draw() {
+    public draw() {
         this.sprite.draw(this.drawX, this.drawY)
-    }
-
-    public walkTo(x: number, y: number, animationSpeed: number) {
-        this.tileX = x
-        this.tileY = y
-        this.walking = new Walking(this, x, y, animationSpeed)
-    }
-
-    public place(x: number, y: number) {
-        this.walking = null
-        this.moveTile(x, y)
     }
 
 }
@@ -67,10 +44,6 @@ export async function initPlayers(game: Game) {
         new Sprite(engine, texture)
     )
 
-    const getEquipData = (id: string) => {
-        return id == "" ? null : engine.itemHandler.get(id).equipData
-    }
-
     const onContext = (player: Player) => {
         if(player.id == game.localId) {
             return
@@ -84,10 +57,26 @@ export async function initPlayers(game: Game) {
             distance: 1
         }
 
+        game.ctxMenu.add(["Attack " + player.name, () => {
+            game.walkToGoal(goal)
+            connection.send(new AttackPlayerPacket(player.id))
+        }])
+
         game.ctxMenu.add(["Follow " + player.name, () => {
             game.walkToGoal(goal)
             connection.send(new FollowPlayerPacket(player.id))
         }])
+    }
+
+    const getAppearanceValues = (equipment: string[]) => {
+        const appearanceValues = [] as EquipmentData[]
+        equipment.forEach(id => {
+            const equipData = engine.itemHandler.get(id).equipData
+            if(equipData.drawable) {
+                appearanceValues.push(equipData)
+            }
+        })
+        return appearanceValues
     }
 
     connection.on("WELCOME", (id: number) => {
@@ -97,22 +86,16 @@ export async function initPlayers(game: Game) {
     connection.on("ADD_PLAYER", data => {
         data.forEach((p: any) => {
             const sprite = new PlayerSprite(engine, baseSprite, 
-                getEquipData(p.legs), 
-                getEquipData(p.plate), 
-                getEquipData(p.helm), 
-                getEquipData(p.shield)
+                getAppearanceValues(p.equipment)
             )
-            const player = new Player(sprite, p.id, p.name, p.x, p.y, onContext)
+            const player = new Player(game, sprite, p.id, p.name, p.x, p.y, onContext)
             game.addPlayer(player)
         });
     })
 
     connection.on("PLAYER_APPEARANCE", data => {
         const playerSprite = game.getPlayer(data.id).sprite
-        playerSprite.set("shield", getEquipData(data.shield))
-        playerSprite.set("helm", getEquipData(data.helm))
-        playerSprite.set("plate", getEquipData(data.plate))
-        playerSprite.set("legs", getEquipData(data.legs))
+        playerSprite.setAppearanceValues(getAppearanceValues(data.equipment))
     })
 
     connection.on("REMOVE_PLAYER", (id: number) => {

@@ -80,7 +80,7 @@ function onWalk(conn: Connection, data: any) {
     }
 
     let player = conn.player
-    player.clearSteps()
+    player.stop()
 
     data.forEach(step => {
         if(!Array.isArray(step) || isNaN(step[0]) || isNaN(step[1])) {
@@ -274,6 +274,25 @@ export function onFollowPlayer(conn: Connection, id: number) {
 }
 
 /*
+ATTACK_PLAYER packet
+*/
+export function onAttackPlayer(conn: Connection, id: number) {
+    if(isNaN(id)) {
+        report(conn, `Invalid ATTACK_PLAYER id: ${id}`)
+        return
+    }
+
+    const other = playerHandler.get(id)
+    const player = conn.player
+
+    if(other == null || other.map != player.map) {
+        return
+    }
+
+    player.attack(other)
+}
+
+/*
 NPC_ACTION packet
 */
 export function onNpcAction(conn: Connection, data: any) {
@@ -297,6 +316,12 @@ export function onNpcAction(conn: Connection, data: any) {
     }
 
     const action = data.action
+
+    if(action == "__attack" && other.attackable) {
+        self.attack(other)
+        return
+    }
+
     if(other.data.actions.find(a => a == action) == null) {
         report(conn, `Invalid NPC_ACTION action: ${action}`)
         return
@@ -348,6 +373,7 @@ export function bindIncomingPackets(ch: ConnectionHandler) {
     ch.on("UNEQUIP_ITEM", onUnequipItem)
     ch.on("OBJECT_ACTION", onObjectAction)
     ch.on("FOLLOW_PLAYER", onFollowPlayer)
+    ch.on("ATTACK_PLAYER", onAttackPlayer)
     ch.on("NPC_ACTION", onNpcAction)
     ch.on("DIALOGUE_OPTION", onDialogueOption)
 }

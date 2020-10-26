@@ -14,6 +14,7 @@ import { initObjects } from "./init-objects";
 import { DialogueModel, initDialogue } from "./model/dialogue-model";
 import { ChatModel, initChat } from "./model/chat-model";
 import { AttributeModel, initAttribs } from "./model/attrib-model";
+import { OverlayAreaModel } from "./model/overlay-model";
 
 export async function initGame(engine: Engine, connection: Connection) {
     const game = new Game(engine, connection)
@@ -28,6 +29,18 @@ export async function initGame(engine: Engine, connection: Connection) {
     initDialogue(game)
     initChat(game)
     initAttribs(game)
+
+    connection.on("HIT_SPLAT", (data: any) => {
+        const character = data.character == "player" ? game.getPlayer(data.characterId) : game.getNpc(data.characterId)
+
+        const coords = character.centerCoords
+        game.overlayArea.addText(`-${data.damage}`, "hitSplat", coords[0], coords[1], 2000)
+    })
+
+    connection.on("HEALTH_BAR", (data: any) => {
+        const character = data.character == "player" ? game.getPlayer(data.characterId) : game.getNpc(data.characterId)
+        character.healthRatio = data.ratio
+    })
 
     connection.on("LOAD_MAP", async (mapId: string) => {
         game.clear()
@@ -88,6 +101,7 @@ export class Game {
     public readonly inventory: InventoryModel
     public readonly equipment: EquipmentModel
     public readonly chat: ChatModel
+    public readonly overlayArea: OverlayAreaModel
     public readonly attributes = new AttributeModel()
 
     constructor(engine: Engine, connection: Connection) {
@@ -96,6 +110,7 @@ export class Game {
         this.dialogue = new DialogueModel(connection)
         this.inventory = new InventoryModel(connection)
         this.equipment = new EquipmentModel(connection)
+        this.overlayArea = new OverlayAreaModel(engine.camera)
         this.chat = new ChatModel(connection)
     }
 
@@ -165,6 +180,7 @@ export class Game {
 
     public addPlayer(player: Player) {
         this.players.push(player)
+        
         if(this.map != null) {
             this.map.addEntity(player)
         }
@@ -207,7 +223,7 @@ export class Game {
     public removePlayer(id: number) {
         this.players = this.players.filter(p => {
             if(p.id == id) {
-                p.remove()
+                p.leave()
                 return false
             } else {
                 return true
@@ -218,7 +234,7 @@ export class Game {
     public removeNpc(id: number) {
         this.npcs = this.npcs.filter(n => {
             if(n.id == id) {
-                n.remove()
+                n.leave()
                 return false
             } else {
                 return true

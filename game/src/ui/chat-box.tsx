@@ -1,7 +1,5 @@
 
-import { connection } from "../connection/connection"
 import React = require("react")
-import { SayPacket } from "../connection/packet"
 import { ChatModel } from "../game/model/chat-model"
 
 export interface ChatBoxProps {

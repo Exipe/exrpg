@@ -10,10 +10,11 @@ import { ObjectMap } from "../object/object-map";
 import { ObjectData } from "../object/object-data";
 import { objDataHandler } from "../world";
 import { TempObject } from "../object/temp-object";
+import { MapId } from "./map-id";
 
 export class Scene {
 
-    public readonly id: string
+    public readonly id: MapId
     public readonly width: number
     public readonly height: number
 
@@ -29,7 +30,7 @@ export class Scene {
     private readonly objectMap: ObjectMap
     private readonly attribGrid: Attrib[][]
 
-    constructor(id: string, width: number, height: number) {
+    constructor(id: MapId, width: number, height: number) {
         this.id = id
         this.width = width
         this.height = height
@@ -46,10 +47,6 @@ export class Scene {
                 row.push(null)
             }
         }
-    }
-
-    public ready() {
-        this.npcs.forEach(npc => npc.ready())
     }
 
     public addTempObj(objId: string, x: number, y: number, lifeTime: number) {

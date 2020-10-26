@@ -1,35 +1,48 @@
 
-import { Player } from "../player";
+import { Player, SPAWN_POINT } from "../player";
 import { Progress } from "./progress";
 import { itemDataHandler } from "../../world";
 import { isEquipSlot } from "../../item/equipment";
-import { isAttribId } from "../../character/attrib";
+import { Item } from "../../item/item";
+import { isAttribId } from "../attrib";
+import { isMapId } from "../../scene/map-id";
 
 export function loadProgress(player: Player, progress: Progress) {
-    player.inventory.seItemIds(progress.inventory, true)
-    
-    for(const [key, value] of Object.entries(progress.equipment)) {
-        const item = itemDataHandler.get(value)
-        if(item == null || !isEquipSlot(key)) {
+    for(let i = 0; i < progress.inventory.length; i++) {
+        const saveItem = progress.inventory[i]
+        if(saveItem == null) {
+            continue
+        }
+        
+        player.inventory.set(i, new Item(saveItem.id, saveItem.amount))
+    }
+
+    for(let equip of progress.equipment) {
+        const item = itemDataHandler.get(equip.id)
+        if(item == null || !isEquipSlot(equip.slot)) {
             continue
         }
 
-        player.equipment.set(key, item, false)
+        player.equipment.set(equip.slot, item, false)
         player.attributes.setArmor(item, false)
     }
 
     for(let attrib of progress.attributes) {
-        const attribId = attrib[0]
-        if(!isAttribId(attribId)) {
+        if(!isAttribId(attrib.id)) {
             continue
         }
 
-        player.attributes.setBase(attribId, attrib[1], false)
+        player.attributes.setBase(attrib.id, attrib.base, false)
     }
 
     player.equipment.update()
     player.attributes.update()
     
     const position = progress.position
-    player.goTo(position.map, position.x, position.y)
+
+    if(isMapId(position.map)) {
+        player.goTo(position.map, position.x, position.y)
+    } else {
+        player.goTo(...SPAWN_POINT)
+    }
 }

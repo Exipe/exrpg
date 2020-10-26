@@ -1,45 +1,65 @@
 
-import { NpcEntity, Engine, NpcData } from "exrpg";
+import { NpcData, Sprite } from "exrpg";
 import { Game } from "../game";
-import { Walking } from "./walking";
 import { Goal } from "./path-finder";
 import { NpcActionPacket } from "../../connection/packet";
+import { Character } from "./character";
 
-export class Npc extends NpcEntity {
+export class Npc extends Character {
     
     public readonly id: number
 
-    private walking: Walking = null
+    public readonly data: NpcData
+    
+    private sprite: Sprite = null
 
-    constructor(engine: Engine, id: number, dataId: string, tileX: number, tileY: number) {
-        super(engine, engine.npcHandler.get(dataId), tileX, tileY)
+    public contextListener: () => void
+
+    public clickListener: () => void
+
+    constructor(game: Game, id: number, dataId: string, tileX: number, tileY: number) {
+        super(game, tileX, tileY)
         this.id = id
+
+        this.data = game.engine.npcHandler.get(dataId)
+
+        this.data.getSprite(game.engine)
+        .then(sprite => {
+            this.sprite = sprite
+            this.setDimensions(sprite.width, sprite.height)
+            this.setNameTag("npcName", this.data.name)
+        })
     }
 
-    public animate(dt: number) {
-        if(this.walking == null) {
+    protected onContext(_: any) {
+        if(this.contextListener == null) {
             return
         }
 
-        if(this.walking.animate(dt)) {
-            this.walking = null
+        this.contextListener()
+    }
+
+    protected onClick(_: any) {
+        if(this.clickListener == null) {
+            return false
         }
+
+        this.clickListener()
+        return true
     }
 
-    public walkTo(x: number, y: number, animationSpeed: number) {
-        this.walking = new Walking(this, x, y, animationSpeed)
-    }
+    public draw() {
+        if(this.sprite == null) {
+            return
+        }
 
-    public place(x: number, y: number) {
-        this.walking = null
-        this.moveTile(x, y)
+        this.sprite.draw(this.drawX, this.drawY)
     }
 
 }
 
 export function initNpcs(game: Game): void {
     const connection = game.connection
-    const engine = game.engine
 
     const npcAction = (npc: Npc, action: string) => {
         const goal: Goal = {
@@ -57,11 +77,7 @@ export function initNpcs(game: Game): void {
         }
     }
 
-    engine.inputHandler.onNpcContext = npc => {
-        if(!(npc instanceof Npc)) {
-            return
-        }
-
+    const onNpcContext = (npc: Npc) => {
         const data = npc.data
         data.options.forEach(option => {
             game.ctxMenu.add([option[0] + " " + data.name, () => {
@@ -70,18 +86,17 @@ export function initNpcs(game: Game): void {
         })
     }
 
-    engine.inputHandler.onNpcClick = npc => {
-        if(!(npc instanceof Npc)) {
-            return
-        }
-
+    const onNpcClick = (npc: Npc) => {
         const action = npc.data.options.length > 0 ? npc.data.options[0][1] : null
         npcAction(npc, action)
     }
 
     connection.on("ADD_NPC", data => {
         data.forEach((n: [number, string, number, number]) => {
-            const npc = new Npc(engine, n[0], n[1], n[2], n[3])
+            const npc = new Npc(game, n[0], n[1], n[2], n[3])
+
+            npc.clickListener = onNpcClick.bind(null, npc)
+            npc.contextListener = onNpcContext.bind(null, npc)
             game.addNpc(npc)
         })
     })

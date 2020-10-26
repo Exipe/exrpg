@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 import { RES_PATH } from "..";
 import { WarpAttrib } from "./attrib";
 import { Scene } from "./scene";
-import { maps } from "./map-id";
+import { isMapId, MapId, maps } from "./map-id";
 import { npcHandler, objDataHandler, itemDataHandler } from "../world";
 
 const WARP_PREFIX = "WARP: "
@@ -21,12 +21,17 @@ function parseAttrib(map: Scene, id: string, x: number, y: number) {
     } 
     else if(id.startsWith(NPC_PREFIX)) {
         const npcId = id.substr(NPC_PREFIX.length)
-        const npc = npcHandler.create(npcId, map, x, y)
-        npc.enterMap()
+        npcHandler.create(npcId, map.id, x, y)
     } 
     else if(id.startsWith(WARP_PREFIX)) {
         const split = id.substr(WARP_PREFIX.length).split(" ")
-        map.setAttrib(x, y, new WarpAttrib(split[0], Number(split[1]), Number(split[2])))
+        const mapId = split[0]
+
+        if(!isMapId(mapId)) {
+            throw `Invalid WARP [${mapId}] in ${map.id}`
+        }
+
+        map.setAttrib(x, y, new WarpAttrib(mapId, Number(split[1]), Number(split[2])))
     }
     else if(id.startsWith(ITEM_PREFIX)) {
         const itemId = id.substr(ITEM_PREFIX.length)
@@ -41,7 +46,7 @@ function parseAttrib(map: Scene, id: string, x: number, y: number) {
     }
 }
 
-async function loadScene(mapId: string) {
+async function loadScene(mapId: MapId) {
     const mapData = await fetch(RES_PATH + "map/" + mapId + ".json")
     .then(res => res.json())
 
@@ -74,7 +79,6 @@ export async function loadScenes() {
 
     const promises = maps.map(async s => {
         const scene = await loadScene(s);
-        scene.ready()
         scenes.set(s, scene);
     })
 

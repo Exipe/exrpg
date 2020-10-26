@@ -1,4 +1,22 @@
 
+import { EquipSlot } from "../../item/equipment";
+import { AttribId } from "../attrib";
+
+export interface SaveItem {
+    id: string,
+    amount: number
+}
+
+export interface SaveEquip {
+    slot: EquipSlot,
+    id: string
+}
+
+export interface SaveAttrib {
+    id: AttribId,
+    base: number
+}
+
 export interface Progress {
     position: {
         x: number,
@@ -6,14 +24,9 @@ export interface Progress {
         map: string
     }
 
-    inventory: [string, number][]
+    inventory: SaveItem[]
 
-    equipment: {
-        helm: string,
-        plate: string,
-        legs: string,
-        shield: string
-    }
+    equipment: SaveEquip[]
 
-    attributes: [string, number][]
+    attributes: SaveAttrib[]
 }

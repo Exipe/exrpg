@@ -24,6 +24,12 @@ function currTime() {
     return new Date().getTime()
 }
 
+const TICK_INTERVAL = 250
+
+function tick() {
+    npcHandler.tick()
+}
+
 export async function initWorld() {
     console.log("Loading NPC data")
     let start = currTime()
@@ -51,10 +57,14 @@ export async function initWorld() {
     sceneHandler = await loadScenes()
     console.log(`Finished loading maps. Took: ${currTime() - start} ms`)
 
+    npcHandler.spawnAll()
+
     playerHandler = new PlayerHandler()
     actionHandler = new ActionHandler()
     commandHandler = new CommandHandler()
 
     initCommands()
     initContent()
+
+    setInterval(tick, TICK_INTERVAL)
 }

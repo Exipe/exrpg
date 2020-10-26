@@ -4,50 +4,66 @@ import { Player } from "../player/player";
 import { UpdateEquipmentPacket } from "../connection/outgoing-packet";
 import { itemDataHandler } from "../world";
 
-export type EquipSlot = "helm" | "plate" | "legs" | "shield" | "sword"
+export type EquipSlot = "legs" | "plate" | "helm" | "shield" | "sword"
+
+/*
+Do note that the order in this list, is the order the equipment will be sent on appearance updates
+*/
+export const EQUIP_SLOTS = [ "legs", "plate", "helm", "shield", "sword" ] as EquipSlot[]
 
 export function isEquipSlot(slot: string): slot is EquipSlot {
-    return [ "helm", "plate", "legs", "shield", "sword" ].includes(slot)
+    return EQUIP_SLOTS.includes(slot as EquipSlot)
 }
 
 export class Equipment {
 
     private readonly player: Player
 
-    private helm: ItemData
-    private plate: ItemData
-    private legs: ItemData
-    private shield: ItemData
-    private sword: ItemData
+    private equippedItems = new Map<EquipSlot, ItemData>()
 
     constructor(player: Player) {
         this.player = player
+
+        EQUIP_SLOTS.forEach(slot => {
+            this.equippedItems.set(slot, null)
+        })
     }
 
     public update() {
         const packet = new UpdateEquipmentPacket(
-            this.helm != null ? this.helm.id : "",
-            this.plate != null ? this.plate.id : "",
-            this.legs != null ? this.legs.id : "",
-            this.shield != null ? this.shield.id : "",
-            this.sword != null ? this.sword.id : ""
+            EQUIP_SLOTS.map(slot => 
+                [slot, this.idOf(slot)])
         )
 
         this.player.send(packet)
     }
 
     public get(slot: EquipSlot) {
-        return this[slot]
+        return this.equippedItems.get(slot)
+    }
+
+    public get appearanceValues() {
+        const equipment = [] as string[]
+        EQUIP_SLOTS.forEach(slot => {
+            const item = this.get(slot)
+            if(item == null) {
+                return
+            }
+
+            equipment.push(item.id)
+        })
+
+        return equipment
     }
 
     public idOf(slot: EquipSlot) {
-        const item = this[slot]
+        const item = this.get(slot)
         return item != null ? item.id : ""
     }
 
     public remove(slot: EquipSlot, update = true) {
-        const old = this[slot]
-        this[slot] = null
+        const old = this.get(slot)
+        this.equippedItems.set(slot, null)
 
         if(update) {
             this.update()
@@ -59,14 +75,10 @@ export class Equipment {
     public setId(slot: EquipSlot, id: string, update = true) {
         const item = itemDataHandler.get(id)
         if(item == null) {
-            return
+            throw `Invalid item id: ${id}`
         }
 
-        this[slot] = item
-
-        if(update) {
-            this.update()
-        }
+        this.set(slot, item, update)
     }
 
     public set(slot: EquipSlot, itemData: ItemData, update = true) {
@@ -74,8 +86,8 @@ export class Equipment {
             throw `Can't equip item: ${itemData.id}`
         }
 
-        const unequipped = this[slot]
-        this[slot] = itemData
+        const unequipped = this.get(slot)
+        this.equippedItems.set(slot, itemData)
 
         if(update) {
             this.update()

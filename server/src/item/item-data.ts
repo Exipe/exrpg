@@ -1,8 +1,8 @@
 
 import fetch from "node-fetch"
 import { RES_PATH } from ".."
+import { AttribId, isAttribId } from "../player/attrib"
 import { EquipSlot, isEquipSlot } from "./equipment"
-import { AttribId, isAttribId } from "../character/attrib"
 
 export class ItemData {
 

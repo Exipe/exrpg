@@ -15,6 +15,8 @@ export class Camera {
     private _width: number
     private _height: number
 
+    public onUpdate = (_x: number, _y: number, _scale: number) => {}
+
     constructor(shaderHandler: ShaderHandler) {
         this.shaderHandler = shaderHandler
     }
@@ -101,6 +103,7 @@ export class Camera {
         this._x = Math.floor(x)
         this._y = Math.floor(y)
 
+        this.onUpdate(this._x, this._y, this._scale)
         this.shaderHandler.setView(this._x, this._y, this._scale)
     }
 

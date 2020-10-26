@@ -4,40 +4,17 @@ import { ItemData } from "exrpg";
 import { Game } from "../game";
 import { UnequipItemPacket } from "../../connection/packet";
 
-export class EquippedItems {
-
-    public readonly helm: ItemData
-    public readonly plate: ItemData
-    public readonly legs: ItemData
-    public readonly shield: ItemData
-    public readonly sword: ItemData
-
-    constructor(helm: ItemData = null, plate: ItemData = null, legs: ItemData = null, shield: ItemData = null, sword: ItemData = null) {
-        this.helm = helm
-        this.plate = plate
-        this.legs = legs
-        this.shield = shield
-        this.sword = sword
-    }
-
-}
-
 export function initEquipment(game: Game) {
     const connection = game.connection
     const engine = game.engine
 
-    function get(id: string) {
-        return id == "" ? null : engine.itemHandler.get(id)
-    }
-
     connection.on("EQUIPMENT", equipment => {
-        const equippedItems = new EquippedItems(
-            get(equipment.helm),
-            get(equipment.plate),
-            get(equipment.legs),
-            get(equipment.shield),
-            get(equipment.sword)
-        )
+        const equippedItems = new Map<string, ItemData>()
+        equipment.forEach((equip: [string, string]) => {
+            const id = equip[1]
+            const item = id == "" ? null : engine.itemHandler.get(id)
+            equippedItems.set(equip[0], item)
+        });
 
         game.equipment.setEquippedItems(equippedItems)
     })
@@ -47,15 +24,15 @@ export class EquipmentModel {
 
     private readonly connection: Connection
 
-    public onEquipmentUpdate: (equippedItems: EquippedItems) => void = null
+    public onEquipmentUpdate: (equippedItems: Map<string, ItemData>) => void = null
 
-    private _equippedItems: EquippedItems = new EquippedItems()
+    private _equippedItems = new Map<string, ItemData>()
 
     constructor(connection: Connection) {
         this.connection = connection
     }
 
-    public setEquippedItems(equippedItems: EquippedItems) {
+    public setEquippedItems(equippedItems: Map<string, ItemData>) {
         this._equippedItems = equippedItems
 
         if(this.onEquipmentUpdate != null) {

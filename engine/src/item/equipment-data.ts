@@ -35,6 +35,10 @@ export class EquipmentData {
 
     public readonly slot: string
 
+    public get drawable() {
+        return this.sprite != null
+    }
+
     constructor(sprite: EquipmentSprite, idx: number, slot: string) {
         this.sprite = sprite
         this.idx = idx

@@ -2,10 +2,19 @@
 import { Scene } from "../scene/scene"
 import { Walking } from "./walking"
 import { sceneHandler } from "../world"
-import { TaskHandler } from "./task"
-import { WALK_DELAY } from "../util"
+import { TaskHandler } from "./task-handler"
+import { Combat } from "../combat/combat-task"
+import { SwingItemPacket } from "../connection/outgoing-packet"
+import { CombatHandler } from "../combat/combat"
+import { MapId } from "../scene/map-id"
+
+export type CharacterType = "player" | "npc"
+
+const WALK_DELAY = 250
 
 export abstract class Character {
+
+    public lastPrimaryExecution = -1
 
     public readonly taskHandler = new TaskHandler()
     protected readonly walking = new Walking(this)
@@ -13,29 +22,45 @@ export abstract class Character {
     private followers = [] as Character[]
     protected following = null as Character
 
+    public readonly type: CharacterType
+
+    public readonly id: number
+
     /*
     The last tile the character moved away from
     (or their current position, after a placement)
     Useful to get behind the character
     */
-    private lastX: number
-    private lastY: number
+    private lastX = 0
+    private lastY = 0
 
-    private _x: number
-    private _y: number
+    private _x = 0
+    private _y = 0
 
     private _map: Scene
 
     private _walkSpeed: number
     private _walkDelay: number
 
-    constructor(walkSpeed = 1, map = null as Scene, x = 0, y = 0) {
-        this._map = map
-        this._x = x
-        this._y = y
-        this.lastX = x
-        this.lastY = y
+    public combatHandler = null as CombatHandler
+
+    constructor(type: CharacterType, id: number, walkSpeed = 1) {
+        this.type = type
+        this.id = id
         this.walkSpeed = walkSpeed
+    }
+
+    public swingItem(itemId: string, offX: number, offY: number, duration: number): void {
+        this.map.broadcast(
+            new SwingItemPacket(itemId, this.type, this.id, offX, offY, duration))
+    }
+
+    public get attackable() {
+        return this.combatHandler != null
+    }
+
+    public get target() {
+        return this.following
     }
 
     public get walkSpeed() {
@@ -43,13 +68,22 @@ export abstract class Character {
     }
 
     public set walkSpeed(value: number) {
-        value = Math.max(0.05, value)
-
         this._walkSpeed = value
         this._walkDelay = Math.trunc(WALK_DELAY / value)
     }
 
     public get walkDelay() {
+        return this._walkDelay
+    }
+
+    /**
+     * If we are following another character slower than us, and have caught up with them, return their walk delay
+     */
+    public get predictWalkDelay() {
+        if(this.walking.still && this.following != null && this.following._walkDelay > this._walkDelay) {
+            return this.following._walkDelay
+        }
+
         return this._walkDelay
     }
 
@@ -92,6 +126,13 @@ export abstract class Character {
         this.getBehind(character)
     }
 
+    public attack(character: Character) {
+        this.follow(character)
+        this.walking.persistentGoal = () => {
+            this.taskHandler.setTask(new Combat(this))
+        }
+    }
+
     public unfollow() {
         if(this.following == null) {
             return
@@ -113,9 +154,9 @@ export abstract class Character {
         return this._map
     }
 
-    public goTo(mapId: string, x: number, y: number) {
+    public goTo(mapId: MapId, x: number, y: number) {
         const map = sceneHandler.get(mapId)
-        this.clearSteps()
+        this.stop()
 
         for(let f of this.followers) {
             f.unfollow()
@@ -149,9 +190,10 @@ export abstract class Character {
         return !this._map.isBlocked(x, y)
     }
 
-    public clearSteps() {
-        this.walking.clear()
+    public stop() {
         this.unfollow()
+        this.walking.clear()
+        this.taskHandler.stopTask()
     }
 
     public addSteps(goalX: number, goalY: number) {
@@ -176,9 +218,14 @@ export abstract class Character {
     public remove() {
         if(this._map != null) {
             this.leaveMap()
+            this._map = null
         }
 
-        this.taskHandler.stopTask()
+        for(let f of this.followers) {
+            f.unfollow()
+        }
+
+        this.stop()
     }
 
 }

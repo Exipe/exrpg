@@ -7,6 +7,7 @@ import React = require("react")
 import { ContextMenu } from "./context-menu"
 import { TabArea } from "./tab-area"
 import { DialogueBox } from "./dialogue-box"
+import { OverlayArea } from "./overlay-area"
 
 export function UiContainer(props: { game: Game }) {
     const [heldItem, setHeldItem] = useState(null as HeldItem)
@@ -14,6 +15,8 @@ export function UiContainer(props: { game: Game }) {
     const game = props.game
 
     return <div id="ui">
+        <OverlayArea overlayAreaModel={game.overlayArea} />
+
         <ContextMenu
             setOnOpenContextMenu={ onOpenContextMenu =>
                 game.ctxMenu.onOpenContextMenu = onOpenContextMenu }

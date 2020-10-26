@@ -3,7 +3,6 @@
         "id": "cat_white",
         "name": "Cat",
         "sprite": "cat",
-        "walkRadius": 0,
 
         "options": [
             "Pet"
@@ -14,7 +13,15 @@
         "id": "goblin_weak",
         "name": "Goblin",
         "sprite": "goblin",
-        "walkRadius": 3
+        "walkRadius": 3,
+
+        "combat": {
+            "weapon": "axe_crude",
+            "health": 50,
+            "maxHit": 5,
+            "accuracy": 2.5,
+            "defence": 1
+        }
     },
 
     {

@@ -1,6 +1,6 @@
 
 import { Connection } from "../connection/connection"
-import { Packet, MovePlayerPacket, MessagePacket, OutgoingPlayer, UpdatePlayerAppearancePacket, WelcomePacket, DialoguePacket, CloseDialoguePacket } from "../connection/outgoing-packet"
+import { Packet, MovePlayerPacket, MessagePacket, OutgoingPlayer, UpdatePlayerAppearancePacket, WelcomePacket, DialoguePacket, CloseDialoguePacket, SwingItemPacket } from "../connection/outgoing-packet"
 import { Character } from "../character/character"
 import { playerHandler, actionHandler, npcHandler } from "../world"
 import { Inventory } from "../item/inventory"
@@ -9,9 +9,12 @@ import { ObjectData } from "../object/object-data"
 import { Dialogue } from "./dialogue"
 import { Progress } from "./progress/progress"
 import { loadProgress } from "./progress/load-progress"
-import { MAIN } from "../scene/map-id"
-import { PlayerAttribHandler } from "./player-attrib"
-import { walkSpeed } from "../util"
+import { PlayerAttribHandler } from "./attrib"
+import { PlayerCombatHandler } from "../combat/player-combat"
+import { speedBonus } from "../util"
+import { MapId } from "../scene/map-id"
+
+export const SPAWN_POINT = [ "main", 18, 41 ] as [ MapId, number, number ]
 
 export class Player extends Character {
 
@@ -31,7 +34,8 @@ export class Player extends Character {
     private dialogueId = -1
 
     constructor(connection: Connection, id: number, name: string, password: string, progress = null as Progress) {
-        super()
+        super("player", id)
+        this.combatHandler = new PlayerCombatHandler(this)
 
         connection.player = this
         this.connection = connection
@@ -41,7 +45,7 @@ export class Player extends Character {
         this.password = password
         this.progress = progress
 
-        this.attributes.onChange('speed_move', value => this.walkSpeed = walkSpeed(value))
+        this.attributes.onChange('speed_move', value => this.walkSpeed = speedBonus(value))
     }
 
     public get connectionState() {
@@ -75,8 +79,8 @@ export class Player extends Character {
         }
     }
 
-    public clearSteps() {
-        super.clearSteps()
+    public stop() {
+        super.stop()
         this.closeDialogue()
     }
 
@@ -86,10 +90,7 @@ export class Player extends Character {
             name: this.name,
             x: this.x,
             y: this.y,
-            shield: this.equipment.idOf("shield"),
-            helm: this.equipment.idOf("helm"),
-            plate: this.equipment.idOf("plate"),
-            legs: this.equipment.idOf("legs"),
+            equipment: this.equipment.appearanceValues
         }
     }
 
@@ -100,7 +101,7 @@ export class Player extends Character {
         if(this.progress != null) {
             loadProgress(this, this.progress)
         } else {
-            this.goTo(MAIN, 18, 41)
+            this.goTo(...SPAWN_POINT)
         }
 
         this.connection.state = "playing"
@@ -157,7 +158,7 @@ export class Player extends Character {
     }
 
     protected onMove(animate: boolean): void {
-        this.map.broadcast(new MovePlayerPacket(this.id, this.x, this.y, animate ? this.walkDelay : -1))
+        this.map.broadcast(new MovePlayerPacket(this.id, this.x, this.y, animate ? this.predictWalkDelay : -1))
     }
 
     public send(packet: Packet) {
@@ -167,10 +168,7 @@ export class Player extends Character {
     private get updateAppearancePacket() {
         return new UpdatePlayerAppearancePacket(
             this.id,
-            this.equipment.idOf("shield"),
-            this.equipment.idOf("helm"),
-            this.equipment.idOf("plate"),
-            this.equipment.idOf("legs"),
+            this.equipment.appearanceValues
         )
     }
 
@@ -212,8 +210,8 @@ export class Player extends Character {
     }
 
     public remove() {
-        super.remove()
         playerHandler.remove(this)
+        super.remove()
     }
 
 }

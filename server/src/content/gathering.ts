@@ -4,9 +4,9 @@ import { Scene } from "../scene/scene";
 import { ObjectData } from "../object/object-data";
 import { objectDirection, randomChance } from "../util";
 import { SwingItemPacket } from "../connection/outgoing-packet";
-import { Task } from "../character/task";
+import { PrimaryTask } from "../character/task";
 
-abstract class Gathering implements Task {
+abstract class Gathering extends PrimaryTask {
 
     protected readonly player: Player
     private readonly map: Scene
@@ -18,7 +18,7 @@ abstract class Gathering implements Task {
     private readonly toolId: string
     private readonly depletdId: string
 
-    public readonly timer: number
+    public readonly delay: number
 
     private readonly animInterval: number
     private readonly respawnTime: number
@@ -29,6 +29,7 @@ abstract class Gathering implements Task {
         toolId: string, depletedId: string, actionInterval: number, animInterval: number, respawnTime: number,
         successChance: number) 
     {
+        super(player)
         this.player = player
         this.map = player.map
         this.objData = objData
@@ -36,7 +37,7 @@ abstract class Gathering implements Task {
         this.objY = objY
         this.toolId = toolId
         this.depletdId = depletedId
-        this.timer = actionInterval
+        this.delay = actionInterval
         this.animInterval = animInterval
         this.respawnTime = respawnTime
         this.successChance = successChance
@@ -70,7 +71,7 @@ abstract class Gathering implements Task {
         }
 
         const [offX, offY] = objectDirection(this.objData, this.objX, this.objY, this.player.x, this.player.y)
-        this.map.broadcast(new SwingItemPacket(this.toolId, this.player.x, this.player.y, offX, offY, this.animInterval))
+        this.map.broadcast(new SwingItemPacket(this.toolId, "player", this.player.id, offX, offY, this.animInterval))
 
         if(!randomChance(this.successChance)) {
             return

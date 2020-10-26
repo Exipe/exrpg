@@ -93,6 +93,11 @@ export class PlayerHandler {
     }
 
     public async login(username: string, password: string, connection: Connection) {
+        if(this.getName(username) != null) {
+            connection.send(new ConnectResponse(false, "User is already signed in."))
+            return
+        }
+
         const invalidDetails = new ConnectResponse(false, "Invalid username or password.")
 
         const path = savePath(username)

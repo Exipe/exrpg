@@ -4,7 +4,7 @@ import { EntityList } from "./entity-list"
 import { InputHandler } from "../input-handler"
 
 export function feetCoords(tileX: number, tileY: number) {
-    return [ tileX * TILE_SIZE, (tileY + 1) * TILE_SIZE ]
+    return [ tileX * TILE_SIZE, tileY * TILE_SIZE ]
 }
 
 export abstract class Entity {
@@ -101,9 +101,9 @@ export abstract class Entity {
         this.moveFeet(feetX, feetY)
     }
 
-    private updateDrawCoords() {
+    protected updateDrawCoords() {
         this.drawX = this._feetX + (TILE_SIZE * this.tileSpan - this._width) / 2
-        this.drawY = this._feetY - this._height
+        this.drawY = this._feetY + TILE_SIZE - this._height
     }
 
     protected setDimensions(width: number, height: number) {

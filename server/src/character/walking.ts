@@ -1,4 +1,5 @@
 
+import { Player } from "../player/player"
 import { Character } from "./character"
 import { Task } from "./task"
 
@@ -11,14 +12,16 @@ export class Walking implements Task {
     private _goalX: number
     private _goalY: number
 
-    private _goal: () => void
+    private _goal: [() => void, boolean]
     private _idle: () => void
+
+    public lastExecution = -1
 
     constructor(character: Character) {
         this.character = character
     }
 
-    public get timer() {
+    public get delay() {
         return this.character.walkDelay
     }
 
@@ -47,8 +50,15 @@ export class Walking implements Task {
 
         if(this.still) {
             this.character.taskHandler.stopTask(this)
+
             if(this._goal != null) {
-                this._goal()
+                const [goal, persistence] = this._goal
+                goal()
+
+                if(persistence) { //do not clear goal, do not start idle task
+                    return
+                }
+
                 this._goal = null
             }
 
@@ -76,7 +86,15 @@ export class Walking implements Task {
             return
         }
 
-        this._goal = goal
+        this._goal = [goal, false]
+    }
+
+    public set persistentGoal(goal: () => void) {
+        this._goal = [goal, true]
+
+        if(this.still) {
+            goal()
+        }
     }
 
     public set idle(idle: () => void) {
