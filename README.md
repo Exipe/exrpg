@@ -27,14 +27,11 @@ A base for a browser based, online RPG.
  * Chat box
  * Command system
 
+### In-game
+![in-game screenshot](https://www.dropbox.com/s/m2z9s2upakvztv5/in-game.png?raw=1)
+
 ### Menu
 ![menu screenshot](https://www.dropbox.com/s/sju8p0r4czhifbl/menu.png?raw=1)
-
-### In-game
-![in-game screenshot](https://www.dropbox.com/s/qgc472m7hl6j1vg/in-game.png?raw=1)
-
-### Lighting
-![lighting screenshot](https://www.dropbox.com/s/bqmao5cjqeyt3gp/lighting.png?raw=1)
 
 ### Map editor
 ![map editor screenshot](https://www.dropbox.com/s/bamb40x0eva7apa/mapedit.png?raw=1)
