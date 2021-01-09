@@ -7,62 +7,12 @@
     },
 
     {
-        "id": "phat_red",
-        "name": "Red partyhat",
-        "sprite": "phat/red",
+        "id": "beta_hat",
+        "name": "Beta hat",
+        "sprite": "beta_hat",
         "equip": {
             "slot": "helm",
-            "sprite": ["phat", 0]
-        }
-    },
-
-    {
-        "id": "phat_yellow",
-        "name": "Yellow partyhat",
-        "sprite": "phat/yellow",
-        "equip": {
-            "slot": "helm",
-            "sprite": ["phat", 1]
-        }
-    },
-
-    {
-        "id": "phat_blue",
-        "name": "Blue partyhat",
-        "sprite": "phat/blue",
-        "equip": {
-            "slot": "helm",
-            "sprite": ["phat", 2]
-        }
-    },
-
-    {
-        "id": "phat_purple",
-        "name": "Purple partyhat",
-        "sprite": "phat/purple",
-        "equip": {
-            "slot": "helm",
-            "sprite": ["phat", 3]
-        }
-    },
-
-    {
-        "id": "phat_green",
-        "name": "Green partyhat",
-        "sprite": "phat/green",
-        "equip": {
-            "slot": "helm",
-            "sprite": ["phat", 4]
-        }
-    },
-
-    {
-        "id": "phat_white",
-        "name": "White partyhat",
-        "sprite": "phat/white",
-        "equip": {
-            "slot": "helm",
-            "sprite": ["phat", 5]
+            "sprite": "beta_hat"
         }
     },
 

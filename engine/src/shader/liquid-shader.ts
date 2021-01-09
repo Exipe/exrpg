@@ -1,4 +1,5 @@
 
+import { LIGHT_TEXTURE_ID } from "../light/light-handler";
 import { Shader, loc } from "./shader";
 
 export class LiquidShader extends Shader {
@@ -14,7 +15,8 @@ export class LiquidShader extends Shader {
         this.use()
 
         this.texOffsetLoc = loc(this, "texOffset")
-        gl.uniform1i(loc(this, "tex"), this.textureId)
+        this.setSampler("tex", this.textureId)
+        this.setSampler("lightMap", LIGHT_TEXTURE_ID)
     }
 
     setOffset(offset: [number, number]) {

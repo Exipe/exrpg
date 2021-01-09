@@ -4,7 +4,7 @@ import { RES_PATH } from ".."
 
 const DEFAULT_RESPAWN_TIME = 15
 const DEFAULT_ATTACK_SPEED = 1
-const DEFAULT_WALK_SPEED = 0.75
+const DEFAULT_WALK_SPEED = 1
 const DEFAULT_WALK_RADIUS = 0 // don't move
 
 export interface NpcCombatData {

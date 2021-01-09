@@ -19,7 +19,12 @@ export async function initItems(resPath: string) {
 
         if(itemData.equip != null && itemData.equip.sprite != null) {
             const equipData = itemData.equip
-            const spriteData = equipData.sprite
+            let spriteData = equipData.sprite
+
+            if(typeof spriteData == "string") {
+                spriteData = [spriteData, 0]
+            }
+
             let sprite = equipSpriteMap.get(spriteData[0])
 
             if(sprite == null) {

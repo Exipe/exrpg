@@ -37,6 +37,11 @@ export function TabArea(props: TabAreaProps) {
         }
     }
 
+    let requestFullScreen = (_: any) => {
+        const container = document.querySelector("#container")
+        container.requestFullscreen()
+    }
+
     let displayTab = <></>
 
     if(tab == "inventory") {
@@ -62,7 +67,7 @@ export function TabArea(props: TabAreaProps) {
             <Tab id="inventory" setTab={ openTab } />
             <Tab id="equipment" setTab={ openTab } />
             <Tab id="skill" setTab={ openTab } />
-            <Tab id="setting" setTab={ openTab } />
+            <Tab id="setting" setTab={ requestFullScreen } />
         </div>
 
         {displayTab}

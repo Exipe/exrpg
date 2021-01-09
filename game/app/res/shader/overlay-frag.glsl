@@ -9,6 +9,9 @@ uniform sampler2D shape;
 
 uniform vec4 outlineColor;
 
+in vec2 lightCoords;
+uniform sampler2D lightMap;
+
 out vec4 fragColor;
 
 void main() {
@@ -23,4 +26,7 @@ void main() {
     else {
         discard;
     }
+
+    vec4 light = texture(lightMap, lightCoords);
+    fragColor = fragColor * light;
 }

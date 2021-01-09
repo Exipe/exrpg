@@ -20,9 +20,11 @@ import { Item } from "./item/item"
 import { MergeTexture } from "./texture/merge-texture"
 import { EquipmentData } from "./item/equipment-data"
 import { ObjectEntity } from "./object/object-entity"
+import { LightHandler } from "./light/light-handler"
+import { Light } from "./light/light"
 
 export { Scene, SceneBuilder, Sprite, MergeTexture, loadScene, saveScene, feetCoords, 
-    Entity, NpcData, NpcEntity, ItemData, EquipmentData, Item, ObjectEntity }
+    Entity, NpcData, NpcEntity, ItemData, EquipmentData, Item, ObjectEntity, Light }
 
 export const TILE_SIZE = 16
 export const ITEM_SIZE = 16
@@ -49,11 +51,12 @@ export async function initEngine(canvas: HTMLCanvasElement, resPath: string, pre
     const npcHandler = results[3]
     const itemHandler = results[4]
 
-    const camera = new Camera(shaderHandler)
+    const lightHandler = new LightHandler(gl)
+    const camera = new Camera(shaderHandler, lightHandler)
     const inputHandler = new InputHandler(canvas, camera)
 
     return new Engine(gl, resPath, inputHandler, tileHandler, shaderHandler, objectHandler, npcHandler, itemHandler, 
-        camera, canvas.width, canvas.height)
+        lightHandler, camera, canvas.width, canvas.height)
 }
 
 export type AnimateCallback = (dt: number) => void
@@ -76,13 +79,15 @@ export class Engine {
 
     private scene: Scene
 
+    public lightHandler: LightHandler
+
     public camera: Camera
 
     public onAnimate: AnimateCallback = null
     public onDraw: DrawCallback = null
 
     constructor(gl: WebGL2RenderingContext, resPath: string, inputHandler: InputHandler, tileHandler: TileHandler, shaderHandler: ShaderHandler, 
-                objectHandler: ObjectHandler, npcHandler: NpcHandler, itemHandler: ItemHandler, camera: Camera, width: number, height: number) 
+                objectHandler: ObjectHandler, npcHandler: NpcHandler, itemHandler: ItemHandler, lightHandler: LightHandler, camera: Camera, width: number, height: number) 
     {
         this.gl = gl
         this.resPath = resPath
@@ -93,12 +98,15 @@ export class Engine {
         this.objectHandler = objectHandler
         this.npcHandler = npcHandler
         this.itemHandler = itemHandler
+
+        this.lightHandler = lightHandler
         this.camera = camera
 
         gl.enable(gl.BLEND)
         gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.SRC_ALPHA, gl.ONE)
 
         this.resize(width, height)
+        lightHandler.brightness = 1
         camera.scale = 3
 
         const now = Date.now()
@@ -119,7 +127,6 @@ export class Engine {
     }
 
     resize(width: number, height: number) {
-        this.gl.viewport(0, 0, width, height)
         this.camera.setDimensions(width, height)
     }
 
@@ -132,6 +139,8 @@ export class Engine {
         if(this.onAnimate != null) {
             this.onAnimate(dt)
         }
+
+        this.lightHandler.render(this)
 
         this.gl.clearColor(0, 0, 0, 1)
         this.gl.clear(this.gl.COLOR_BUFFER_BIT)

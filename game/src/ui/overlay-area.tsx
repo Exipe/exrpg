@@ -69,7 +69,7 @@ function HealthBar(props: HealthBarProps) {
     }
 
     return <Overlay overlayModel={healthBarModel} className={"overlayHealthBar"}>
-        <div ref={fillRef} className={"healthFill"} style={fillStyle}></div>
+        <div ref={fillRef} className={"overlayHealthFill"} style={fillStyle}></div>
     </Overlay>
 }
 

@@ -41,7 +41,7 @@ export abstract class CombatHandler {
 
     public health: number
 
-    constructor(character: Character, health = 0, attackSpeed = 1, maxDamage = 1) {
+    constructor(character: Character, health: number, attackSpeed: number, maxDamage: number) {
         this.character = character
         this.maxHealth = this.health = health
         this.attackSpeed = attackSpeed

@@ -9,6 +9,7 @@ import { ActionHandler } from "./action-handler"
 import { initContent } from "./content/content"
 import { CommandHandler } from "./command/command-handler"
 import { initCommands } from "./command/command"
+import { initWeather, WeatherHandler } from "./weather"
 
 export let npcDataHandler: NpcDataHandler = null
 export let objDataHandler: ObjectDataHandler = null
@@ -19,6 +20,8 @@ export let npcHandler: NpcHandler = null
 export let sceneHandler: SceneHandler = null
 export let actionHandler: ActionHandler = null
 export let commandHandler: CommandHandler = null
+
+export let weatherHandler: WeatherHandler = null
 
 function currTime() {
     return new Date().getTime()
@@ -65,6 +68,8 @@ export async function initWorld() {
 
     initCommands()
     initContent()
+
+    weatherHandler = initWeather()
 
     setInterval(tick, TICK_INTERVAL)
 }

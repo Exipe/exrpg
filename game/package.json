@@ -6,6 +6,7 @@
   "scripts": {
     "build-dev": "webpack --config ./webpack.dev.js --watch",
     "build-prod": "webpack --config ./webpack.prod.js",
+    "build-desktop-dev": "webpack --config ./webpack.desktop.dev.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

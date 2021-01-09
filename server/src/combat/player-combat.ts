@@ -1,4 +1,5 @@
 
+import { HealthPacket } from "../connection/outgoing-packet";
 import { Player, SPAWN_POINT } from "../player/player";
 import { speedBonus } from "../util";
 import { CombatHandler } from "./combat";
@@ -27,7 +28,7 @@ export class PlayerCombatHandler extends CombatHandler {
     private readonly player: Player
 
     constructor(player: Player) {
-        super(player, HEALTH)
+        super(player, HEALTH, 1, maxDamage(1))
         this.player = player
         player.attributes.onChange('speed_attack', value => this.attackSpeed = speedBonus(value))
         player.attributes.onChange('damage', value => this.maxDamage = maxDamage(value))
@@ -54,6 +55,15 @@ export class PlayerCombatHandler extends CombatHandler {
         this.player.sendMessage("Goodness gracious! You die")
         this.health = this.maxHealth
         this.player.goTo(...SPAWN_POINT)
+    }
+
+    public updateHealth() {
+        this.player.send(new HealthPacket(this.health, this.maxHealth))
+    }
+
+    public damage(value: number) {
+        super.damage(value)
+        this.updateHealth()
     }
     
 }

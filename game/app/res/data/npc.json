@@ -10,17 +10,34 @@
     },
 
     {
+        "id": "slime_weak",
+        "name": "Slime",
+        "sprite": "slime",
+        "walkRadius": 5,
+        "walkSpeed": 0.33,
+
+        "combat": {
+            "health": 50,
+            "maxHit": 10,
+            "attackSpeed": 0.5,
+            "accuracy": 2.5,
+            "defence": 0
+        }
+    },
+
+    {
         "id": "goblin_weak",
         "name": "Goblin",
         "sprite": "goblin",
         "walkRadius": 3,
+        "walkSpeed": 0.5,
 
         "combat": {
             "weapon": "axe_crude",
-            "health": 50,
-            "maxHit": 5,
-            "accuracy": 2.5,
-            "defence": 1
+            "health": 100,
+            "maxHit": 20,
+            "accuracy": 10,
+            "defence": 5
         }
     },
 
@@ -29,6 +46,7 @@
         "name": "Tony Tony Copper",
         "sprite": "tony",
         "walkRadius": 4,
+        "walkSpeed": 0.66,
 
         "options": [
             "Talk-to"

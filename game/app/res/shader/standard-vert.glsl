@@ -7,9 +7,13 @@ uniform mat3 projection;
 uniform mat3 view;
 uniform mat3 model;
 
+out vec2 lightCoords;
 out vec2 texCoords;
 
 void main() {
-    gl_Position = vec4((projection * floor(view * model * vec3(vertPos, 1))).xy, 1, 1);
+    vec2 vertCoords = (projection * floor(view * model * vec3(vertPos, 1))).xy;
+    lightCoords = (vertCoords + vec2(1.0, 1.0)) * 0.5;
     texCoords = texPos;
+
+    gl_Position = vec4(vertCoords, 1, 1);
 }

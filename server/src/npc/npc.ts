@@ -78,7 +78,7 @@ export class Npc extends Character {
     }
 
     public tick() {
-        if(!this.alive || !this.still || !randomChance(5)) {
+        if(!this.alive || !this.still || !randomChance(15)) {
             return
         }
 

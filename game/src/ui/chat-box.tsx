@@ -2,11 +2,24 @@
 import React = require("react")
 import { ChatModel } from "../game/model/chat-model"
 
-export interface ChatBoxProps {
+export interface ChatAreaProps {
     chat: ChatModel
 }
 
-export function ChatBox(props: ChatBoxProps) {
+interface ChatButtonProps {
+    onOpenChat: () => void
+}
+
+function OpenChatButton(props: ChatButtonProps) {
+    return <div id="openChatButton" onClick={props.onOpenChat} />
+}
+
+interface ChatProps {
+    onCloseChat: () => void
+    chat: ChatModel
+}
+
+function ChatBox(props: ChatProps) {
     const chat = props.chat
 
     const [messages, setMessages] = React.useState(props.chat.messages)
@@ -39,6 +52,8 @@ export function ChatBox(props: ChatBoxProps) {
     }
 
     return <div id="chatBox">
+        <div id="closeChat" onClick={props.onCloseChat}></div>
+
         <div id="chatBoxMessageArea">
             {messages.map((m, i) => <p key={i}>{m}</p>)}
         </div>
@@ -49,5 +64,19 @@ export function ChatBox(props: ChatBoxProps) {
                onChange={(e) => { setInput(e.target.value) }}
                onKeyDown={(e) => { if(e.key == "Enter" && input.length > 0) enterMessage() }}
                maxLength={100}></input>
+    </div>
+}
+
+export function ChatArea(props: ChatAreaProps) {
+    const [viewChat, setViewChat] = React.useState(false)
+
+    let content = <OpenChatButton onOpenChat={() => { setViewChat(true) }} />
+
+    if(viewChat) {
+        content = <ChatBox chat={props.chat} onCloseChat={() => { setViewChat(false) }} />
+    }
+
+    return <div id="chatArea">
+        {content}
     </div>
 }

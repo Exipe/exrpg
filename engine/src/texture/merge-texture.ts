@@ -55,6 +55,9 @@ export class MergeTexture {
 
         gl.clearColor(0, 0, 0, 0)
         gl.clear(engine.gl.COLOR_BUFFER_BIT)
+
+        const shader = engine.shaderHandler.useStandardShader()
+        shader.setEnableLight(false)
     }
 
     public unbind() {
@@ -67,6 +70,9 @@ export class MergeTexture {
 
         engine.shaderHandler.setProjection(camera.realWidth, camera.realHeight)
         engine.shaderHandler.setView(camera.realX, camera.realY, camera.scale)
+
+        const shader = engine.shaderHandler.useStandardShader()
+        shader.setEnableLight(true)
     }
 
 }

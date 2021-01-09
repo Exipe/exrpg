@@ -1,4 +1,4 @@
-import { Entity } from "exrpg";
+import { Entity, Light } from "exrpg";
 import { Game } from "../game";
 import { HealthBarModel, TextModel, TextStyle } from "../model/overlay-model";
 import { Walking } from "./walking";
@@ -15,6 +15,8 @@ export abstract class Character extends Entity {
     private nameTag = null as TextModel
 
     private walking: Walking = null
+
+    private light = null as Light
 
     constructor(game: Game, tileX: number, tileY: number, width = 0, height = 0) {
         super(tileX, tileY, width, height)
@@ -36,9 +38,32 @@ export abstract class Character extends Entity {
             this.healthBar = overlayArea.addHealthBar(value, ...this.centerBelowCoords)
         }
 
-        this.healthBarTimeout = setTimeout(() => {
+        this.healthBarTimeout = window.setTimeout(() => {
             this.removeHealthBar()
         }, HIDE_HEALTHBAR_TIME)
+    }
+
+    public removeLight() {
+        if(this.light == null) {
+            return
+        }
+
+        const lightHandler = this.game.engine.lightHandler
+        lightHandler.removeLight(this.light)
+    }
+
+    public setLight(radius: number) {
+        const lightHandler = this.game.engine.lightHandler
+
+        this.removeLight()
+
+        const [x, y] = this.centerCoords
+        this.light = {
+            x: x,
+            y: y,
+            radius: radius
+        }
+        lightHandler.addLight(this.light)
     }
 
     protected setNameTag(style: TextStyle, name: string) {
@@ -65,6 +90,12 @@ export abstract class Character extends Entity {
 
     protected updateDrawCoords() {
         super.updateDrawCoords()
+
+        if(this.light != null) {
+            const [x, y] = this.centerCoords
+            this.light.x = x
+            this.light.y = y
+        }
 
         if(this.nameTag != null) {
             this.nameTag.move(...this.centerAboveCoords)
@@ -94,6 +125,7 @@ export abstract class Character extends Entity {
 
     public leave() {
         super.remove()
+        this.removeLight()
 
         const overlayArea = this.game.overlayArea
 

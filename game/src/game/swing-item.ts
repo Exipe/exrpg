@@ -80,16 +80,3 @@ export class SwingItem {
     }
 
 }
-
-export function initSwingItems(game: Game) {
-    const engine = game.engine
-
-    connection.on("SWING_ITEM", data => {
-        const spritePromise = engine.itemHandler.get(data.itemId).getSprite(engine)
-        const character = data.character == "player" ? game.getPlayer(data.characterId) 
-            : game.getNpc(data.characterId)
-        const swingItem = new SwingItem(spritePromise, character,
-            data.offX, data.offY, data.duration)
-        game.addSwingItem(swingItem)
-    })
-}

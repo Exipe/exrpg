@@ -1,10 +1,13 @@
 
 import { ShaderHandler } from "./shader/shader-handler"
 import { Entity } from "./entity/entity"
+import { LightHandler } from "./light/light-handler"
+import { projection, translation } from "./matrix"
 
 export class Camera {
 
     private shaderHandler: ShaderHandler
+    private lightHandler: LightHandler
 
     private _x: number = 0
     private _y: number = 0
@@ -17,8 +20,9 @@ export class Camera {
 
     public onUpdate = (_x: number, _y: number, _scale: number) => {}
 
-    constructor(shaderHandler: ShaderHandler) {
+    constructor(shaderHandler: ShaderHandler, lightHandler: LightHandler) {
         this.shaderHandler = shaderHandler
+        this.lightHandler = lightHandler
     }
 
     public get realX() {
@@ -75,22 +79,32 @@ export class Camera {
         return this._height / this._scale
     }
 
-    set scale(scale: number) {
-        if(this.followEntity != null) {
-            this._scale = scale
-            this.centerAroundEntity()
-            return
-        }
+    private dimensionsChanged() {
+        this.lightHandler.resize(this.width, this.height)
+        const lightShader = this.shaderHandler.useLightShader()
+        lightShader.setProjectionMatrix(projection(this.width, this.height))
+    }
 
+    set scale(scale: number) {
         const x = this.x
         const y = this.y
         this._scale = scale
+        
+        this.dimensionsChanged()
+
+        if(this.followEntity != null) {
+            this.centerAroundEntity()
+            return
+        }
+        
         this.move(x, y)
     }
 
     setDimensions(width: number, height: number) {
         this._width = width
         this._height = height
+
+        this.dimensionsChanged()
 
         this.shaderHandler.setProjection(width, height)
 
@@ -105,6 +119,8 @@ export class Camera {
 
         this.onUpdate(this._x, this._y, this._scale)
         this.shaderHandler.setView(this._x, this._y, this._scale)
+        const lightShader = this.shaderHandler.useLightShader()
+        lightShader.setViewMatrix(translation(-this.x, -this.y))
     }
 
     move(x: number, y: number) {

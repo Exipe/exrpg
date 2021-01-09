@@ -8,6 +8,15 @@ export interface Packet {
     data: any
 }
 
+export class BrightnessPacket implements Packet {
+    public readonly id = "BRIGHTNESS"
+    public readonly data: any
+
+    constructor(brightness: number) {
+        this.data = brightness
+    }
+}
+
 export class ConnectResponse implements Packet {
     public readonly id = "CONNECT_RESPONSE"
     public readonly data: any
@@ -201,6 +210,18 @@ export class HitSplatPacket implements Packet {
             character: character,
             characterId: characterId,
             damage: damage
+        }
+    }
+}
+
+export class HealthPacket implements Packet {
+    public readonly id = "HEALTH"
+    public readonly data: any
+
+    constructor(health: number, totalHealth: number) {
+        this.data = {
+            health: health,
+            totalHealth: totalHealth
         }
     }
 }

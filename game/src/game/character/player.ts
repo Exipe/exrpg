@@ -17,7 +17,8 @@ export class Player extends Character {
     constructor(game: Game, playerSprite: PlayerSprite, id: number, name: string, x: number, y: number, onContext: (player: Player) => void) {
         super(game, x, y, playerSprite.width, playerSprite.height)
         this.setNameTag("playerName", name)
-        
+        this.setLight(48)
+
         this.id = id
         this.name = name
         this.sprite = playerSprite

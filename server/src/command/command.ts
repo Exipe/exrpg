@@ -2,7 +2,37 @@
 import { ATTRIBUTES, isAttribId } from "../player/attrib";
 import { Player } from "../player/player";
 import { formatStrings } from "../util";
-import { playerHandler, itemDataHandler, commandHandler } from "../world";
+import { playerHandler, itemDataHandler, commandHandler, weatherHandler } from "../world";
+
+function onMeTo(player: Player, args: string[]) {
+    if(args.length == 0) {
+        player.sendMessage("Correct usage: '/meto player_name'")
+        return
+    }
+
+    const other = playerHandler.getName(args[0])
+    if(other == null) {
+        player.sendMessage(`Could not find player: ${args[0]}`)
+        return
+    }
+
+    player.goToMap(other.map, other.x, other.y)
+}
+
+function onToMe(player: Player, args: string[]) {
+    if(args.length == 0) {
+        player.sendMessage("Correct usage: '/tome player_name'")
+        return
+    }
+
+    const other = playerHandler.getName(args[0])
+    if(other == null) {
+        player.sendMessage(`Could not find player: ${args[0]}`)
+        return
+    }
+
+    other.goToMap(player.map, player.x, player.y)
+}
 
 function onItem(player: Player, args: string[]) {
     if(args.length == 0) {
@@ -83,10 +113,33 @@ function onSet(player: Player, args: string[]) {
     player.sendMessage(`Set ${attribId} to ${value}`)
 }
 
+function onBrightness(player: Player, args: string[]) {
+    let brightness: number
+
+    if(args.length < 1 || isNaN(brightness = parseFloat(args[0]))) {
+        player.sendMessage("Correct usage: /brightness value")
+        return
+    }
+
+    player.sendMessage(`Brightness set to ${brightness}`)
+    weatherHandler.brightness = brightness
+
+    weatherHandler.enableClock = false
+}
+
+function onClock(player: Player, _: any) {
+    weatherHandler.enableClock = !weatherHandler.enableClock
+    player.sendMessage(`Weather clock ${weatherHandler.enableClock ? "enabled" : "disabled"}`)
+}
+
 export function initCommands() {
     const ch = commandHandler
     ch.on("item", onItem)
     ch.on("empty", onEmpty)
     ch.on("pos", onPos)
     ch.on("set", onSet)
+    ch.on("meto", onMeTo)
+    ch.on("tome", onToMe)
+    ch.on("brightness", onBrightness)
+    ch.on("clock", onClock)
 }

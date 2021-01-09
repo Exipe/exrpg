@@ -21,7 +21,7 @@ async function setupEngine(canvas: HTMLCanvasElement) {
     return engine
 }
 
-export function Main(props: any) {
+export function Main(_: any) {
     const [game, setGame] = React.useState(null as Game)
     const canvas = React.useRef(null as HTMLCanvasElement)
 
@@ -52,7 +52,7 @@ export function Main(props: any) {
         <canvas ref={canvas}></canvas>
 
         {game != null &&
-            <UiContainer game={game} />
+            <UiContainer  game={game} />
         }
     </>
 }

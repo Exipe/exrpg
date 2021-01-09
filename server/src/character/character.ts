@@ -154,8 +154,7 @@ export abstract class Character {
         return this._map
     }
 
-    public goTo(mapId: MapId, x: number, y: number) {
-        const map = sceneHandler.get(mapId)
+    public goToMap(map: Scene, x: number, y: number) {
         this.stop()
 
         for(let f of this.followers) {
@@ -177,6 +176,11 @@ export abstract class Character {
         } else {
             this.move(x, y)
         }
+    }
+
+    public goTo(mapId: MapId, x: number, y: number) {
+        const map = sceneHandler.get(mapId)
+        this.goToMap(map, x, y)
     }
 
     protected abstract enterMap(): void

@@ -1,6 +1,6 @@
 
 import { Player, initPlayers } from "./character/player";
-import { Scene, Engine, loadScene } from "exrpg";
+import { Scene, Engine } from "exrpg";
 import { Npc, initNpcs } from "./character/npc";
 import { Connection } from "../connection/connection";
 import { findPath, Goal } from "./character/path-finder";
@@ -9,12 +9,14 @@ import { initInventory, InventoryModel } from "./model/inventory-model";
 import { GroundItem, initGroundItems } from "./ground-item";
 import { ContextMenuModel } from "./model/context-menu-model";
 import { EquipmentModel, initEquipment } from "./model/equipment-model";
-import { SwingItem, initSwingItems } from "./swing-item";
+import { SwingItem } from "./swing-item";
 import { initObjects } from "./init-objects";
 import { DialogueModel, initDialogue } from "./model/dialogue-model";
 import { ChatModel, initChat } from "./model/chat-model";
 import { AttributeModel, initAttribs } from "./model/attrib-model";
 import { OverlayAreaModel } from "./model/overlay-model";
+import { StatusModel } from "./model/status-model";
+import { bindIncomingPackets } from "../connection/incoming-packet";
 
 export async function initGame(engine: Engine, connection: Connection) {
     const game = new Game(engine, connection)
@@ -25,38 +27,11 @@ export async function initGame(engine: Engine, connection: Connection) {
     initGroundItems(game)
     initInventory(game)
     initEquipment(game)
-    initSwingItems(game)
     initDialogue(game)
     initChat(game)
     initAttribs(game)
 
-    connection.on("HIT_SPLAT", (data: any) => {
-        const character = data.character == "player" ? game.getPlayer(data.characterId) : game.getNpc(data.characterId)
-
-        const coords = character.centerCoords
-        game.overlayArea.addText(`-${data.damage}`, "hitSplat", coords[0], coords[1], 2000)
-    })
-
-    connection.on("HEALTH_BAR", (data: any) => {
-        const character = data.character == "player" ? game.getPlayer(data.characterId) : game.getNpc(data.characterId)
-        character.healthRatio = data.ratio
-    })
-
-    connection.on("LOAD_MAP", async (mapId: string) => {
-        game.clear()
-
-        const mapData = await fetch("res/map/" + mapId + ".json").then(res => res.text())
-        const map = loadScene(game.engine, mapData)
-        map.attribLayer.visible = false
-
-        game.enterMap(map)
-    })
-
-    connection.on("SET_OBJECT", (objects: [string, number, number][]) => {
-        objects.forEach(o => {
-            game.setObject(o[0], o[1], o[2])
-        })
-    })
+    bindIncomingPackets(game)
 
     engine.onAnimate = (dt) => {
         game.animate(dt)
@@ -103,6 +78,7 @@ export class Game {
     public readonly chat: ChatModel
     public readonly overlayArea: OverlayAreaModel
     public readonly attributes = new AttributeModel()
+    public readonly status = new StatusModel()
 
     constructor(engine: Engine, connection: Connection) {
         this.engine = engine

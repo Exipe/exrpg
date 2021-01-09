@@ -1,8 +1,8 @@
 
 import { Connection } from "../connection/connection"
-import { Packet, MovePlayerPacket, MessagePacket, OutgoingPlayer, UpdatePlayerAppearancePacket, WelcomePacket, DialoguePacket, CloseDialoguePacket, SwingItemPacket } from "../connection/outgoing-packet"
+import { Packet, MovePlayerPacket, MessagePacket, OutgoingPlayer, UpdatePlayerAppearancePacket, WelcomePacket, DialoguePacket, CloseDialoguePacket, SwingItemPacket, HealthPacket, BrightnessPacket } from "../connection/outgoing-packet"
 import { Character } from "../character/character"
-import { playerHandler, actionHandler, npcHandler } from "../world"
+import { playerHandler, actionHandler, npcHandler, weatherHandler } from "../world"
 import { Inventory } from "../item/inventory"
 import { Equipment, EquipSlot } from "../item/equipment"
 import { ObjectData } from "../object/object-data"
@@ -95,12 +95,17 @@ export class Player extends Character {
     }
 
     public ready() {
+        this.send(new BrightnessPacket(weatherHandler.brightness))
         this.send(new WelcomePacket(this.id))
         this.send(new MessagePacket("Welcome to ExRPG."))
-        
+
+        const cb = this.combatHandler as PlayerCombatHandler
+        cb.updateHealth()
+
         if(this.progress != null) {
             loadProgress(this, this.progress)
         } else {
+            this.inventory.add("beta_hat", 1)
             this.goTo(...SPAWN_POINT)
         }
 
