@@ -2,6 +2,7 @@
 import { TILE_SIZE } from ".."
 import { EntityList } from "./entity-list"
 import { InputHandler } from "../input-handler"
+import { ComponentHandler } from "./component-handler"
 
 export function feetCoords(tileX: number, tileY: number) {
     return [ tileX * TILE_SIZE, tileY * TILE_SIZE ]
@@ -31,6 +32,8 @@ export abstract class Entity {
     public behind: Entity = null
 
     public list: EntityList = null
+
+    public componentHandler = new ComponentHandler()
 
     constructor(tileX: number, tileY: number, width = 0, height = 0, tileSpan = 1) {
         this.tileX = tileX
@@ -91,19 +94,39 @@ export abstract class Entity {
         return this._height
     }
 
+    public animate(dt) {
+        this.componentHandler.forEach(c => c.animate(dt))
+    }
+
     public abstract draw(): any
 
     public moveTile(x: number, y: number) {
         this.tileX = x
         this.tileY = y
 
+        this.componentHandler.forEach(c => c.moveTile())
+
         const [feetX, feetY] = feetCoords(x, y)
         this.moveFeet(feetX, feetY)
+    }
+
+    public get centerCoords(): [number, number] {
+        return [this.drawX + this.width / 2, this.drawY + this.height / 2]
+    }
+
+    public get centerAboveCoords(): [number, number] {
+        return [this.drawX + this.width / 2, this.drawY]
+    }
+
+    public get centerBelowCoords(): [number, number] {
+        return [this.drawX + this.width / 2, this.drawY + this.height]
     }
 
     protected updateDrawCoords() {
         this.drawX = this._feetX + (TILE_SIZE * this.tileSpan - this._width) / 2
         this.drawY = this._feetY + TILE_SIZE - this._height
+
+        this.componentHandler.forEach(c => c.movePx())
     }
 
     protected setDimensions(width: number, height: number) {
@@ -192,7 +215,12 @@ export abstract class Entity {
         }
     }
 
-    public remove() {
+    public destroy() {
+        this.remove()
+        this.componentHandler.forEach(c => c.destroy())
+    }
+
+    private remove() {
         if(this.behind == null) {
             this.list.furthestBehind = this.ahead
         } else {

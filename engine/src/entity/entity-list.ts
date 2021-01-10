@@ -6,6 +6,10 @@ export class EntityList {
     public furthestBehind: Entity = null
     public furthestAhead: Entity = null
 
+    public destroy() {
+        this.fromBack(e => e.componentHandler.destroy())
+    }
+
     public fromBack(action: (e: Entity) => any) {
         let current = this.furthestBehind
 
@@ -43,6 +47,8 @@ export class EntityList {
         } else {
             this.furthestBehind.placeAhead(entity)
         }
+
+        entity.componentHandler.initialize()
     }
 
 }

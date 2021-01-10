@@ -108,14 +108,6 @@ export class Game {
     }
 
     public animate(dt: number) {
-        this.players.forEach(p => {
-            p.animate(dt)
-        })
-
-        this.npcs.forEach(n => {
-            n.animate(dt)
-        })
-
         this.swingItems = this.swingItems.filter(i => {
             return i.animate(dt)
         })
@@ -189,6 +181,10 @@ export class Game {
     }
 
     public clear() {
+        if(this.engine.map != null) {
+            this.engine.map.destroy()
+        }
+
         this.engine.map = null
         this.players = []
         this.npcs = []
@@ -199,7 +195,7 @@ export class Game {
     public removePlayer(id: number) {
         this.players = this.players.filter(p => {
             if(p.id == id) {
-                p.leave()
+                p.destroy()
                 return false
             } else {
                 return true
@@ -210,7 +206,7 @@ export class Game {
     public removeNpc(id: number) {
         this.npcs = this.npcs.filter(n => {
             if(n.id == id) {
-                n.leave()
+                n.destroy()
                 return false
             } else {
                 return true

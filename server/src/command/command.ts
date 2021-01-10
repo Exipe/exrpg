@@ -132,6 +132,21 @@ function onClock(player: Player, _: any) {
     player.sendMessage(`Weather clock ${weatherHandler.enableClock ? "enabled" : "disabled"}`)
 }
 
+function onSwingItem(player: Player, args: string[]) {
+    if(args.length < 1) {
+        player.sendMessage("Correct usage: /swing item_id")
+        return
+    }
+
+    const itemArg = args[0]
+    if(itemDataHandler.get(itemArg) == null) {
+        player.sendMessage(`Could not find item: ${itemArg}`)
+        return
+    }
+
+    player.swingItem(itemArg, 0, 1, 400)
+}
+
 export function initCommands() {
     const ch = commandHandler
     ch.on("item", onItem)
@@ -142,4 +157,5 @@ export function initCommands() {
     ch.on("tome", onToMe)
     ch.on("brightness", onBrightness)
     ch.on("clock", onClock)
+    ch.on("swing", onSwingItem)
 }

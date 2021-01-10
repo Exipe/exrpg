@@ -86,7 +86,7 @@ export class ObjectTile extends AttribTile {
     public remove(x: number, y: number) {
         const obj = this.objectEntity
         this.objectEntity = null
-        obj.remove()
+        obj.destroy()
 
         for(let i = 0; i < obj.data.width; i++) {
             this.scene.unBlock(x + i, y)
@@ -123,7 +123,7 @@ export class PreviewNpcTile extends NpcTile {
     }
 
     public remove(x: number, y: number) {
-        this.npc.remove()
+        this.npc.destroy()
         this.npc = null
     }
 

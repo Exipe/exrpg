@@ -4,6 +4,7 @@ import { Engine } from "..";
 import { ObjectData } from "./object-data";
 import { Entity } from "../entity/entity";
 import { InputHandler } from "../input-handler";
+import { LightComponent } from "../light/light-component";
 
 export class ObjectEntity extends Entity {
 
@@ -15,6 +16,11 @@ export class ObjectEntity extends Entity {
         super(tileX, tileY, 0, 0, objectData.width)
 
         this.data = objectData
+
+        if(objectData.light > 0) {
+            const lightComp = new LightComponent(this, engine.lightHandler, objectData.light)
+            this.componentHandler.add(lightComp)
+        }
 
         objectData.getSprite(engine)
         .then(sprite => {

@@ -1,6 +1,6 @@
 
 import { Sprite } from "../texture/sprite"
-import { Engine } from ".."
+import { Engine, Light } from ".."
 import { loadTexture } from "../texture/texture"
 
 export type ObjectOption = [string, string]
@@ -11,18 +11,18 @@ export class ObjectData {
     public readonly name: string
 
     public readonly spritePath: string
-
-    public readonly width: number
-
+    
     private sprite: Sprite = null
 
     public readonly options: ObjectOption[]
 
-    constructor(id: string, name: string, spritePath: string, width: number, options: ObjectOption[]) {
+    public light = 0
+    public width = 1
+
+    constructor(id: string, name: string, spritePath: string, options: ObjectOption[]) {
         this.id = id
         this.name = name
         this.spritePath = spritePath
-        this.width = width
         this.options = options
     }
 

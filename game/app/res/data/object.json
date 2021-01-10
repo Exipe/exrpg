@@ -43,7 +43,8 @@
         "id": "furnace",
         "name": "Furnace",
         "sprite": "furnace",
-        "width": 2
+        "width": 2,
+        "light": 32
     },
 
     {
@@ -59,7 +60,8 @@
     {
         "id": "torch_common",
         "name": "Torch",
-        "sprite": "torch"
+        "sprite": "torch",
+        "light": 32
     },
 
     {

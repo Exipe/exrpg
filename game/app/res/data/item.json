@@ -41,6 +41,33 @@
     },
 
     {
+        "id": "wizard_hat",
+        "name": "Wizard hat",
+        "equip": {
+            "slot": "helm",
+            "sprite": ["robes", 0]
+        }
+    },
+
+    {
+        "id": "wizard_top",
+        "name": "Wizard top",
+        "equip": {
+            "slot": "plate",
+            "sprite": ["robes", 1]
+        }
+    },
+
+    {
+        "id": "wizard_bottom",
+        "name": "Wizard bottom",
+        "equip": {
+            "slot": "legs",
+            "sprite": ["robes", 2]
+        }
+    },
+
+    {
         "id": "sword_copper",
         "name": "Copper sword",
         "sprite": "copper_sword",

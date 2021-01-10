@@ -11,7 +11,7 @@ import { Progress } from "./progress/progress"
 import { loadProgress } from "./progress/load-progress"
 import { PlayerAttribHandler } from "./attrib"
 import { PlayerCombatHandler } from "../combat/player-combat"
-import { speedBonus } from "../util"
+import { speedBonus } from "../formula"
 import { MapId } from "../scene/map-id"
 
 export const SPAWN_POINT = [ "main", 18, 41 ] as [ MapId, number, number ]

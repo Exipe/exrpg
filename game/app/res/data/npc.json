@@ -51,5 +51,19 @@
         "options": [
             "Talk-to"
         ]
+    },
+
+    {
+        "id": "wizard",
+        "name": "Wizard",
+        "sprite": "man",
+
+        "equip": [
+            "wizard_bottom",
+            "wizard_top",
+            "wizard_hat",
+            "shield_copper"
+        ]
     }
+
 ]

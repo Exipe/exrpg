@@ -19,7 +19,14 @@ export async function initNpcs(resPath: string) {
         if(npcData.combat != null) {
             options.unshift(["Attack", "__attack"])
         }
-        npcMap.set(id, new NpcData(id, npcData.name, resPath + "/char/" + sprite + ".png", options))
+
+        const npc = new NpcData(id, npcData.name, resPath + "/char/" + sprite + ".png", options)
+        
+        if(npcData.equip != null) {
+            npc.equip = npcData.equip
+        }
+
+        npcMap.set(id, npc)
     })
 
     return new NpcHandler(npcMap)

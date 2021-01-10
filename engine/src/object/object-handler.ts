@@ -10,7 +10,7 @@ export async function initObjects(resPath: string) {
         const id = objData.id
         const name = objData.name
         const sprite = objData.sprite
-        const width = objData.width ? objData.width : 1
+
         const options: ObjectOption[] = objData.options ? objData.options.map((option: string) => [
             option, option.toLowerCase().replace(" ", "_")
         ]) : []
@@ -20,7 +20,17 @@ export async function initObjects(resPath: string) {
         }
 
         objList.push(id)
-        objMap.set(id, new ObjectData(id, name, resPath + "/obj/" + sprite + ".png", width, options))
+
+        const obj = new ObjectData(id, name, resPath + "/obj/" + sprite + ".png", options)
+        objMap.set(id, obj)
+
+        if(objData.width) {
+            obj.width = objData.width
+        }
+
+        if(objData.light) {
+            obj.light = objData.light
+        }
     });
 
     return new ObjectHandler(objMap, objList)

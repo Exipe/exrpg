@@ -22,9 +22,10 @@ import { EquipmentData } from "./item/equipment-data"
 import { ObjectEntity } from "./object/object-entity"
 import { LightHandler } from "./light/light-handler"
 import { Light } from "./light/light"
+import { LightComponent } from "./light/light-component"
 
 export { Scene, SceneBuilder, Sprite, MergeTexture, loadScene, saveScene, feetCoords, 
-    Entity, NpcData, NpcEntity, ItemData, EquipmentData, Item, ObjectEntity, Light }
+    Entity, NpcData, NpcEntity, ItemData, EquipmentData, Item, ObjectEntity, Light, LightComponent }
 
 export const TILE_SIZE = 16
 export const ITEM_SIZE = 16
@@ -138,6 +139,10 @@ export class Engine {
 
         if(this.onAnimate != null) {
             this.onAnimate(dt)
+        }
+
+        if(this.scene != null) {
+            this.scene.animate(dt)
         }
 
         this.lightHandler.render(this)

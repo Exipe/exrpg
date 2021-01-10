@@ -11,7 +11,7 @@ export interface TabAreaProps {
     setHeldItem: (item: HeldItem) => void
 }
 
-type TabId = "inventory" | "equipment" | "skill" | "setting"
+type TabId = "inventory" | "equipment" | "friends" | "setting"
 
 interface TabProps {
     id: TabId,
@@ -66,7 +66,7 @@ export function TabArea(props: TabAreaProps) {
         <div id="tabs">
             <Tab id="inventory" setTab={ openTab } />
             <Tab id="equipment" setTab={ openTab } />
-            <Tab id="skill" setTab={ openTab } />
+            <Tab id="friends" setTab={ openTab } />
             <Tab id="setting" setTab={ requestFullScreen } />
         </div>
 

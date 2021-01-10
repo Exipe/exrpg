@@ -9,7 +9,7 @@ export async function initItems(resPath: string) {
     data.forEach((itemData: any) => {
         const id = itemData.id
         const name = itemData.name
-        const sprite = itemData.sprite
+        const sprite = itemData.sprite ? itemData.sprite : "null"
 
         if(itemMap.has(id)) {
             throw "IMPORTANT - duplicate item ID: " + id

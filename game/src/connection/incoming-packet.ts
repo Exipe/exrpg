@@ -24,7 +24,8 @@ function onHitSplat(game: Game, data: any) {
 function onHealthBar(game: Game, data: any) {
     const character = data.character == "player" ? game.getPlayer(data.characterId) 
         : game.getNpc(data.characterId)
-    character.healthRatio = data.ratio
+
+    character.healthBarComponent.healthRatio = data.ratio
 }
 
 function onHealth(game: Game, data: any) {

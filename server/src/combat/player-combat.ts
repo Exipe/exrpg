@@ -1,7 +1,7 @@
 
 import { HealthPacket } from "../connection/outgoing-packet";
+import { speedBonus } from "../formula";
 import { Player, SPAWN_POINT } from "../player/player";
-import { speedBonus } from "../util";
 import { CombatHandler } from "./combat";
 
 const HEALTH = 100

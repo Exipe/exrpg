@@ -27,7 +27,7 @@ export class Npc extends Character {
         .then(sprite => {
             this.sprite = sprite
             this.setDimensions(sprite.width, sprite.height)
-            this.setNameTag("npcName", this.data.name)
+            this.nameTagComponent.setNameTag("npcName", this.data.name)
         })
     }
 

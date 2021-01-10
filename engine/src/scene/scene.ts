@@ -207,6 +207,7 @@ export class Scene {
     }
 
     public resize(width: number, height: number, anchorX: 0 | 1 | 2, anchorY: 0 | 1 | 2) {
+        this.entityList.destroy()
         this.entityList = new EntityList() //otherwise it duplicates objects
         this.items = []
 
@@ -231,6 +232,12 @@ export class Scene {
         this._decoLayer.update(this.engine)
     }
 
+    public animate(dt: number) {
+        this.entityList.fromBack(e => {
+            e.animate(dt)
+        })
+    }
+
     public draw() {
         const camera = this.engine.camera
 
@@ -251,6 +258,10 @@ export class Scene {
         })
 
         this._attribLayer.draw(this.engine, firstX, firstY, lastX, lastY)
+    }
+
+    public destroy() {
+        this.entityList.destroy()
     }
 
 }
