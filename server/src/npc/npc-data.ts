@@ -7,6 +7,10 @@ const DEFAULT_ATTACK_SPEED = 1
 const DEFAULT_WALK_SPEED = 1
 const DEFAULT_WALK_RADIUS = 0 // don't move
 
+function defaultXp(health: number) {
+    return Math.ceil(health / 2.5)
+}
+
 export interface NpcCombatData {
     weapon: string
     respawnTime: number
@@ -15,6 +19,7 @@ export interface NpcCombatData {
     maxHit: number
     accuracy: number
     defence: number
+    experience: number
 }
 
 export interface NpcData {
@@ -50,7 +55,8 @@ export async function loadNpcData() {
                 attackSpeed: cb.attackSpeed ? cb.attackSpeed : DEFAULT_ATTACK_SPEED,
                 maxHit: cb.maxHit,
                 accuracy: cb.accuracy,
-                defence: cb.defence
+                defence: cb.defence,
+                experience: cb.experience ? cb.experience : defaultXp(cb.health)
             }
         }
 

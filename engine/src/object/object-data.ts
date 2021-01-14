@@ -2,6 +2,7 @@
 import { Sprite } from "../texture/sprite"
 import { Engine, Light } from ".."
 import { loadTexture } from "../texture/texture"
+import { ShadowData } from "../entity/entity-shadow"
 
 export type ObjectOption = [string, string]
 
@@ -18,6 +19,8 @@ export class ObjectData {
 
     public light = 0
     public width = 1
+
+    public shadowData = null as ShadowData
 
     constructor(id: string, name: string, spritePath: string, options: ObjectOption[]) {
         this.id = id

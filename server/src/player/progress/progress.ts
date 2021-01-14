@@ -18,6 +18,11 @@ export interface SaveAttrib {
 }
 
 export interface Progress {
+    level: number
+    experience: number
+
+    health: number
+
     position: {
         x: number,
         y: number,

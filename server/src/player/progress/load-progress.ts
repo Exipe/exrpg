@@ -8,6 +8,11 @@ import { isAttribId } from "../attrib";
 import { isMapId } from "../../scene/map-id";
 
 export function loadProgress(player: Player, progress: Progress) {
+    player.level.level = progress.level
+    player.level.experience = progress.experience
+
+    player.combatHandler.health = progress.health
+
     for(let i = 0; i < progress.inventory.length; i++) {
         const saveItem = progress.inventory[i]
         if(saveItem == null) {

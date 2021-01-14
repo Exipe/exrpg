@@ -52,6 +52,10 @@ async function onSetObject(game: Game, objects: [string, number, number][]) {
     })
 }
 
+export function onLevel(game: Game, data: any) {
+    game.status.setLevel(data.level, data.experience, data.requiredExperience)
+}
+
 export function bindIncomingPackets(game: Game) {
     const connection = game.connection
 
@@ -66,4 +70,5 @@ export function bindIncomingPackets(game: Game) {
     bind("LOAD_MAP", onLoadMap)
     bind("SET_OBJECT", onSetObject)
     bind("BRIGHTNESS", onBrightness)
+    bind("LEVEL", onLevel)
 }

@@ -31,6 +31,9 @@ export function saveProgress(player: Player): Progress {
     }))
 
     return {
+        level: player.level.level,
+        experience: player.level.experience,
+        health: player.combatHandler.health,
         position: position,
         inventory: inventory,
         equipment: equipment,

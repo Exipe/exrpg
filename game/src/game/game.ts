@@ -19,8 +19,12 @@ import { StatusModel } from "./model/status-model";
 import { bindIncomingPackets } from "../connection/incoming-packet";
 
 export async function initGame(engine: Engine, connection: Connection) {
-    const game = new Game(engine, connection)
-    
+    const game = new Game(engine, connection);
+
+    (window as any).hideLocal = () => {
+        game.getLocal().destroy()
+    }
+
     await initPlayers(game)
     initNpcs(game)
     initObjects(game)

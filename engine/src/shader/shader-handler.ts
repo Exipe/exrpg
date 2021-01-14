@@ -7,6 +7,7 @@ import { Camera } from "../camera"
 import { BaseShader } from "./base-shader"
 import { StandardShader } from "./standard-shader"
 import { LightShader } from "./light-shader"
+import { EntityShadowShader } from "./entity-shadow-shader"
 
 /**
  * Loads shader source code and compiles an OpenGL shader
@@ -35,24 +36,31 @@ async function loadGlShader(gl: WebGL2RenderingContext, srcPath: string, srcFile
  *      path to find the necessary GLSL source files
  */
 export async function initShaders(gl: WebGL2RenderingContext, srcPath: string) {
+    const vert = (file: string) => loadGlShader(gl, srcPath, file, gl.VERTEX_SHADER)
+    const frag = (file: string) => loadGlShader(gl, srcPath, file, gl.FRAGMENT_SHADER)
+
     const results = await Promise.all([
-        loadGlShader(gl, srcPath, "standard-vert", gl.VERTEX_SHADER),
-        loadGlShader(gl, srcPath, "standard-frag", gl.FRAGMENT_SHADER),
-        loadGlShader(gl, srcPath, "base-vert", gl.VERTEX_SHADER),
-        loadGlShader(gl, srcPath, "overlay-vert", gl.VERTEX_SHADER),
-        loadGlShader(gl, srcPath, "overlay-frag", gl.FRAGMENT_SHADER),
-        loadGlShader(gl, srcPath, "shadow-vert", gl.VERTEX_SHADER),
-        loadGlShader(gl, srcPath, "shadow-frag", gl.FRAGMENT_SHADER),
-        loadGlShader(gl, srcPath, "light-vert", gl.VERTEX_SHADER),
-        loadGlShader(gl, srcPath, "light-frag", gl.FRAGMENT_SHADER)])
+        vert("standard-vert"),
+        frag("standard-frag"),
+        vert("base-vert"),
+        vert("overlay-vert"),
+        frag("overlay-frag"),
+        vert("shadow-vert"),
+        frag("shadow-frag"),
+        vert("light-vert"),
+        frag("light-frag"),
+        vert("entity-shadow-vert"),
+        frag("entity-shadow-frag")])
 
     let standardShader = new StandardShader(gl, results[0], results[1])
     let baseShader = new BaseShader(gl, results[2], results[1])
     let overlayShader = new OverlayShader(gl, results[3], results[4])
     let shadowShader = new ShadowShader(gl, results[5], results[6])
     let lightShader = new LightShader(gl, results[7], results[8])
+    let entityShadowShader = new EntityShadowShader(gl, results[9], results[10])
 
-    return new ShaderHandler(standardShader, baseShader, overlayShader, shadowShader, lightShader)
+    return new ShaderHandler(standardShader, baseShader, overlayShader,
+        shadowShader, lightShader, entityShadowShader)
 }
 
 export class ShaderHandler {
@@ -64,21 +72,24 @@ export class ShaderHandler {
     private overlayShader: OverlayShader
     private shadowShader: ShadowShader
     private lightShader: LightShader
+    private entityShadowShader: EntityShadowShader
 
     private all: Shader[]
 
-    constructor(standardShader: StandardShader, baseShader: BaseShader, overlayShader: OverlayShader, shadowShader: ShadowShader, lightShader: LightShader) 
+    constructor(standardShader: StandardShader, baseShader: BaseShader, overlayShader: OverlayShader, 
+        shadowShader: ShadowShader, lightShader: LightShader, entityShadowShader: EntityShadowShader) 
     {
         this.standardShader = standardShader
         this.baseShader = baseShader
         this.overlayShader = overlayShader
         this.shadowShader = shadowShader
         this.lightShader = lightShader
+        this.entityShadowShader = entityShadowShader
 
         /*
         Light shader purposefully excluded, as it uses its own view/projection matrices
         */
-        this.all = [ standardShader, baseShader, overlayShader, shadowShader ]
+        this.all = [ standardShader, baseShader, overlayShader, shadowShader, entityShadowShader ]
     }
 
     private setCurrent(shader: Shader) {
@@ -111,6 +122,11 @@ export class ShaderHandler {
     useLightShader() {
         this.setCurrent(this.lightShader)
         return this.lightShader
+    }
+
+    useEntityShadowShader() {
+        this.setCurrent(this.entityShadowShader)
+        return this.entityShadowShader
     }
 
     setProjection(width: number, height: number) {

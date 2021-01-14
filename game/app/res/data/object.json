@@ -4,6 +4,11 @@
         "name": "Tree",
         "sprite": "tree",
 
+        "shadow": {
+            "offsetX": 4,
+            "offsetY": 4
+        },
+
         "options": [
             "Chop down"
         ]

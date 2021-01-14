@@ -31,6 +31,13 @@ export async function initObjects(resPath: string) {
         if(objData.light) {
             obj.light = objData.light
         }
+
+        if(objData.shadow) {
+            obj.shadowData = {
+                offsetX: objData.offsetX ? objData.offsetX : 0,
+                offsetY: objData.offsetY ? objData.offsetY : 0
+            }
+        }
     });
 
     return new ObjectHandler(objMap, objList)

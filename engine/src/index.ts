@@ -141,16 +141,13 @@ export class Engine {
             this.onAnimate(dt)
         }
 
-        if(this.scene != null) {
-            this.scene.animate(dt)
-        }
-
-        this.lightHandler.render(this)
-
         this.gl.clearColor(0, 0, 0, 1)
         this.gl.clear(this.gl.COLOR_BUFFER_BIT)
 
         if(this.scene != null) {
+            this.scene.animate(dt)
+
+            this.lightHandler.render(this, this.scene)
             this.scene.draw()
         }
 

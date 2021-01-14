@@ -21,3 +21,11 @@ export function speedBonus(x: number) {
 
     return Math.max(0.05, 1 + (x >= 0 ? 1 : -1) * result)
 }
+
+export function experienceRequired(level: number) {
+    return 100 + Math.floor(Math.pow(level, 3) / 1.5);
+}
+
+export function maxHealth(level: number) {
+    return level < 20 ? 100 + level * 5 : level * 10
+}

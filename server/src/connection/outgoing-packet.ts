@@ -34,8 +34,11 @@ export class WelcomePacket implements Packet {
     public readonly id = "WELCOME"
     public readonly data: any
 
-    constructor(id: number) {
-        this.data = id
+    constructor(id: number, name: string) {
+        this.data = {
+            id: id,
+            name: name
+        }
     }
 }
 
@@ -273,5 +276,18 @@ export class UpdateAttribPacket implements Packet {
 
     constructor(attribs: [AttribId, number, number][]) {
         this.data = attribs
+    }
+}
+
+export class UpdateLevelPacket implements Packet {
+    public readonly id = "LEVEL"
+    public readonly data: any
+
+    constructor(level: number, experience: number, requiredExperience: number) {
+        this.data = {
+            level: level,
+            experience: experience,
+            requiredExperience: requiredExperience
+        }
     }
 }

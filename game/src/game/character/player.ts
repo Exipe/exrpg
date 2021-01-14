@@ -80,8 +80,9 @@ export async function initPlayers(game: Game) {
         return appearanceValues
     }
 
-    connection.on("WELCOME", (id: number) => {
-        game.localId = id
+    connection.on("WELCOME", data => {
+        game.localId = data.id
+        game.status.name = data.name
     })
 
     connection.on("ADD_PLAYER", data => {

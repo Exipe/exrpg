@@ -1,6 +1,7 @@
 
 import { Character } from "../character/character";
 import { HealthBarPacket, HitSplatPacket } from "../connection/outgoing-packet";
+import { DamageCounter } from "./damage-counter";
 
 function highHitChance(accuracy: number, defence: number) {
     let remainder = Math.abs(accuracy - defence)
@@ -32,6 +33,8 @@ const ATTACK_DELAY = 2000
 export abstract class CombatHandler {
 
     private readonly character: Character
+    
+    private damageCounter = new DamageCounter()
 
     public attackDelay: number
 
@@ -60,7 +63,7 @@ export abstract class CombatHandler {
 
     protected abstract retaliate(other: Character): void
 
-    protected abstract die(): void;
+    protected abstract die(killer: Character): void;
 
     public attack(other: CombatHandler) {
         const self = this.character
@@ -81,6 +84,10 @@ export abstract class CombatHandler {
         }
 
         other.retaliate(self)
+
+        if(self.type == "player") {
+            other.damageCounter.count(self.id, damage)
+        }
         other.damage(damage)
     }
 
@@ -98,7 +105,8 @@ export abstract class CombatHandler {
         )
 
         if(this.health <= 0) {
-            this.die()
+            const killer = this.damageCounter.determineKiller()
+            this.die(killer)
         }
     }
 

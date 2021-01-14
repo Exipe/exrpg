@@ -1,10 +1,13 @@
 import { Character } from "../character/character";
 import { Npc } from "../npc/npc";
+import { Player } from "../player/player";
 import { CombatHandler } from "./combat";
 
 export class NpcCombatHandler extends CombatHandler {
 
     private readonly npc: Npc
+
+    private readonly xp: number
 
     protected readonly accuracy: number
 
@@ -15,6 +18,7 @@ export class NpcCombatHandler extends CombatHandler {
     constructor(npc: Npc, data = npc.data.combatData) {
         super(npc, data.health, data.attackSpeed, data.maxHit)
         this.npc = npc
+        this.xp = data.experience
         this.accuracy = data.accuracy
         this.defence = data.defence
         this.heldItem = data.weapon
@@ -31,8 +35,13 @@ export class NpcCombatHandler extends CombatHandler {
         self.attack(other)
     }
 
-    protected die() {
+    protected die(killer: Player) {
         this.npc.remove()
+
+        if(killer != null) {
+            killer.level.addExperience(this.xp)
+        }
+
         this.health = this.maxHealth
 
         setTimeout(() => {

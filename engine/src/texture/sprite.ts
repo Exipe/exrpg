@@ -2,7 +2,9 @@
 import { Texture } from "./texture";
 import { Engine } from "..";
 import { Quad } from "../quad";
-import { translation, scaling, Matrix } from "../matrix";
+import { translation, Matrix } from "../matrix";
+import { StandardShader } from "../shader/standard-shader";
+import { EntityShadowShader } from "../shader/entity-shadow-shader";
 
 export class Sprite {
 
@@ -39,15 +41,19 @@ export class Sprite {
         return this.texture.height
     }
 
-    public draw(x: number, y: number) {
-        this.drawMatrix(translation(x, y))
+    private get standardShader(): StandardShader | EntityShadowShader {
+        return this.engine.shaderHandler.useStandardShader()
     }
 
-    public drawMatrix(matrix: Matrix) {
+    public draw(x: number, y: number, shader = this.standardShader) {
+        this.drawMatrix(translation(x, y), shader)
+    }
+
+    public drawMatrix(matrix: Matrix, shader = this.standardShader) 
+    {
         const engine = this.engine
         const gl = engine.gl
 
-        const shader = engine.shaderHandler.useStandardShader()
         this.texture.bind(shader.textureId)
         shader.setModelMatrix(matrix)
 

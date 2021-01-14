@@ -1,5 +1,5 @@
 
-import { Engine } from "..";
+import { Engine, Scene, SHADOW_OUTLINE } from "..";
 import { initLightVAO, Light, renderLight } from "./light";
 
 export const LIGHT_TEXTURE_ID = 7
@@ -32,8 +32,8 @@ export class LightHandler {
 
         gl.activeTexture(gl.TEXTURE0 + LIGHT_TEXTURE_ID)
         gl.bindTexture(gl.TEXTURE_2D, this.glTexture)
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
 
         this.fb = gl.createFramebuffer()
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb)
@@ -65,8 +65,6 @@ export class LightHandler {
         const gl = engine.gl
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb)
         gl.viewport(0, 0, this.width, this.height)
-
-        gl.bindVertexArray(this.lightVao)
     }
 
     private postRender(engine: Engine) {
@@ -75,15 +73,34 @@ export class LightHandler {
         gl.viewport(0, 0, engine.camera.realWidth, engine.camera.realHeight)
     }
 
-    public render(engine: Engine) {
+    private renderShadows(engine: Engine, scene: Scene) {
+        const shadowShader = engine.shaderHandler.useEntityShadowShader()
+
+        scene.entityList.fromBack(e => {
+            if(e.shadow == null) {
+                return
+            }
+
+            shadowShader.setColor(SHADOW_OUTLINE)
+            e.shadow.drawShadow(shadowShader)
+
+            shadowShader.setColor([this.brightness, this.brightness, this.brightness, 1])
+            e.shadow.draw(shadowShader)
+        })
+    }
+
+    public render(engine: Engine, scene: Scene) {
         this.preRender(engine)
         const gl = engine.gl
 
         gl.clearColor(this.brightness, this.brightness, this.brightness, 1)
         gl.clear(gl.COLOR_BUFFER_BIT)
 
-        const shader = engine.shaderHandler.useLightShader()
-        this.lights.forEach(l => renderLight(gl, shader, l))
+        this.renderShadows(engine, scene)
+
+        gl.bindVertexArray(this.lightVao)        
+        const lightShader = engine.shaderHandler.useLightShader()
+        this.lights.forEach(l => renderLight(gl, lightShader, l))
 
         this.postRender(engine)
     }

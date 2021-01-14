@@ -39,7 +39,7 @@ export class Scene {
 
     private blockMap: BlockMap
 
-    private entityList: EntityList = new EntityList()
+    public entityList: EntityList = new EntityList()
     private items = [] as Item[]
 
     constructor(engine: Engine, width: number, height: number) {

@@ -13,6 +13,11 @@ import { PlayerAttribHandler } from "./attrib"
 import { PlayerCombatHandler } from "../combat/player-combat"
 import { speedBonus } from "../formula"
 import { MapId } from "../scene/map-id"
+import { PlayerLevel } from "./player-level"
+
+export function isPlayer(character: Character): character is Player {
+    return character.type == "player"
+}
 
 export const SPAWN_POINT = [ "main", 18, 41 ] as [ MapId, number, number ]
 
@@ -33,9 +38,12 @@ export class Player extends Character {
     private dialogue = null as Dialogue
     private dialogueId = -1
 
+    public level = new PlayerLevel(this)
+
     constructor(connection: Connection, id: number, name: string, password: string, progress = null as Progress) {
         super("player", id)
         this.combatHandler = new PlayerCombatHandler(this)
+        this.level.level = 1
 
         connection.player = this
         this.connection = connection
@@ -96,11 +104,8 @@ export class Player extends Character {
 
     public ready() {
         this.send(new BrightnessPacket(weatherHandler.brightness))
-        this.send(new WelcomePacket(this.id))
+        this.send(new WelcomePacket(this.id, this.name))
         this.send(new MessagePacket("Welcome to ExRPG."))
-
-        const cb = this.combatHandler as PlayerCombatHandler
-        cb.updateHealth()
 
         if(this.progress != null) {
             loadProgress(this, this.progress)
@@ -108,6 +113,11 @@ export class Player extends Character {
             this.inventory.add("beta_hat", 1)
             this.goTo(...SPAWN_POINT)
         }
+
+        this.level.update()
+
+        const cb = this.combatHandler as PlayerCombatHandler
+        cb.updateHealth()
 
         this.connection.state = "playing"
     }

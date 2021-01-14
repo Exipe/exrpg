@@ -3,6 +3,7 @@ import { TILE_SIZE } from ".."
 import { EntityList } from "./entity-list"
 import { InputHandler } from "../input-handler"
 import { ComponentHandler } from "./component-handler"
+import { EntityShadow } from "./entity-shadow"
 
 export function feetCoords(tileX: number, tileY: number) {
     return [ tileX * TILE_SIZE, tileY * TILE_SIZE ]
@@ -12,8 +13,8 @@ export abstract class Entity {
 
     protected readonly tileSpan: number
 
-    protected drawX = 0
-    protected drawY = 0
+    public drawX = 0
+    public drawY = 0
 
     public tileX: number
     public tileY: number
@@ -34,7 +35,8 @@ export abstract class Entity {
     public list: EntityList = null
 
     public componentHandler = new ComponentHandler()
-
+    public shadow = null as EntityShadow
+    
     constructor(tileX: number, tileY: number, width = 0, height = 0, tileSpan = 1) {
         this.tileX = tileX
         this.tileY = tileY

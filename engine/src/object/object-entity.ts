@@ -5,6 +5,7 @@ import { ObjectData } from "./object-data";
 import { Entity } from "../entity/entity";
 import { InputHandler } from "../input-handler";
 import { LightComponent } from "../light/light-component";
+import { EntityShadow } from "../entity/entity-shadow";
 
 export class ObjectEntity extends Entity {
 
@@ -26,6 +27,10 @@ export class ObjectEntity extends Entity {
         .then(sprite => {
             this.sprite = sprite
             this.setDimensions(sprite.width, sprite.height)
+
+            if(objectData.shadowData != null) {
+                this.shadow = new EntityShadow(this, sprite, objectData.shadowData)
+            }
         })
     }
 

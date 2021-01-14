@@ -1,3 +1,8 @@
+1.5
+- Lighting & shadows
+- Level up combat
+- NPC:s with player appearance
+
 1.4
 - Basic pvp and pvm combat
 - Added NPC- and player name tags
