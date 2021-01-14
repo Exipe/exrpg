@@ -19,9 +19,9 @@ export class PlayerLevel {
         return this._level
     }
 
-    public set level(value: number) {
+    public setLevel(value: number, updateHealth = true) {
         this.requiredExperience = experienceRequired(value)
-        this.player.combatHandler.maxHealth = maxHealth(value)
+        this.player.playerCombat.setMaxHealth(maxHealth(value), updateHealth)
         this._level = value
     }
 
@@ -34,7 +34,7 @@ export class PlayerLevel {
 
         while(this.experience >= this.requiredExperience) {
             this.experience -= this.requiredExperience
-            this.level++
+            this.setLevel(this._level+1)
 
             this.player.sendMessage("Congratulations, you have gained a level!")
 

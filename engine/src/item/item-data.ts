@@ -4,6 +4,8 @@ import { Engine } from ".."
 import { loadTexture } from "../texture/texture"
 import { EquipmentData } from "./equipment-data"
 
+export type ItemOption = [string, string]
+
 export class ItemData {
 
     public readonly id: string
@@ -12,13 +14,16 @@ export class ItemData {
 
     public readonly equipData: EquipmentData
 
+    public readonly options: ItemOption[]
+
     private sprite: Sprite = null
 
-    constructor(id: string, name: string, spritePath: string, equipData: EquipmentData) {
+    constructor(id: string, name: string, spritePath: string, equipData: EquipmentData, options: ItemOption[]) {
         this.id = id
         this.name = name
         this.spritePath = spritePath
         this.equipData = equipData
+        this.options = options
     }
 
     public async getSprite(engine: Engine) {

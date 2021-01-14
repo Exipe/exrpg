@@ -8,7 +8,7 @@ import { isAttribId } from "../attrib";
 import { isMapId } from "../../scene/map-id";
 
 export function loadProgress(player: Player, progress: Progress) {
-    player.level.level = progress.level
+    player.level.setLevel(progress.level, false)
     player.level.experience = progress.experience
 
     player.combatHandler.health = progress.health

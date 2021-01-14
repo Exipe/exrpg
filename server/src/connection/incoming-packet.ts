@@ -3,7 +3,7 @@ import { ConnectionHandler } from "./connection-handler";
 import { Connection } from "./connection";
 import { INVENTORY_SIZE } from "../item/inventory";
 import { isEquipSlot } from "../item/equipment";
-import { playerHandler, objDataHandler, npcHandler, commandHandler } from "../world";
+import { playerHandler, objDataHandler, npcHandler, commandHandler, actionHandler } from "../world";
 
 /*
 Handle packet spoofing.
@@ -173,7 +173,16 @@ function onUseItem(conn: Connection, data: any) {
         } else {
             report(conn, `Attempt to equip unequipable item: ${item.id}`)
         }
+
+        return
     }
+    
+    if(!item.data.actions.includes(action)) {
+        report(conn, `Invalid action, ${action} on item: ${item.id}`)
+        return
+    }
+
+    actionHandler.itemAction(player, item.id, action, slot)
 }
 
 /*

@@ -67,6 +67,30 @@ export class PlayerCombatHandler extends CombatHandler {
         this.player.send(new HealthPacket(this.health, this.maxHealth))
     }
 
+    public setMaxHealth(maxHealth: number, update = true) {
+        this.maxHealth = maxHealth
+
+        if(update) {
+            this.updateHealth()
+        }
+    }
+
+    public setHealth(health: number, update = true) {
+        this.health = health
+
+        if(update) {
+            this.updateHealth()
+        }
+    }
+
+    public heal(value: number, update = true) {
+        this.health += value
+
+        if(update) {
+            this.updateHealth()
+        }
+    }
+
     public damage(value: number) {
         super.damage(value)
         this.updateHealth()

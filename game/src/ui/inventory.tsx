@@ -87,6 +87,13 @@ export function Inventory(props: InventoryProps) {
             ])
         }
 
+        data.options.forEach(option => {
+            ctxMenu.push([
+                `${option[0]} ${data.name}`, 
+                () => { props.useItem(option[1], data.id, idx) }
+            ])
+        })
+
         ctxMenu.push([
             "Drop " + data.name, 
             () => { props.useItem("drop", data.id, idx) }

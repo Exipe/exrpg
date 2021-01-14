@@ -3,8 +3,11 @@ import { actionHandler, objDataHandler } from "../world"
 import { Woodcutting, Mining } from "./gathering"
 import { Dialogue } from "../player/dialogue"
 import { randomChance, randomInt } from "../util"
+import { initFood } from "./food"
 
 export function initContent() {
+    initFood()
+
     actionHandler.onObject("car", (player, action) => {
         if(action == "drive") {
             player.sendMessage("Car racing - coming soon™!")

@@ -14,6 +14,7 @@ import { PlayerCombatHandler } from "../combat/player-combat"
 import { speedBonus } from "../formula"
 import { MapId } from "../scene/map-id"
 import { PlayerLevel } from "./player-level"
+import { FoodHandler } from "../item/food-handler"
 
 export function isPlayer(character: Character): character is Player {
     return character.type == "player"
@@ -38,12 +39,15 @@ export class Player extends Character {
     private dialogue = null as Dialogue
     private dialogueId = -1
 
-    public level = new PlayerLevel(this)
+    public readonly level = new PlayerLevel(this)
+    public readonly foodHandler = new FoodHandler(this)
+
+    public readonly playerCombat: PlayerCombatHandler
 
     constructor(connection: Connection, id: number, name: string, password: string, progress = null as Progress) {
         super("player", id)
-        this.combatHandler = new PlayerCombatHandler(this)
-        this.level.level = 1
+        this.combatHandler = this.playerCombat = new PlayerCombatHandler(this)
+        this.level.setLevel(1, false)
 
         connection.player = this
         this.connection = connection
@@ -116,8 +120,7 @@ export class Player extends Character {
 
         this.level.update()
 
-        const cb = this.combatHandler as PlayerCombatHandler
-        cb.updateHealth()
+        this.playerCombat.updateHealth()
 
         this.connection.state = "playing"
     }

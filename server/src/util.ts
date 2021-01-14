@@ -1,6 +1,14 @@
 
 import { ObjectData } from "./object/object-data"
 
+export function currentTime() {
+    return (new Date()).getTime()
+}
+
+export function timeSince(timestamp: number) {
+    return currentTime() - timestamp
+}
+
 export function randomChance(probability: number) {
     return Math.random() < 1 / probability
 }

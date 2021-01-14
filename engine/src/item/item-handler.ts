@@ -1,4 +1,4 @@
-import { ItemData } from "./item-data";
+import { ItemData, ItemOption } from "./item-data";
 import { EquipmentData, EquipmentSprite } from "./equipment-data";
 
 export async function initItems(resPath: string) {
@@ -14,6 +14,9 @@ export async function initItems(resPath: string) {
         if(itemMap.has(id)) {
             throw "IMPORTANT - duplicate item ID: " + id
         }
+
+        const options: ItemOption[] = itemData.options ? itemData.options.map((option: string) => [
+            option, option.toLowerCase().replace(" ", "_")]) : []
 
         let equip = null as EquipmentData
 
@@ -37,7 +40,7 @@ export async function initItems(resPath: string) {
             equip = new EquipmentData(null, -1, itemData.equip.slot)
         }
 
-        itemMap.set(id, new ItemData(id, name, resPath + "/item/" + sprite + ".png", equip))
+        itemMap.set(id, new ItemData(id, name, resPath + "/item/" + sprite + ".png", equip, options))
     })
 
     return new ItemHandler(itemMap)

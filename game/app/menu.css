@@ -1,25 +1,49 @@
 
-#menu {
-    position: relative;
+* {
+    margin: 0;
+}
 
-    width: 400px;
-    height: 340px;
-    margin: 100px auto;
-    padding: 32px;
+#menu {
+    font-family: sans-serif;
+    color: white;
+
+    margin-top: 100px;
 
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
-    font-family: sans-serif;
+#menuContainer, #updateContainer {
+    width: 400px;
+    height: 340px;
+    padding: 32px;
+
+    margin: 16px;
+
     background-color: var(--bg-color);
     border: 3px solid var(--fg-color);
     border-radius: 4px;
-    color: white
 }
 
-#menu h1, #menu p {
-    margin: 0;
+#updateContainer {
+    white-space: pre-wrap;
+    overflow: auto;
+}
+
+#updateContainer::-webkit-scrollbar-thumb {
+    background-color: var(--fg-color);
+}
+
+#updateContainer::-webkit-scrollbar {
+    background-color: transparent;
+}
+
+#menuContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #inputContainer {

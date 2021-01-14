@@ -142,7 +142,11 @@
     {
         "id": "apple",
         "name": "Apple",
-        "sprite": "apple"
+        "sprite": "apple",
+
+        "options": [
+            "Eat"
+        ]
     },
 
     {

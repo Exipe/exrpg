@@ -1,9 +1,6 @@
 
+import { currentTime } from "../util"
 import { Task } from "./task"
-
-function currentTime() {
-    return (new Date()).getTime()
-}
 
 export class TaskHandler {
 

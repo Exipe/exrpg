@@ -3,6 +3,7 @@ import React = require("react");
 import { StateId } from ".";
 import { initConnection, Connection } from "./connection/connection";
 import { LoginPacket, RegisterPacket } from "./connection/packet";
+import { UpdateContainer } from "./updates";
 
 export interface MenuProps {
     setState: (state: StateId) => void
@@ -10,7 +11,7 @@ export interface MenuProps {
 
 const BACKGROUND = "menu_bg.png"
 
-const VERSION_MAJOR = 3
+const VERSION_MAJOR = 0
 const VERSION_MINOR = 0
 
 const PROTOCOL = (window as any).protocol
@@ -125,7 +126,7 @@ function RegisterMenu(properties: { props: MenuStateProps }) {
     </>
 }
 
-export function Menu(props: MenuProps) {
+export function MenuContainer(props: MenuProps) {
     const [state, setState] = React.useState("main" as MenuState)
 
     const [connection, setConnection] = React.useState(null as Connection)
@@ -133,9 +134,6 @@ export function Menu(props: MenuProps) {
     const [errorMessage, setErrorMessage] = React.useState("")
 
     React.useEffect(() => {
-        const body = document.querySelector("body")
-        body.style.backgroundImage = `url('${BACKGROUND}')`
-
         const connection = initConnection(PROTOCOL, ADDRESS, PORT)
         setConnection(connection)
 
@@ -158,7 +156,6 @@ export function Menu(props: MenuProps) {
         })
 
         return () => {
-            body.style.backgroundImage = ""
             connection.onOpen(null)
             connection.onClose(null)
             connection.off("CONNECT_RESPONSE")
@@ -185,9 +182,9 @@ export function Menu(props: MenuProps) {
             break
     }
 
-    return <div id="menu">
+    return <div id="menuContainer">
         <h1>ExRPG</h1>
-        <p>(Demo 1.{VERSION_MAJOR}.{VERSION_MINOR})</p>
+        <p>(Alpha 1.{VERSION_MAJOR}.{VERSION_MINOR})</p>
         <br />
         <p>Server status: {serverStatus}</p>
 
@@ -201,5 +198,19 @@ export function Menu(props: MenuProps) {
             <a target="_blank" href="https://github.com/Exipe/ExRPG">GitHub</a>
             <a target="_blank" href="#">Discord</a>
         </div>
+    </div>
+}
+
+export function Menu(props: MenuProps) {
+    React.useEffect(() => {
+        const body = document.querySelector("body")
+        body.style.backgroundImage = `url('${BACKGROUND}')`
+
+        return () => body.style.backgroundImage = ""
+    }, [])
+
+    return <div id="menu">
+        {MenuContainer(props)}
+        {UpdateContainer(props)}
     </div>
 }

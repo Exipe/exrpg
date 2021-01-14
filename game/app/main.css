@@ -439,6 +439,7 @@ canvas {
 }
 
 body {
+    background-attachment: fixed;
     background-position: top;
     background-repeat: no-repeat;
     background-color: black;
