@@ -1,5 +1,5 @@
 
-import { currentTime } from "../util"
+import { currentTime } from "../util/util"
 import { Task } from "./task"
 
 export class TaskHandler {

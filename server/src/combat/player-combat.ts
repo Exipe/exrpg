@@ -1,6 +1,6 @@
 
 import { HealthPacket, MessagePacket } from "../connection/outgoing-packet";
-import { maxHealth, speedBonus } from "../formula";
+import { maxHealth, speedBonus } from "../util/formula";
 import { Player, SPAWN_POINT } from "../player/player";
 import { playerHandler } from "../world";
 import { CombatHandler } from "./combat";

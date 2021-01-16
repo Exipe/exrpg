@@ -2,7 +2,8 @@
 import { Connection } from "../../connection/connection";
 import { ItemData } from "exrpg";
 import { Game } from "../game";
-import { UnequipItemPacket } from "../../connection/packet";
+import { SpendPointsPacket, UnequipItemPacket } from "../../connection/packet";
+import { AttribId } from "./attrib-model";
 
 export function initEquipment(game: Game) {
     const connection = game.connection
@@ -30,6 +31,10 @@ export class EquipmentModel {
 
     constructor(connection: Connection) {
         this.connection = connection
+    }
+
+    public spendPoints(points: [AttribId, number][]) {
+        this.connection.send(new SpendPointsPacket(points))
     }
 
     public setEquippedItems(equippedItems: Map<string, ItemData>) {

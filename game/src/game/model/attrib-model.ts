@@ -12,8 +12,9 @@ export const ATTRIBUTES = [
 ] as [AttribId, string, string][]
 
 export interface Attribute {
-    total: number,
+    value: number,
     armor: number
+    total: number
 }
 
 export class Attributes {
@@ -26,10 +27,13 @@ export class Attributes {
         return this._walkSpeed
     }
 
+    public points = 0
+
     constructor() {
         ATTRIBUTES.forEach(attrib => {
             this.attribs.set(attrib[0], {
                 total: 0,
+                value: 0,
                 armor: 0
             })
         })
@@ -52,11 +56,15 @@ export class Attributes {
 export function initAttribs(game: Game) {
     const connection = game.connection
 
-    connection.on("ATTRIB", (values: [AttribId, number, number][]) => {
+    connection.on("ATTRIB", (data: any) => {
         const attribs = new Attributes()
+        attribs.points = data.points
+
+        const values = data.attribs as [AttribId, number, number][]
         values.forEach(value => {
             attribs.set(value[0], {
                 total: value[1] + value[2],
+                value: value[1],
                 armor: value[2]
             })
         })

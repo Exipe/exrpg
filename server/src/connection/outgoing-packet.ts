@@ -272,10 +272,13 @@ export class CloseDialoguePacket implements Packet {
 
 export class UpdateAttribPacket implements Packet {
     public readonly id = "ATTRIB"
-    public readonly data: [AttribId, number, number][]
+    public readonly data: any
 
-    constructor(attribs: [AttribId, number, number][]) {
-        this.data = attribs
+    constructor(points: number, attribs: [AttribId, number, number][]) {
+        this.data = {
+            points: points,
+            attribs: attribs
+        }
     }
 }
 

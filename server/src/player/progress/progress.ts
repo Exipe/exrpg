@@ -34,4 +34,5 @@ export interface Progress {
     equipment: SaveEquip[]
 
     attributes: SaveAttrib[]
+    points: number
 }

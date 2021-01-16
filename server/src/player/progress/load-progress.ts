@@ -32,6 +32,8 @@ export function loadProgress(player: Player, progress: Progress) {
         player.attributes.setArmor(item, false)
     }
 
+    player.attributes.setPoints(progress.points, false)
+
     for(let attrib of progress.attributes) {
         if(!isAttribId(attrib.id)) {
             continue

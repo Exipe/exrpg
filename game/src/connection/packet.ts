@@ -1,3 +1,4 @@
+import { AttribId } from "../game/model/attrib-model"
 
 export interface Packet {
     id: string,
@@ -103,6 +104,15 @@ export class UnequipItemPacket implements Packet {
             id: id,
             slot: slot
         }
+    }
+}
+
+export class SpendPointsPacket implements Packet {
+    public readonly id = "SPEND_POINTS"
+    public readonly data: [AttribId, number][]
+
+    constructor(pointsSpent: [AttribId, number][]) {
+        this.data = pointsSpent
     }
 }
 

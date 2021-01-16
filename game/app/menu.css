@@ -1,8 +1,4 @@
 
-* {
-    margin: 0;
-}
-
 #menu {
     font-family: sans-serif;
     color: white;
@@ -12,6 +8,10 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+#menu * {
+    margin: 0;
 }
 
 #menuContainer, #updateContainer {

@@ -2,11 +2,13 @@
 import { actionHandler, objDataHandler } from "../world"
 import { Woodcutting, Mining } from "./gathering"
 import { Dialogue } from "../player/dialogue"
-import { randomChance, randomInt } from "../util"
+import { randomChance, randomInt } from "../util/util"
 import { initFood } from "./food"
+import { initDrops } from "./drops"
 
 export function initContent() {
     initFood()
+    initDrops()
 
     actionHandler.onObject("car", (player, action) => {
         if(action == "drive") {

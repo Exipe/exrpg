@@ -1,6 +1,6 @@
 
 import { Player } from "../player/player";
-import { currentTime, timeSince } from "../util";
+import { currentTime, timeSince } from "../util/util";
 
 export interface Food {
     delay: number

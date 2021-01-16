@@ -24,6 +24,8 @@ import { LightHandler } from "./light/light-handler"
 import { Light } from "./light/light"
 import { LightComponent } from "./light/light-component"
 
+export { Camera }
+
 export { Scene, SceneBuilder, Sprite, MergeTexture, loadScene, saveScene, feetCoords, 
     Entity, NpcData, NpcEntity, ItemData, EquipmentData, Item, ObjectEntity, Light, LightComponent }
 
@@ -121,6 +123,20 @@ export class Engine {
     public set map(map: Scene) {
         this.scene = map
         this.inputHandler.scene = map
+
+        let minX = -Infinity
+        let minY = -Infinity
+        let maxX = Infinity
+        let maxY = Infinity
+
+        if(map != null) {
+            minX = 0
+            minY = 0
+            maxX = map.width * TILE_SIZE
+            maxY = map.height * TILE_SIZE
+        }
+        
+        this.camera.setBoundaries(minX, minY, maxX, maxY)
     }
 
     public get map() {

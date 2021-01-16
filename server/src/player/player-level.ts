@@ -1,5 +1,5 @@
 import { MessagePacket, UpdateLevelPacket } from "../connection/outgoing-packet"
-import { experienceRequired, maxHealth } from "../formula"
+import { experienceRequired, maxHealth } from "../util/formula"
 import { playerHandler } from "../world"
 import { Player } from "./player"
 
@@ -37,6 +37,13 @@ export class PlayerLevel {
             this.setLevel(this._level+1)
 
             this.player.sendMessage("Congratulations, you have gained a level!")
+
+            const points = this.player.attributes.getPoints()
+            if(points > 0) {
+                this.player.sendMessage("P.S. Remember to spend your attribute points when you gain a level.")
+            }
+
+            this.player.attributes.setPoints(points + 5)
 
             if(this.level % 10 == 0) {
                 playerHandler.broadcast(new MessagePacket(`${this.player.name} has advanced to level ${this.level}!`))

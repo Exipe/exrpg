@@ -183,7 +183,7 @@
 
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    /*align-items: flex-end;*/
 }
 
 #tabArea > * {
@@ -198,6 +198,7 @@
 
 #tabs {
     width: fit-content;
+    align-self: flex-end;
     display: flex;
     justify-content: space-around;
     padding: 4px;
@@ -212,6 +213,30 @@
     image-rendering: pixelated;
 
     margin: 4px 12px;
+}
+
+.uiButton {
+    background-color: var(--bg-solid);
+    width: 100%;
+    padding: 2px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    color: white;
+}
+
+#settings {
+    width: 200px;
+    height: 200px;
+    padding: 4px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#fullscreenButton {
+    margin-top: auto;
 }
 
 #inventory {
@@ -244,9 +269,16 @@
     font-size: 14px;
 }
 
+#equipmentAttribs {
+    display: flex;
+    flex-direction: column;
+}
+
 #attribs {
-    float: left;
     margin: 0;
+    padding: 0 25px 0 25px;
+    text-align: center;
+    list-style-type: none;
 }
 
 #attribs > * {
@@ -264,14 +296,19 @@
     color: coral
 }
 
+#openPointSpend {
+    margin-top: auto;
+    text-align: center;
+}
+
 #equipment {
-    width: 350px;
+    display: flex;
+    justify-content: space-between;
     padding: 4px;
 }
 
 #equipmentGrid {
     display: grid;
-    float: left;
     grid-template-columns: repeat(3, 48px);
     grid-template-rows: repeat(3, 48px);
 }
@@ -300,6 +337,40 @@
 
 #legsSlot {
     background-image: url('ui/equip/legs.png');
+}
+
+#pointSpendContainer {
+    padding: 4px;
+    color: sandybrown;
+}
+
+#pointSpendContainer .uiButton {
+    text-align: center;
+}
+
+#pointSpendHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 2px solid saddlebrown;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+}
+
+#pointSpendAttribs {
+    display: grid;
+    grid-template-columns: repeat(6, auto);
+    column-gap: 4px;
+    row-gap: 4px;
+}
+
+.pointSpendAttrib {
+    padding-top: 2px;
+}
+
+#pointSpendConfirm {
+    grid-column: span 3;
 }
 
 #chatArea {
@@ -332,16 +403,19 @@
     color: white;
 }
 
-#closeChat {
+.closeButton {
     background-image: url('ui/close.png');
     width: 20px;
     height: 20px;
+    border-radius: 2px;
 
     background-color: var(--fg-color);
+}
+
+#closeChat {
     position: absolute;
     top: 4px;
     left: 4px;
-    border-radius: 2px;
 }
 
 #chatBoxMessageArea {

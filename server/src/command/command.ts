@@ -1,7 +1,7 @@
 
 import { ATTRIBUTES, isAttribId } from "../player/attrib";
 import { Player } from "../player/player";
-import { formatStrings } from "../util";
+import { formatStrings } from "../util/util";
 import { playerHandler, itemDataHandler, commandHandler, weatherHandler } from "../world";
 
 function onMeTo(player: Player, args: string[]) {

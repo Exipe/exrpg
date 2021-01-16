@@ -1,8 +1,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import React = require("react");
-import { MenuEntry } from "../game/model/context-menu-model";
-import { Item } from "../game/model/inventory-model";
+import { MenuEntry } from "../../game/model/context-menu-model";
+import { Item } from "../../game/model/inventory-model";
 
 export interface HeldItem {
     mouseX: number,

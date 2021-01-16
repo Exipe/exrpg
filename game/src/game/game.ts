@@ -17,6 +17,7 @@ import { AttributeModel, initAttribs } from "./model/attrib-model";
 import { OverlayAreaModel } from "./model/overlay-model";
 import { StatusModel } from "./model/status-model";
 import { bindIncomingPackets } from "../connection/incoming-packet";
+import { SettingsModel } from "./model/settings-model";
 
 export async function initGame(engine: Engine, connection: Connection) {
     const game = new Game(engine, connection);
@@ -83,6 +84,7 @@ export class Game {
     public readonly overlayArea: OverlayAreaModel
     public readonly attributes = new AttributeModel()
     public readonly status = new StatusModel()
+    public readonly settings: SettingsModel
 
     constructor(engine: Engine, connection: Connection) {
         this.engine = engine
@@ -92,6 +94,7 @@ export class Game {
         this.equipment = new EquipmentModel(connection)
         this.overlayArea = new OverlayAreaModel(engine.camera)
         this.chat = new ChatModel(connection)
+        this.settings = new SettingsModel(engine)
     }
 
     private get map() {
@@ -129,6 +132,7 @@ export class Game {
 
     public enterMap(map: Scene) {
         this.engine.map = map
+        this.settings.updateBoundary()
 
         this.players.forEach(p => {
             map.addEntity(p)

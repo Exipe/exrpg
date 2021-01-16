@@ -104,7 +104,6 @@
             "sprite": ["copper", 2],
 
             "bonuses": {
-                "speed_move": -1,
                 "defence": 4
             }
         }
@@ -119,7 +118,6 @@
             "sprite": ["copper", 3],
 
             "bonuses": {
-                "speed_move": -1,
                 "defence": 2
             }
         }

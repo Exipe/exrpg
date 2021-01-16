@@ -1,6 +1,7 @@
 import { Character } from "../character/character";
 import { Npc } from "../npc/npc";
 import { Player } from "../player/player";
+import { actionHandler } from "../world";
 import { CombatHandler } from "./combat";
 
 export class NpcCombatHandler extends CombatHandler {
@@ -40,6 +41,7 @@ export class NpcCombatHandler extends CombatHandler {
 
         if(killer != null) {
             killer.level.addExperience(this.xp)
+            actionHandler.npcDeath(killer, this.npc)
         }
 
         this.health = this.maxHealth

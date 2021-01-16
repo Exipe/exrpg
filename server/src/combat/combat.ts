@@ -1,32 +1,8 @@
 
 import { Character } from "../character/character";
 import { HealthBarPacket, HitSplatPacket } from "../connection/outgoing-packet";
+import { calculateDamage } from "../util/formula";
 import { DamageCounter } from "./damage-counter";
-
-function highHitChance(accuracy: number, defence: number) {
-    let remainder = Math.abs(accuracy - defence)
-    let result = 0
-
-    if(remainder > 20) {
-        result += 0.0025 * (remainder - 20)
-        remainder = 20
-    }
-
-    result += 0.01 * remainder
-
-    result = Math.min(0.45, result)
-    return 0.5 + (accuracy > defence ? 1 : -1) * result
-}
-
-function calculateDamage(maxDamage: number, accuracy: number, defence: number) {
-    const halfDmg = maxDamage / 2
-
-    let damage = Math.random() * halfDmg
-    if(Math.random() < highHitChance(accuracy, defence)) {
-        damage += halfDmg
-    }
-    return Math.ceil(damage)
-}
 
 const ATTACK_DELAY = 2000
 

@@ -1,14 +1,14 @@
 
 import { ChatArea } from "./chat-box"
 import { Game } from "../game/game"
-import { HeldItemPointer, HeldItem } from "./inventory"
 import { useState } from "react"
 import React = require("react")
 import { ContextMenu } from "./context-menu"
-import { TabArea } from "./tab-area"
+import { TabArea } from "./tab-area/tab-area"
 import { DialogueBox } from "./dialogue-box"
 import { OverlayArea } from "./overlay-area"
 import { StatusArea } from "./status-area"
+import { HeldItem, HeldItemPointer } from "./tab-area/inventory"
 
 export function UiContainer(props: { game: Game }) {
     const [heldItem, setHeldItem] = useState(null as HeldItem)

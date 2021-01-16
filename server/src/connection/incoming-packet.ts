@@ -4,6 +4,7 @@ import { Connection } from "./connection";
 import { INVENTORY_SIZE } from "../item/inventory";
 import { isEquipSlot } from "../item/equipment";
 import { playerHandler, objDataHandler, npcHandler, commandHandler, actionHandler } from "../world";
+import { isAttribId } from "../player/attrib";
 
 /*
 Handle packet spoofing.
@@ -228,6 +229,34 @@ function onUnequipItem(conn: Connection, data: any) {
 }
 
 /*
+SPEND_POINTS packet
+*/
+function onSpendPoints(conn: Connection, data: any) {
+    if(!Array.isArray(data)) {
+        report(conn, `Invalid SPEND_POINTS data: ${data}`)
+        return
+    }
+
+    const playerAttribs = conn.player.attributes
+
+    for(const attribute of data) {
+        const valid = Array.isArray(attribute)
+            && attribute.length == 2
+            && isAttribId(attribute[0])
+            && attribute[1] <= playerAttribs.getPoints()
+
+        if(!valid) {
+            report(conn, `Invalid SPEND_POINTS row: ${attribute}`)
+            continue
+        }
+
+        playerAttribs.spendPoints(attribute[0], attribute[1], false)
+    }
+
+    playerAttribs.update()
+}
+
+/*
 OBJECT_ACTION packet
 */
 function onObjectAction(conn: Connection, data: any) {
@@ -380,6 +409,7 @@ export function bindIncomingPackets(ch: ConnectionHandler) {
     ch.on("USE_ITEM", onUseItem)
     ch.on("TAKE_ITEM", onTakeItem)
     ch.on("UNEQUIP_ITEM", onUnequipItem)
+    ch.on("SPEND_POINTS", onSpendPoints)
     ch.on("OBJECT_ACTION", onObjectAction)
     ch.on("FOLLOW_PLAYER", onFollowPlayer)
     ch.on("ATTACK_PLAYER", onAttackPlayer)

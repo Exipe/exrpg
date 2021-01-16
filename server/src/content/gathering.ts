@@ -2,7 +2,7 @@
 import { Player } from "../player/player";
 import { Scene } from "../scene/scene";
 import { ObjectData } from "../object/object-data";
-import { objectDirection, randomChance } from "../util";
+import { objectDirection, randomChance } from "../util/util";
 import { SwingItemPacket } from "../connection/outgoing-packet";
 import { PrimaryTask } from "../character/task";
 

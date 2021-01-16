@@ -1,9 +1,10 @@
 
-import { Game } from "../game/game";
+import { Game } from "../../game/game";
 
 import { HeldItem, Inventory } from "./inventory";
 import React = require("react");
 import { Equipment } from "./equipment";
+import { Settings } from "./settings";
 
 export interface TabAreaProps {
     game: Game,
@@ -11,7 +12,7 @@ export interface TabAreaProps {
     setHeldItem: (item: HeldItem) => void
 }
 
-type TabId = "inventory" | "equipment" | "friends" | "setting"
+type TabId = "inventory" | "equipment" | "friends" | "settings"
 
 interface TabProps {
     id: TabId,
@@ -37,11 +38,6 @@ export function TabArea(props: TabAreaProps) {
         }
     }
 
-    let requestFullScreen = (_: any) => {
-        const container = document.querySelector("#container")
-        container.requestFullscreen()
-    }
-
     let displayTab = <></>
 
     if(tab == "inventory") {
@@ -60,6 +56,11 @@ export function TabArea(props: TabAreaProps) {
             equipment={game.equipment}
             attributes={game.attributes}
         />
+    } else if(tab == "settings") {
+        displayTab = <Settings 
+            ctxMenu={game.ctxMenu}
+            settings={game.settings}
+        />
     }
 
     return <div id="tabArea">
@@ -67,7 +68,7 @@ export function TabArea(props: TabAreaProps) {
             <Tab id="inventory" setTab={ openTab } />
             <Tab id="equipment" setTab={ openTab } />
             <Tab id="friends" setTab={ openTab } />
-            <Tab id="setting" setTab={ requestFullScreen } />
+            <Tab id="settings" setTab={ openTab } />
         </div>
 
         {displayTab}

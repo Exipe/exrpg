@@ -3,7 +3,7 @@ import { Character } from "../character/character";
 import { NpcDataHandler, NpcData } from "./npc-data";
 import { MoveNpcPacket } from "../connection/outgoing-packet";
 import { MapId } from "../scene/map-id";
-import { randomChance, randomOffset } from "../util";
+import { randomChance, randomOffset } from "../util/util";
 import { NpcCombatHandler } from "../combat/npc-combat";
 
 export class NpcHandler {
@@ -48,7 +48,7 @@ export class Npc extends Character {
     public readonly id: number
     public readonly data: NpcData
 
-    private readonly mapId: MapId
+    public readonly mapId: MapId
     private readonly spawnX: number
     private readonly spawnY: number
 

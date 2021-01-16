@@ -37,6 +37,7 @@ export function saveProgress(player: Player): Progress {
         position: position,
         inventory: inventory,
         equipment: equipment,
-        attributes: attributes
+        attributes: attributes,
+        points: player.attributes.getPoints()
     }
 }

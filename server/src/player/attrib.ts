@@ -22,6 +22,8 @@ export class PlayerAttribHandler {
 
     private readonly player: Player
 
+    private points = 0
+
     private attribs = new Map<AttribId, PlayerAttrib>()
     private listeners = new Map<AttribId, ChangeListener>()
 
@@ -50,7 +52,7 @@ export class PlayerAttribHandler {
     }
 
     public update() {
-        this.player.send(new UpdateAttribPacket(ATTRIBUTES.map(attribId => {
+        this.player.send(new UpdateAttribPacket(this.points, ATTRIBUTES.map(attribId => {
             const attrib = this.attribs.get(attribId)
             return [attribId, attrib.base, attrib.armor]
         })))
@@ -91,6 +93,31 @@ export class PlayerAttribHandler {
     public setBase(id: AttribId, value: number, update = true) {
         this.attribs.get(id).base = value
         this.didChange(id)
+
+        if(update) {
+            this.update()
+        }
+    }
+
+    public spendPoints(id: AttribId, amount: number, update = true) {
+        if(amount > this.points) {
+            throw `[Failure to spend points] not enough points ${amount} > ${this.points}`
+        }
+
+        this.setPoints(this.getPoints() - amount, false)
+        this.setBase(id, this.getBase(id) + amount, false)
+
+        if(update) {
+            this.update()
+        }
+    }
+
+    public getPoints() {
+        return this.points
+    }
+
+    public setPoints(points: number, update = true) {
+        this.points = points
 
         if(update) {
             this.update()

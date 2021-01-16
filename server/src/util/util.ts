@@ -1,5 +1,5 @@
 
-import { ObjectData } from "./object/object-data"
+import { ObjectData } from "../object/object-data"
 
 export function currentTime() {
     return (new Date()).getTime()

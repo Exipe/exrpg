@@ -25,6 +25,23 @@ export class Camera {
         this.lightHandler = lightHandler
     }
 
+    private maxX = Infinity
+    private maxY = Infinity
+
+    private minX = -Infinity
+    private minY = -Infinity
+
+    public setBoundaries(minX: number, minY: number, maxX: number, maxY: number) {
+        this.minX = minX
+        this.minY = minY
+        this.maxX = maxX
+        this.maxY = maxY
+
+        if(this.followEntity != null) {
+            this.fixPosition()
+        }
+    }
+
     public get realX() {
         return this._x
     }
@@ -48,16 +65,46 @@ export class Camera {
 
         this.followEntity = entity
         entity._onMove = () => {
-            this.centerAroundEntity()
+            this.fixPosition()
         }
 
-        this.centerAroundEntity()
+        this.fixPosition()
     }
 
-    private centerAroundEntity() {
-        const entityX = Math.floor((this.followEntity.feetX + this.followEntity.width / 2) * this._scale)
-        const entityY = Math.floor((this.followEntity.feetY - this.followEntity.height / 2) * this._scale)
-        this._move(entityX - this._width / 2, entityY - this._height / 2)
+    private fixPosition() {
+        const maxX = this.maxX * this._scale
+        const maxY = this.maxY * this._scale
+        const minX = this.minX * this._scale
+        const minY = this.minY * this._scale
+
+        let cameraX: number, cameraY: number
+
+        if(this._width < maxX) {
+            const entityX = Math.floor((this.followEntity.feetX + this.followEntity.width / 2) * this._scale)
+            cameraX = entityX - this._width / 2
+            if(cameraX < minX) {
+                cameraX = minX
+            } else if(cameraX > maxX - this._width) {
+                cameraX = maxX - this._width
+            }
+        } else { // center
+            cameraX = -this._width / 2 + maxX / 2
+        }
+
+        if(this._height < maxY) {
+            const entityY = Math.floor((this.followEntity.feetY - this.followEntity.height / 2) * this._scale)        
+            cameraY = entityY - this._height / 2
+    
+            if(cameraY < minY) {
+                cameraY = minY
+            } else if(cameraY > maxY - this._height) {
+                cameraY = maxY - this._height
+            }
+        } else { // center
+            cameraY = -this._height / 2 + maxY / 2
+        }
+
+        this._move(cameraX, cameraY)
     }
 
     translateClick(mouseX: number, mouseY: number) {
@@ -93,7 +140,7 @@ export class Camera {
         this.dimensionsChanged()
 
         if(this.followEntity != null) {
-            this.centerAroundEntity()
+            this.fixPosition()
             return
         }
         
@@ -109,7 +156,7 @@ export class Camera {
         this.shaderHandler.setProjection(width, height)
 
         if(this.followEntity != null) {
-            this.centerAroundEntity()
+            this.fixPosition()
         }
     }
 
