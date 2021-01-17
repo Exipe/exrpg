@@ -4,7 +4,7 @@ import { Attrib } from "./attrib";
 import { Packet, AddPlayerPacket, LoadMapPacket, RemovePlayerPacket, AddNpcPacket, RemoveNpcPacket, AddGroundItemPacket, RemoveGroundItemPacket, SetObjectPacket } from "../connection/outgoing-packet";
 import { Npc } from "../npc/npc";
 import { BlockMap } from "./block-map";
-import { GroundItem } from "../item/ground-item";
+import { GroundItem, itemDropStrategy, PrivateVisibilityStrategy } from "../item/ground-item";
 import { ItemData } from "../item/item-data";
 import { ObjectMap } from "../object/object-map";
 import { ObjectData } from "../object/object-data";
@@ -18,7 +18,7 @@ export class Scene {
     public readonly width: number
     public readonly height: number
 
-    private players: Player[] = []
+    public players: Player[] = []
     private npcs: Npc[] = []
 
     private groundItemCounter = 0
@@ -95,19 +95,17 @@ export class Scene {
     public addItem(item: ItemData, amount: number, x: number, y: number) {
         const id = this.groundItemCounter++
         const groundItem = new GroundItem(this, item, id, x, y, amount)
-        groundItem.respawnTimer = 10_000
-
+        groundItem.spawn()
         this.groundItems.push(groundItem)
-        this.broadcast(new AddGroundItemPacket([ [id, item.id, x, y] ]))
     }
 
-    public dropItem(item: ItemData, amount: number, x: number, y: number) {
+    public dropItem(item: ItemData, amount: number, x: number, y: number, visiblePlayers: Player[]) {
         const id = this.groundItemCounter++
         const groundItem = new GroundItem(this, item, id, x, y, amount)
-        groundItem.setLifeTime(100_000)
+        groundItem.lifeCycleStrategy = itemDropStrategy
+        groundItem.visibilityStrategy = new PrivateVisibilityStrategy(visiblePlayers.map(p => p.name))
+        groundItem.spawn()
         this.groundItems.push(groundItem)
-
-        this.broadcast(new AddGroundItemPacket([ [id, item.id, x, y] ]))
     }
 
     public getItem(id: number) {
@@ -116,7 +114,6 @@ export class Scene {
 
     public removeItem(id: number) {
         this.groundItems = this.groundItems.filter(item => item.id != id)
-        this.broadcast(new RemoveGroundItemPacket(id))
     }
 
     public block(x: number, y: number) {
@@ -176,9 +173,9 @@ export class Scene {
         )
         p.send(setObjects)
 
-        const addGroundItems = new AddGroundItemPacket(
-            this.groundItems.map(i => [ i.id, i.itemData.id, i.x, i.y ])
-        )
+        const groundItems = this.groundItems.filter(i => i.visibilityStrategy.isVisible(p))
+        .map(i => i.packetData)
+        const addGroundItems = new AddGroundItemPacket(groundItems)
         p.send(addGroundItems)
     }
 

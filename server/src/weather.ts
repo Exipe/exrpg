@@ -1,7 +1,7 @@
 import { BrightnessPacket } from "./connection/outgoing-packet"
 import { playerHandler } from "./world"
 
-const MIN_BRIGHTNESS = 0.25, MAX_BRIGHTNESS = 1.0
+const MIN_BRIGHTNESS = 0.25, MAX_BRIGHTNESS = 0.75
 
 export function initWeather() {
     const weatherHandler = new WeatherHandler()

@@ -34,8 +34,8 @@ export async function initObjects(resPath: string) {
 
         if(objData.shadow) {
             obj.shadowData = {
-                offsetX: objData.offsetX ? objData.offsetX : 0,
-                offsetY: objData.offsetY ? objData.offsetY : 0
+                offsetX: objData.shadow.offsetX ? objData.shadow.offsetX : 0,
+                offsetY: objData.shadow.offsetY ? objData.shadow.offsetY : 0
             }
         }
     });

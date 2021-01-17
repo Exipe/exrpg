@@ -106,6 +106,11 @@ export class Walking implements Task {
     }
 
     public followStep(x: number, y: number) {
+        if(this.character.x == x && this.character.y == y) {
+            this.steps = []
+            return
+        }
+
         let steps = []
         for(const step of this.steps) {
             steps.push(step)

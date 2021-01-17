@@ -1,5 +1,5 @@
 
-import { HealthPacket, MessagePacket } from "../connection/outgoing-packet";
+import { HealthPacket, HitSplatType, MessagePacket } from "../connection/outgoing-packet";
 import { maxHealth, speedBonus } from "../util/formula";
 import { Player, SPAWN_POINT } from "../player/player";
 import { playerHandler } from "../world";
@@ -83,16 +83,13 @@ export class PlayerCombatHandler extends CombatHandler {
         }
     }
 
-    public heal(value: number, update = true) {
-        this.health += value
-
-        if(update) {
-            this.updateHealth()
-        }
+    public heal(value: number) {
+        super.heal(value)
+        this.updateHealth()
     }
 
-    public damage(value: number) {
-        super.damage(value)
+    public damage(value: number, type: HitSplatType) {
+        super.damage(value, type)
         this.updateHealth()
     }
     

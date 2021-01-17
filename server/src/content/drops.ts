@@ -10,13 +10,13 @@ function addDrop(npcId: string, probability: number, item: string, amount: numbe
         throw `[Invalid NPC drop] unknown item: ${item}`
     }
 
-    actionHandler.onNpcDeath(npcId, (_killer, npc) => {
+    actionHandler.onNpcDeath(npcId, (killer, npc) => {
         if(!randomChance(probability)) {
             return
         }
 
         sceneHandler.get(npc.mapId)
-        .dropItem(itemDataHandler.get(item), amount, npc.x, npc.y)
+        .dropItem(itemDataHandler.get(item), amount, npc.x, npc.y, [killer])
     })
 }
 

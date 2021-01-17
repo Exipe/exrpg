@@ -1,6 +1,6 @@
 
 import { Character } from "../character/character";
-import { HealthBarPacket, HitSplatPacket } from "../connection/outgoing-packet";
+import { HealthBarPacket, HitSplatPacket, HitSplatType } from "../connection/outgoing-packet";
 import { calculateDamage } from "../util/formula";
 import { DamageCounter } from "./damage-counter";
 
@@ -52,7 +52,7 @@ export abstract class CombatHandler {
             return
         }
 
-        const damage = calculateDamage(this.maxDamage, this.accuracy, other.defence)
+        const [type, damage] = calculateDamage(this.maxDamage, this.accuracy, other.defence)
 
         const heldItem = this.heldItem
         if(heldItem != "") {
@@ -64,15 +64,24 @@ export abstract class CombatHandler {
         if(self.type == "player") {
             other.damageCounter.count(self.id, damage)
         }
-        other.damage(damage)
+        other.damage(damage, type)
     }
 
-    public damage(value: number) {
+    public heal(value: number) {
+        const self = this.character
+        this.character.map.broadcast(
+            new HitSplatPacket(self.type, self.id, "heal", value)
+        )
+
+        this.health = Math.min(this.health + value, this.maxHealth)
+    }
+
+    public damage(value: number, type: HitSplatType) {
         const self = this.character
         const damage = Math.min(this.health, value)
 
         self.map.broadcast(
-            new HitSplatPacket(self.type, self.id, damage)
+            new HitSplatPacket(self.type, self.id, type, damage)
         )
 
         this.health -= damage

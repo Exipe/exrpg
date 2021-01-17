@@ -140,7 +140,7 @@ export class Player extends Character {
     public takeItem(id: number) {
         const item = this.map.getItem(id)
         
-        if(item != null && item.x == this.x && item.y == this.y) {
+        if(item != null && item.isVisible(this) && item.x == this.x && item.y == this.y) {
             item.remove()
             this.inventory.addData(item.itemData, item.amount)
         }
@@ -216,7 +216,7 @@ export class Player extends Character {
 
     public dropItem(slot: number) {
         const item = this.inventory.remove(slot)
-        this.map.dropItem(item.data, item.amount, this.x, this.y)
+        this.map.dropItem(item.data, item.amount, this.x, this.y, [this])
     }
 
     public say(message: string) {

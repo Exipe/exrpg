@@ -204,14 +204,17 @@ export class SwingItemPacket implements Packet {
     }
 }
 
+export type HitSplatType = "hit" | "miss" | "heal"
+
 export class HitSplatPacket implements Packet {
     public readonly id = "HIT_SPLAT"
     public readonly data: any
 
-    constructor(character: CharacterType, characterId: number, damage: number) {
+    constructor(character: CharacterType, characterId: number, type: HitSplatType, damage: number) {
         this.data = {
             character: character,
             characterId: characterId,
+            type: type,
             damage: damage
         }
     }

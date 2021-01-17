@@ -66,7 +66,7 @@ export class HealthBarModel extends OverlayModel {
 
 }
 
-export type TextStyle = "playerName" | "npcName" | "hitSplat"
+export type TextStyle = "playerName" | "npcName" | "hitSplat" | "missSplat" | "healSplat"
 
 export class TextModel extends OverlayModel {
 

@@ -1,6 +1,7 @@
 
 import { loadScene } from "exrpg";
 import { Game } from "../game/game";
+import { TextStyle } from "../game/model/overlay-model";
 import { SwingItem } from "../game/swing-item";
 
 function onSwingItem(game: Game, data: any) {
@@ -16,9 +17,26 @@ function onSwingItem(game: Game, data: any) {
 function onHitSplat(game: Game, data: any) {
     const character = data.character == "player" ? game.getPlayer(data.characterId) 
         : game.getNpc(data.characterId)
+    let style: TextStyle
+    let text: string
+
+    switch(data.type) {
+        case "hit":
+            style = "hitSplat"
+            text = `-${data.damage}`
+            break
+        case "miss":
+            style = "missSplat"
+            text = `-${data.damage}`
+            break
+        case "heal":
+            style = "healSplat"
+            text = `+${data.damage}`
+            break
+    }
 
     const coords = character.centerCoords
-    game.overlayArea.addText(`-${data.damage}`, "hitSplat", coords[0], coords[1], 2000)
+    game.overlayArea.addText(text, style, coords[0], coords[1], 2000)
 }
 
 function onHealthBar(game: Game, data: any) {

@@ -1,3 +1,4 @@
+import { HitSplatType } from "../connection/outgoing-packet"
 import { randomInt } from "./util"
 
 /**
@@ -38,12 +39,12 @@ export function highHitChance(accuracy: number, defence: number) {
     return 0.5 + (accuracy > defence ? 1 : -1) * result
 }
 
-export function calculateDamage(maxDamage: number, accuracy: number, defence: number) {
+export function calculateDamage(maxDamage: number, accuracy: number, defence: number): [HitSplatType, number] {
     const highHit = Math.random() < highHitChance(accuracy, defence)
     const lowerBound = Math.floor(highHit ? maxDamage / 10 : 0)
     const higherBound = Math.ceil(highHit ? maxDamage : maxDamage / 10)
 
-    return randomInt(lowerBound, higherBound)
+    return [highHit ? "hit" : "miss", randomInt(lowerBound, higherBound)]
 }
 
 export function experienceRequired(level: number) {

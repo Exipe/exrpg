@@ -50,6 +50,10 @@ export abstract class Character {
         this.walkSpeed = walkSpeed
     }
 
+    public get followDebug() {
+        return this.followers.includes(this.following) && !this.following.walking.still
+    }
+
     public swingItem(itemId: string, offX: number, offY: number, duration: number): void {
         this.map.broadcast(
             new SwingItemPacket(itemId, this.type, this.id, offX, offY, duration))
@@ -106,9 +110,9 @@ export abstract class Character {
         this.followers = this.followers.filter(c => c != character)
     }
 
-    private getBehind(other: Character) {
-        const distX = Math.abs(other.x - this.walking.goalX)
-        const distY = Math.abs(other.y - this.walking.goalY)
+    private getBehind(other: Character, x = this.walking.goalX, y = this.walking.goalY) {
+        const distX = Math.abs(other.x - x)
+        const distY = Math.abs(other.y - y)
 
         if((distX == 0 && distY == 0) || distX > 1 || distY > 1) {
             this.walking.followStep(other.lastX, other.lastY)
@@ -209,13 +213,13 @@ export abstract class Character {
     public move(x: number, y: number, animate = false) {
         this.lastX = this._x
         this.lastY = this._y
-
-        this.followers.forEach(f => {
-            f.walking.followStep(this._x, this._y)
-        })
-
         this._x = x
         this._y = y
+
+        this.followers.forEach(f => {
+            f.getBehind(this, f.x, f.y)
+        })
+
         this.onMove(animate)
     }
 

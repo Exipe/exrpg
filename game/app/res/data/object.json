@@ -5,8 +5,8 @@
         "sprite": "tree",
 
         "shadow": {
-            "offsetX": 4,
-            "offsetY": 4
+            "offsetX": -2,
+            "offsetY": 2
         },
 
         "options": [
@@ -18,6 +18,32 @@
         "id": "stump_common",
         "name": "Tree stump",
         "sprite": "stump"
+    },
+
+    {
+        "id": "tree_birch",
+        "name": "Birch",
+        "sprite": "birch",
+
+        "shadow": {
+            "offsetX": -4,
+            "offsetY": 2
+        },
+
+        "options": [
+            "Chop down"
+        ]
+    },
+
+    {
+        "id": "bush",
+        "name": "Strawberry bush",
+        "sprite": "bush",
+        "options": [
+            "Pick-from"
+        ],
+
+        "width": 2
     },
 
     {
