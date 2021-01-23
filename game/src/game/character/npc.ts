@@ -1,5 +1,5 @@
 
-import { NpcData, Sprite } from "exrpg";
+import { EntityShadow, NpcData, Sprite } from "exrpg";
 import { Game } from "../game";
 import { Goal } from "./path-finder";
 import { NpcActionPacket } from "../../connection/packet";
@@ -28,6 +28,10 @@ export class Npc extends Character {
             this.sprite = sprite
             this.setDimensions(sprite.width, sprite.height)
             this.nameTagComponent.setNameTag("npcName", this.data.name)
+
+            if(this.data.shadowData != null) {
+                this.shadow = new EntityShadow(this, sprite, this.data.shadowData)
+            }
         })
     }
 

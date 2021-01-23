@@ -3,6 +3,7 @@ import { Sprite } from "../texture/sprite"
 import { Engine } from ".."
 import { loadTexture } from "../texture/texture"
 import { PlayerSprite } from "../texture/player-sprite"
+import { ShadowData } from "../entity/entity-shadow"
 
 export type NpcOption = [string, string]
 
@@ -17,6 +18,8 @@ export class NpcData {
     public readonly options: NpcOption[]
 
     public equip = [] as string[]
+
+    public shadowData = null as ShadowData
 
     constructor(id: string, name: string, spritePath: string, options: NpcOption[]) {
         this.id = id

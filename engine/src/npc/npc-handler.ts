@@ -26,6 +26,13 @@ export async function initNpcs(resPath: string) {
             npc.equip = npcData.equip
         }
 
+        if(npcData.shadow) {
+            npc.shadowData = {
+                offsetX: npcData.shadow.offsetX ? npcData.shadow.offsetX : 0,
+                offsetY: npcData.shadow.offsetY ? npcData.shadow.offsetY : 0
+            }
+        }
+
         npcMap.set(id, npc)
     })
 

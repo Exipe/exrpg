@@ -64,6 +64,28 @@
             "wizard_hat",
             "shield_copper"
         ]
+    },
+
+    {
+        "id": "ent",
+        "name": "Erengard the Ent",
+        "sprite": "ent",
+
+        "walkRadius": 3,
+        "walkSpeed": 0.5,
+
+        "shadow": {
+            "offsetX": -2,
+            "offsetY": -2
+        },
+
+        "combat": {
+            "weapon": "log_common",
+            "maxHit": 50,
+            "accuracy": 25,
+            "defence": 25,
+            "health": 500
+        }
     }
 
 ]

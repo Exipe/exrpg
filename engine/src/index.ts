@@ -23,8 +23,10 @@ import { ObjectEntity } from "./object/object-entity"
 import { LightHandler } from "./light/light-handler"
 import { Light } from "./light/light"
 import { LightComponent } from "./light/light-component"
+import { EntityShadow } from "./entity/entity-shadow"
 
 export { Camera }
+export { EntityShadow }
 
 export { Scene, SceneBuilder, Sprite, MergeTexture, loadScene, saveScene, feetCoords, 
     Entity, NpcData, NpcEntity, ItemData, EquipmentData, Item, ObjectEntity, Light, LightComponent }

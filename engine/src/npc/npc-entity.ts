@@ -3,6 +3,7 @@ import { Entity } from "../entity/entity";
 import { NpcData } from "./npc-data";
 import { Sprite, Engine } from "..";
 import { InputHandler } from "../input-handler";
+import { EntityShadow } from "../entity/entity-shadow";
 
 export class NpcEntity extends Entity {
 
@@ -19,6 +20,10 @@ export class NpcEntity extends Entity {
         .then(sprite => {
             this.sprite = sprite
             this.setDimensions(sprite.width, sprite.height)
+
+            if(npcData.shadowData != null) {
+                this.shadow = new EntityShadow(this, sprite, npcData.shadowData)
+            }
         })
     }
 
