@@ -16,10 +16,17 @@ A base for a browser based, online RPG.
    * Place tiles and attributes
    * Resize, with an anchor point
  * Register / log in
- * Day / night system
+ * Lighting system
+   * Day / night cycle
+   * Point lights
+   * Shadows
  * Path finding
  * Inventory / equipment
  * NPC:s, with basic dialogues
+ * PvP - / PvM combat
+   * Level up / attributes
+   * Item drops
+   * Heal
  * Interact with the world
    * Put down - / pick up items
    * Cut down trees
@@ -28,7 +35,7 @@ A base for a browser based, online RPG.
  * Command system
 
 ### In-game
-![in-game screenshot](https://www.dropbox.com/s/m2z9s2upakvztv5/in-game.png?raw=1)
+![in-game screenshot](https://www.dropbox.com/s/5xiqsy0nxowwu7d/in-game.png?raw=1)
 
 ### Menu
 ![menu screenshot](https://www.dropbox.com/s/sju8p0r4czhifbl/menu.png?raw=1)
