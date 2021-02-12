@@ -5,8 +5,8 @@ import { InputHandler } from "../input-handler"
 import { ComponentHandler } from "./component-handler"
 import { EntityShadow } from "./entity-shadow"
 
-export function feetCoords(tileX: number, tileY: number) {
-    return [ tileX * TILE_SIZE, tileY * TILE_SIZE ]
+export function feetCoords(entity: Entity, tileX = entity.tileX, tileY = entity.tileY) {
+    return [ tileX * TILE_SIZE + entity.offsetX, tileY * TILE_SIZE + entity.offsetY ]
 }
 
 export abstract class Entity {
@@ -18,6 +18,9 @@ export abstract class Entity {
 
     public tileX: number
     public tileY: number
+
+    public readonly offsetX: number
+    public readonly offsetY: number
 
     public _onMove: () => any = null
 
@@ -37,12 +40,14 @@ export abstract class Entity {
     public componentHandler = new ComponentHandler()
     public shadow = null as EntityShadow
     
-    constructor(tileX: number, tileY: number, width = 0, height = 0, tileSpan = 1) {
+    constructor(tileX: number, tileY: number, width = 0, height = 0, tileSpan = 1, offsetX = 0, offsetY = 0) {
         this.tileX = tileX
         this.tileY = tileY
         this.tileSpan = tileSpan
+        this.offsetX = offsetX
+        this.offsetY = offsetY
 
-        const [feetX, feetY] = feetCoords(tileX, tileY)
+        const [feetX, feetY] = feetCoords(this)
         this._feetX = feetX
         this._feetY = feetY
 
@@ -108,7 +113,7 @@ export abstract class Entity {
 
         this.componentHandler.forEach(c => c.moveTile())
 
-        const [feetX, feetY] = feetCoords(x, y)
+        const [feetX, feetY] = feetCoords(this)
         this.moveFeet(feetX, feetY)
     }
 

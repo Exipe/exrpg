@@ -1,27 +1,9 @@
 
 import { HealthPacket, HitSplatType, MessagePacket } from "../connection/outgoing-packet";
-import { maxHealth, speedBonus } from "../util/formula";
+import { maxDamage, maxHealth, speedBonus } from "../util/formula";
 import { Player, SPAWN_POINT } from "../player/player";
 import { playerHandler } from "../world";
 import { CombatHandler } from "./combat";
-
-const MIN_DAMAGE = 10
-
-function maxDamage(x: number) {
-    if(x <= 0) {
-        return MIN_DAMAGE
-    }
-
-    let result = MIN_DAMAGE
-    if(x > 10) {
-        result += 2.5 * (x - 10)
-        x = 10
-    }
-
-    result += 4 * x
-
-    return Math.floor(result)
-}
 
 export class PlayerCombatHandler extends CombatHandler {
 

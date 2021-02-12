@@ -49,7 +49,7 @@ export class Scene {
         }
     }
 
-    public addTempObj(objId: string, x: number, y: number, lifeTime: number) {
+    public addTempObj(objId: string, x: number, y: number, lifeTime = -1) {
         const obj = objDataHandler.get(objId)
         
         let temp = new TempObject(this, obj, x, y)
@@ -59,7 +59,10 @@ export class Scene {
             }
 
             temp.replacedObjData = o.replacedObjData
-            clearTimeout(o.timeout)
+
+            if(o.timed) {
+                clearTimeout(o.timeout)
+            }
             return false
         })
 
@@ -69,7 +72,10 @@ export class Scene {
         }
         
         this.tempObjects.push(temp)
-        temp.setLifeTime(lifeTime)
+
+        if(lifeTime >= 0) {
+            temp.setLifeTime(lifeTime)
+        }
 
         this.broadcast(new SetObjectPacket([ [objId, x, y] ]))
     }

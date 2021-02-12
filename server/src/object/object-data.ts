@@ -7,11 +7,13 @@ export class ObjectData {
     public readonly id: string
     public readonly width: number
 
+    public readonly block: boolean
     public readonly actions: string[]
 
-    constructor(id: string, width: number, actions: string[]) {
+    constructor(id: string, width: number, block: boolean, actions: string[]) {
         this.id = id
         this.width = width
+        this.block = block
         this.actions = actions
     }
 
@@ -28,10 +30,11 @@ export async function loadObjectData() {
         }
 
         const width = obj.width ? obj.width : 1
+        const block = obj.block != undefined ? obj.block : true
         const actions = obj.options ? obj.options.map((action: string) =>
             action.toLowerCase().replace(" ", "_")) : []
 
-        const objData = new ObjectData(obj.id, width, actions)
+        const objData = new ObjectData(obj.id, width, block, actions)
         objDataMap.set(obj.id, objData)
     })
 

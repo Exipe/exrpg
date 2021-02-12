@@ -8,7 +8,6 @@ export async function initObjects(resPath: string) {
     const data = await fetch(resPath + "/data/object.json").then(text => text.json())
     data.forEach((objData: any) => {
         const id = objData.id
-        const name = objData.name
         const sprite = objData.sprite
 
         const options: ObjectOption[] = objData.options ? objData.options.map((option: string) => [
@@ -21,23 +20,8 @@ export async function initObjects(resPath: string) {
 
         objList.push(id)
 
-        const obj = new ObjectData(id, name, resPath + "/obj/" + sprite + ".png", options)
+        const obj = new ObjectData(objData, resPath + "/obj/" + sprite + ".png", options)
         objMap.set(id, obj)
-
-        if(objData.width) {
-            obj.width = objData.width
-        }
-
-        if(objData.light) {
-            obj.light = objData.light
-        }
-
-        if(objData.shadow) {
-            obj.shadowData = {
-                offsetX: objData.shadow.offsetX ? objData.shadow.offsetX : 0,
-                offsetY: objData.shadow.offsetY ? objData.shadow.offsetY : 0
-            }
-        }
     });
 
     return new ObjectHandler(objMap, objList)

@@ -2,3 +2,5 @@ node_modules/
 app/script.js
 app/script.js.map
 app/release.js
+app/react-dom.development.js
+app/react.development.js

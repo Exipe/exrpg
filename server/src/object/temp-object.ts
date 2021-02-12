@@ -21,6 +21,10 @@ export class TempObject {
         this.y = y
     }
 
+    public get timed() {
+        return this.timeout != null
+    }
+
     public setLifeTime(ms: number) {
         clearTimeout(this.timeout)
 
@@ -30,7 +34,9 @@ export class TempObject {
     }
 
     public remove() {
-        clearTimeout(this.timeout)
+        if(this.timed) {
+            clearTimeout(this.timeout)
+        }
         this.scene.removeTempObj(this)
     }
 

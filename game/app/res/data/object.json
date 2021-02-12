@@ -1,16 +1,57 @@
 [
     {
+        "id": "door_closed",
+        "name": "Door",
+        "sprite": "door/closed",
+
+        "offsetY": 1,
+
+        "options": [
+            "Open"
+        ]
+    },
+
+    {
+        "id": "door_open",
+        "name": "Door",
+        "sprite": "door/open",
+
+        "offsetY": 1,
+        "block": false,
+
+        "options": [
+            "Close"
+        ]
+    },
+
+    {
         "id": "tree_common",
         "name": "Tree",
         "sprite": "tree",
 
         "shadow": {
             "offsetX": -2,
-            "offsetY": 2
+            "offsetY": -2
         },
 
         "options": [
             "Chop down"
+        ]
+    },
+
+    {
+        "id": "tree_apple",
+        "name": "Apple tree",
+        "sprite": "apple_tree",
+
+        "shadow": {
+            "offsetX": -2,
+            "offsetY": -2
+        },
+
+        "options": [
+            "Chop down",
+            "Pick from"
         ]
     },
 
@@ -27,7 +68,7 @@
 
         "shadow": {
             "offsetX": -4,
-            "offsetY": 2
+            "offsetY": -2
         },
 
         "options": [
@@ -37,13 +78,20 @@
 
     {
         "id": "bush",
-        "name": "Strawberry bush",
+        "name": "Bush",
         "sprite": "bush",
-        "options": [
-            "Pick-from"
-        ],
-
         "width": 2
+    },
+
+    {
+        "id": "bush_strawberry",
+        "name": "Strawberry bush",
+        "sprite": "red_bush",
+        "width": 2,
+
+        "options": [
+            "Pick from"
+        ]
     },
 
     {

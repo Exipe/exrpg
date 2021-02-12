@@ -78,6 +78,10 @@ export class ObjectTile extends AttribTile {
         const obj = this.scene.addObject(this.objId, x, y)
         this.objectEntity = obj
 
+        if(!obj.data.block) {
+            return
+        }
+
         for(let i = 0; i < obj.data.width; i++) {
             this.scene.block(x + i, y)
         }
@@ -87,6 +91,10 @@ export class ObjectTile extends AttribTile {
         const obj = this.objectEntity
         this.objectEntity = null
         obj.destroy()
+
+        if(!obj.data.block) {
+            return
+        }
 
         for(let i = 0; i < obj.data.width; i++) {
             this.scene.unBlock(x + i, y)

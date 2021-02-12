@@ -10,6 +10,14 @@ export function initContent() {
     initFood()
     initDrops()
 
+    actionHandler.onObject("door_open", (player, _action, ox, oy) => {
+        player.map.addTempObj("door_closed", ox, oy)
+    })
+
+    actionHandler.onObject("door_closed", (player, _action, ox, oy) => {
+        player.map.addTempObj("door_open", ox, oy)
+    })
+
     actionHandler.onObject("car", (player, action) => {
         if(action == "drive") {
             player.sendMessage("Car racing - coming soon™!")

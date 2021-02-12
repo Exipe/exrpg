@@ -24,13 +24,13 @@ export class ObjectMap {
         let old = this.grid[y][x]
         this.grid[y][x] = objData
 
-        if(old != null) {
+        if(old != null && old.block) {
             for(let i = 0; i < objData.width; i++) {
                 this.blockMap.unBlock(x+i, y)
             }
         }
 
-        if(objData == null) {
+        if(objData == null || !objData.block) {
             return old
         }
 

@@ -14,7 +14,7 @@ export class ObjectEntity extends Entity {
     private sprite: Sprite = null
 
     constructor(engine: Engine, objectData: ObjectData, tileX: number, tileY: number) {
-        super(tileX, tileY, 0, 0, objectData.width)
+        super(tileX, tileY, 0, 0, objectData.width, objectData.offsetX, objectData.offsetY)
 
         this.data = objectData
 

@@ -18,7 +18,7 @@ export class Walking {
         this.goalY = goalY
         this.timer = animationSpeed
 
-        const goalCoords = feetCoords(goalX, goalY)
+        const goalCoords = feetCoords(entity, goalX, goalY)
         this.speedX = (goalCoords[0] - entity.feetX) / animationSpeed
         this.speedY = (goalCoords[1] - entity.feetY) / animationSpeed
     }

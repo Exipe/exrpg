@@ -2,7 +2,7 @@
 import { Entity, Sprite, translation } from "..";
 import { EntityShadowShader } from "../shader/entity-shadow-shader";
 
-const ROTATION = -30
+const ROTATION = 30
 
 export interface ShadowData {
     offsetX: number,
@@ -29,10 +29,11 @@ export class EntityShadow {
     }
 
     drawShadow(shader: EntityShadowShader) {
-        const matrix = translation(0, -this.sprite.height)
+        const matrix = translation(-this.sprite.width, -this.sprite.height)
         .rotate(ROTATION)
-        .translate(this.entity.drawX - this.offsetX, 
-            this.entity.drawY + this.sprite.height - this.offsetY)
+        .translate(
+            this.entity.drawX + this.sprite.width + this.offsetX, 
+            this.entity.drawY + this.sprite.height + this.offsetY)
         
         this.sprite.drawMatrix(matrix, shader)
     }
