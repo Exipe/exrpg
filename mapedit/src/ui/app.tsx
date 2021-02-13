@@ -12,6 +12,7 @@ import { groundTool, shapeTool, wallTool, decoTool } from "../tool"
 import { save, load } from "../load-save"
 import { ObjectWindow, NpcWindow, ItemWindow } from "./entity-window"
 import { WarpWindow } from "./warp-window"
+import { engine } from "../engine-setup"
 
 const createWindows = [
     createWindow("new", "New", <>New</>, WindowCategory.OptionTool),
@@ -62,6 +63,7 @@ export function App() {
             <ToggleButton onClick={ load } enabled={false}>Open</ToggleButton>
             <ToggleButton onClick={ save } enabled={false}>Save</ToggleButton>
             {optionToolToggles}
+            <ToggleButton onClick={ () => { engine.map.islandMap.rebuild() } } enabled={false}>R Island</ToggleButton>
         </div>
 
         <div className="toolToggles" id="mapToolToggles">
@@ -69,7 +71,7 @@ export function App() {
         </div>
 
         <div className="footer">
-            Hovering tile: ({footer.hoverX}, {footer.hoverY})
+            Hovering tile: ({footer.hoverX}, {footer.hoverY}) Island: {footer.island}
         </div>
 
         {windowComponents}

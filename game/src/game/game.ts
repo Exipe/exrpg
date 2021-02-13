@@ -102,14 +102,26 @@ export class Game {
     }
 
     public walkTo(x: number, y: number) {
+        if(this.map.isBlocked(x, y)) {
+            return
+        }
+
         this.walkToGoal({
             x: x, y: y, width: 1, height: 1,
-            distance: this.map.isBlocked(x, y) ? 1 : 0
+            distance: 0
         })
     }
 
     public walkToGoal(goal: Goal) {
         const player = this.getLocal()
+        const islandMap = this.map.islandMap
+        const playerIsland = islandMap.get(player.tileX, player.tileY)
+        const goalIsland = islandMap.get(goal.x, goal.y)
+
+        if(playerIsland != goalIsland) {
+            return
+        }
+
         const path = findPath(this.map, player.tileX, player.tileY, goal)
         this.connection.send(new WalkPacket(path))
     }

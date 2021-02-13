@@ -32,7 +32,7 @@ function tileHover(x: number, y: number) {
         return
     }
 
-    store.dispatch(setHover(x, y))
+    store.dispatch(setHover(x, y, map.islandMap.get(x, y)))
 
     lastX = x
     lastY = y
@@ -78,6 +78,8 @@ export async function setupEngine(resPath: string) {
 
     engine = await initEngine(canvas, resPath, true)
     cursor = new Sprite(engine, await engine.loadTexture("tile/cursor.png"))
+
+    engine.camera.scale = 2
 
     engine.map = new Scene(engine, 10, 10)
     engine.map.builder.autoUpdate = true

@@ -59,6 +59,27 @@ export class NpcAvoidTile extends AttribTile {
 
 }
 
+export const ISLAND_ID = "ISLAND"
+
+export class IslandTile extends AttribTile {
+
+    private readonly scene: Scene
+
+    constructor(textureQuad: Quad, scene: Scene) {
+        super(ISLAND_ID, textureQuad)
+        this.scene = scene
+    }
+
+    public put(x: number, y: number) {
+        this.scene.islandMap.add(x, y)
+    }
+
+    public remove(x: number, y: number) {
+        this.scene.islandMap.remove(x, y)
+    }
+
+}
+
 export const OBJ_ID_PREFIX = "OBJECT: "
 
 export class ObjectTile extends AttribTile {

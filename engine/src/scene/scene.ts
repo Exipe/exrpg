@@ -17,8 +17,8 @@ import { Tile } from "../tile/tile"
 import { DecoTile } from "../tile/texture-tile"
 import { DecoLayer } from "./layer/deco-layer"
 import { NpcEntity } from "../npc/npc-entity"
-import { BlockMap } from "./block-map"
 import { InputHandler } from "../input-handler"
+import { BlockMap, IslandMap } from "./meta-map"
 
 export class Scene {
 
@@ -38,6 +38,7 @@ export class Scene {
     private _decoLayer: Layer<DecoTile>
 
     private blockMap: BlockMap
+    public islandMap: IslandMap
 
     public entityList: EntityList = new EntityList()
     private items = [] as Item[]
@@ -55,6 +56,7 @@ export class Scene {
         this._decoLayer = new DecoLayer(width, height)
 
         this.blockMap = new BlockMap(width, height)
+        this.islandMap = new IslandMap(this)
     }
 
     public get width() {
@@ -217,7 +219,8 @@ export class Scene {
         this._attribLayer = this._attribLayer.resize(width, height, anchorX, anchorY)
         this._decoLayer = this._decoLayer.resize(width, height, anchorX, anchorY)
 
-        this.blockMap = this.blockMap.resize(width, height, anchorX, anchorY)
+        this.blockMap = this.blockMap.resize(width, height, anchorX, anchorY) as BlockMap
+        this.islandMap = this.islandMap.resize(width, height, anchorX, anchorY)
 
         this._width = width
         this._height = height

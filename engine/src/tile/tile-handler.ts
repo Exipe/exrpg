@@ -7,7 +7,7 @@ import { WaterTile } from "./water-tile";
 import { Quad } from "../quad";
 import { OverlayTile } from "./overlay-tile";
 import { WallTile } from "./wall-tile";
-import { BlockTile, ObjectTile, WarpTile, PreviewNpcTile, NpcTile, PreviewItemTile, ItemTile, NpcAvoidTile } from "./attrib-tile";
+import { BlockTile, ObjectTile, WarpTile, PreviewNpcTile, NpcTile, PreviewItemTile, ItemTile, NpcAvoidTile, IslandTile } from "./attrib-tile";
 import { Scene } from "../scene/scene";
 import { GroundTile, DecoTile } from "./texture-tile";
 
@@ -150,6 +150,10 @@ export class TileHandler {
 
     public npcAvoidTile() {
         return new NpcAvoidTile(this.attribTexture.get(5, 0).quad)
+    }
+
+    public islandTile(scene: Scene) {
+        return new IslandTile(this.attribTexture.get(0, 1).quad, scene)
     }
 
     public warpTile(mapId: string, toX: number, toY: number) {

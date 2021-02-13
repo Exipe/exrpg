@@ -83,14 +83,16 @@ function onWalk(conn: Connection, data: any) {
     let player = conn.player
     player.stop()
 
-    data.forEach(step => {
+    for(const step of data) {
         if(!Array.isArray(step) || isNaN(step[0]) || isNaN(step[1])) {
             report(conn, "Invalid WALK step: " + step)
-            return
+            continue
         }
 
-        player.addSteps(step[0], step[1])
-    })
+        if(!player.addSteps(step[0], step[1])) {
+            break
+        }
+    }
 }
 
 /*

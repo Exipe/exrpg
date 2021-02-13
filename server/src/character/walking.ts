@@ -164,6 +164,7 @@ export class Walking implements Task {
         }
 
         this.setGoalCoordinates(x, y)
+        return x == goalX && y == goalY
     }
 
 }

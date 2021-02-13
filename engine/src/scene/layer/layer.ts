@@ -2,6 +2,7 @@
 import { Chunk, CHUNK_SIZE } from "./chunk";
 import { Engine } from "../..";
 import { Tile } from "../../tile/tile";
+import { AnchorPoint, resizeOffset } from "../../util";
 
 function sameTile(a: Tile, b: Tile) {
     if(a == null || b == null) {
@@ -39,21 +40,8 @@ export abstract class Layer<T extends Tile> {
         }
     }
 
-    public resize(width: number, height: number, anchorX: 0 | 1 | 2, anchorY: 0 | 1 | 2) {
-        let offsetX = 0
-        let offsetY = 0
-
-        if(anchorX == 1) { // center
-            offsetX = width / 2 - this.width / 2
-        } else if(anchorX == 2) { // right
-            offsetX = width - this.width
-        }
-
-        if(anchorY == 1) { // center
-            offsetY = height / 2 - this.height / 2
-        } else if(anchorY == 2) { // bottom
-            offsetY = height - this.height
-        }
+    public resize(width: number, height: number, anchorX: AnchorPoint, anchorY: AnchorPoint) {
+        let [offsetX, offsetY] = resizeOffset(width, height, this.width, this.height, anchorX, anchorY)
 
         const layerNew = this.createLayer(width, height)
 

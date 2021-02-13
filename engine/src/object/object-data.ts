@@ -49,7 +49,9 @@ export class ObjectData {
 
         this.offsetX = ifPresent(definition.offsetX, 0)
         this.offsetY = ifPresent(definition.offsetY, 0)
-        this.block = ifPresent(definition.block, true)
+
+        // if the object is a door, consider it unblocked
+        this.block = !ifPresent(definition.door, false) && ifPresent(definition.block, true)
     }
 
     public async getSprite(engine: Engine) {

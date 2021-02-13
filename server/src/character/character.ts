@@ -205,7 +205,7 @@ export abstract class Character {
     }
 
     public addSteps(goalX: number, goalY: number) {
-        this.walking.addSteps(goalX, goalY)
+        return this.walking.addSteps(goalX, goalY)
     }
 
     protected abstract onMove(animate: boolean): void

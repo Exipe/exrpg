@@ -2,7 +2,7 @@
 import { ATTRIBUTES, isAttribId } from "../player/attrib";
 import { Player } from "../player/player";
 import { formatStrings } from "../util/util";
-import { playerHandler, itemDataHandler, commandHandler, weatherHandler } from "../world";
+import { playerHandler, itemDataHandler, commandHandler, weatherHandler, sceneHandler } from "../world";
 
 function onMeTo(player: Player, args: string[]) {
     if(args.length == 0) {
@@ -132,19 +132,41 @@ function onClock(player: Player, _: any) {
     player.sendMessage(`Weather clock ${weatherHandler.enableClock ? "enabled" : "disabled"}`)
 }
 
-function onSwingItem(player: Player, args: string[]) {
-    if(args.length < 1) {
-        player.sendMessage("Correct usage: /swing item_id")
+function onTele(player: Player, args: string[]) {
+    let xarg: any
+    let yarg: any
+
+    let map = player.map
+
+    if(args.length == 2) {
+        xarg = args[0]
+        yarg = args[1]
+    } else if(args.length == 3) {
+        map = sceneHandler.get(args[0])
+        if(map == null) {
+            player.sendMessage(`map_id ${args[0]} does not exist`)
+            return
+        }
+
+        xarg = args[1]
+        yarg = args[2]
+    } else {
+        player.sendMessage("Correct usage: /tele [map_id] x y")
         return
     }
 
-    const itemArg = args[0]
-    if(itemDataHandler.get(itemArg) == null) {
-        player.sendMessage(`Could not find item: ${itemArg}`)
+    const x = parseInt(xarg)
+    const y = parseInt(yarg)
+
+    let isNumber = !(isNaN(x) || isNaN(y))
+    let isInRange = isNumber && x >= 0 && y >= 0 && x < map.width && y < map.height
+
+    if(!isInRange) {
+        player.sendMessage(`Invalid coords (${xarg}, ${yarg})`)
         return
     }
 
-    player.swingItem(itemArg, 0, 1, 400)
+    player.goToMap(map, x, y)
 }
 
 export function initCommands() {
@@ -157,5 +179,5 @@ export function initCommands() {
     ch.on("tome", onToMe)
     ch.on("brightness", onBrightness)
     ch.on("clock", onClock)
-    ch.on("swing", onSwingItem)
+    ch.on("tele", onTele)
 }

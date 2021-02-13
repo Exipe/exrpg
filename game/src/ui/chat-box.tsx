@@ -60,6 +60,7 @@ function ChatBox(props: ChatProps) {
 
         <input id="chatBoxInput" 
                value={input} 
+               autoComplete="off"
                ref={inputRef}
                onChange={(e) => { setInput(e.target.value) }}
                onKeyDown={(e) => { if(e.key == "Enter" && input.length > 0) enterMessage() }}

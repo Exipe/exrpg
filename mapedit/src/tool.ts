@@ -175,6 +175,22 @@ export const npcAvoidTool: Tool = {
     }
 }
 
+export const islandTool: Tool = {
+    name: "Island",
+    modes: ["Place", "Remove"],
+
+    apply: (scene, mode, x, y) => {
+        switch(mode) {
+            case "Place":
+                scene.putIsland(x, y)
+                break
+            case "Remove":
+                scene.removeAttrib(x, y)
+                break
+        }
+    }
+}
+
 export const warpTool: Tool = {
     name: "Warp",
     modes: ["Place", "Remove"],
@@ -192,10 +208,23 @@ export const warpTool: Tool = {
         }
     }
 
-}
+};
 
-; //seriously, typescript?
+const tools = [
+    waterTool,
+    groundTool,
+    shapeTool,
+    wallTool,
+    decoTool,
+    objectTool,
+    npcTool,
+    itemTool,
+    blockTool,
+    npcAvoidTool,
+    islandTool,
+    warpTool
+]
 
-[ waterTool, groundTool, shapeTool, wallTool, decoTool, objectTool, npcTool, itemTool, blockTool, npcAvoidTool, warpTool ].forEach(tool => {
+tools.forEach(tool => {
     store.dispatch(addTool(tool))
 })
