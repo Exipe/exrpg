@@ -1,6 +1,6 @@
 
 import { Connection } from "../connection/connection"
-import { Packet, MovePlayerPacket, MessagePacket, OutgoingPlayer, UpdatePlayerAppearancePacket, WelcomePacket, DialoguePacket, CloseDialoguePacket, SwingItemPacket, HealthPacket, BrightnessPacket } from "../connection/outgoing-packet"
+import { Packet, MovePlayerPacket, MessagePacket, OutgoingPlayer, UpdatePlayerAppearancePacket, WelcomePacket, DialoguePacket, CloseWindowPacket, SwingItemPacket, HealthPacket, BrightnessPacket } from "../connection/outgoing-packet"
 import { Character } from "../character/character"
 import { playerHandler, actionHandler, npcHandler, weatherHandler } from "../world"
 import { Inventory } from "../item/inventory"
@@ -75,7 +75,7 @@ export class Player extends Character {
         }
 
         this.dialogue = null
-        this.send(new CloseDialoguePacket())
+        this.send(new CloseWindowPacket("Dialogue"))
     }
 
     public handleDialogueOption(dialogueId: number, index: number) {

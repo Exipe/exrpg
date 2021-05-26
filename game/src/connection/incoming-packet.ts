@@ -1,7 +1,9 @@
 
 import { loadScene } from "exrpg";
 import { Game } from "../game/game";
+import { Dialogue } from "../game/model/dialogue-model";
 import { TextStyle } from "../game/model/overlay-model";
+import { Shop } from "../game/model/shop-model";
 import { SwingItem } from "../game/swing-item";
 
 function onSwingItem(game: Game, data: any) {
@@ -70,8 +72,29 @@ async function onSetObject(game: Game, objects: [string, number, number][]) {
     })
 }
 
-export function onLevel(game: Game, data: any) {
+function onLevel(game: Game, data: any) {
     game.status.setLevel(data.level, data.experience, data.requiredExperience)
+}
+
+function onCloseWindow(game: Game, id: string) {
+    if(game.primaryWindow.value != id) {
+        return
+    }
+    
+    game.primaryWindow.value = "None"
+}
+
+function onOpenDialogue(game: Game, data: any) {
+    const dialogue = new Dialogue(data.id, data.name, data.lines, data.options)
+    game.dialogue.observable.value = dialogue
+    game.primaryWindow.value = "Dialogue"
+}
+
+function onOpenShop(game: Game, data: any) {
+    const shop = new Shop(data.name, data.items.map((id: string) =>
+        game.engine.itemHandler.get(id)))
+    game.shop.observable.value = shop
+    game.primaryWindow.value = "Shop"
 }
 
 export function bindIncomingPackets(game: Game) {
@@ -89,4 +112,7 @@ export function bindIncomingPackets(game: Game) {
     bind("SET_OBJECT", onSetObject)
     bind("BRIGHTNESS", onBrightness)
     bind("LEVEL", onLevel)
+    bind("CLOSE_WINDOW", onCloseWindow)
+    bind("DIALOGUE", onOpenDialogue)
+    bind("SHOP", onOpenShop)
 }

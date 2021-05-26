@@ -5,6 +5,7 @@ import { Dialogue } from "../player/dialogue"
 import { randomChance, randomInt } from "../util/util"
 import { initFood } from "./food"
 import { initDrops } from "./drops"
+import { ShopPacket } from "../connection/outgoing-packet"
 
 export function initContent() {
     initFood()
@@ -61,9 +62,10 @@ export function initContent() {
             `Hello, ${player.name}.`, "What can I help you with?"
         ])
 
-        dialogue.addOption("Let's trade", () =>
-            new Dialogue(npc.data.name, ["Sorry.", "I am completely out of stock right now."])
-        )
+        dialogue.addOption("Let's trade", () => {
+            player.send(new ShopPacket("Test Shop", ['helm_copper', 'plate_copper', 'legs_copper']))
+            return null
+        })
 
         dialogue.addOption("Never mind", () => null)
 

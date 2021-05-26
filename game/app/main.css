@@ -253,22 +253,35 @@
     margin-top: auto;
 }
 
-#inventory {
-    width: fit-content;
-    height: fit-content;
-
+.itemContainer {
     display: grid;
-    grid-template-columns: repeat(6, 48px);
     column-gap: 4px;
-    grid-template-rows: repeat(5, 48px);
-    row-gap: 4px;
+    row-gap: 4px;   
 }
 
-#inventory > * {
+.itemContainer > * {
     position: relative;
     background-repeat: no-repeat;
     background-size: cover;
     image-rendering: pixelated;
+}
+
+#shopName {
+    text-align: center;
+    color: yellow;
+}
+
+#shopWindow .itemContainer {
+    grid-template-columns: repeat(8, 48px);
+    grid-template-rows: repeat(6, 48px);
+}
+
+#inventory {
+    width: fit-content;
+    height: fit-content;
+
+    grid-template-columns: repeat(6, 48px);
+    grid-template-rows: repeat(5, 48px);
 }
 
 .itemAmount {
@@ -469,19 +482,21 @@
     outline: none;
 }
 
-#dialogueBox {
+.window {
     pointer-events: initial;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
 
-    width: 325px;
-    padding: 16px;
-
     background-color: var(--bg-solid);
     border: 3px solid var(--fg-color);
     border-radius: 5px;
+}
+
+#dialogueBox {
+    width: 325px;
+    padding: 16px;
 
     color: white;
 }

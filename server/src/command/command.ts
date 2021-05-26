@@ -1,4 +1,5 @@
 
+import { ShopPacket } from "../connection/outgoing-packet";
 import { ATTRIBUTES, isAttribId } from "../player/attrib";
 import { Player } from "../player/player";
 import { formatStrings } from "../util/util";

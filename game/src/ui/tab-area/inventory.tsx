@@ -167,7 +167,7 @@ export function Inventory(props: InventoryProps) {
         </div>
     })
 
-    return <div id="inventory">
+    return <div className="itemContainer" id="inventory">
         {displayItems}
     </div>
 }

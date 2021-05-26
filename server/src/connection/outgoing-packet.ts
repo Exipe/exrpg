@@ -268,9 +268,13 @@ export class DialoguePacket implements Packet {
     }
 }
 
-export class CloseDialoguePacket implements Packet {
-    public readonly id = "CLOSE_DIALOGUE"
-    public readonly data: any = null
+export class CloseWindowPacket implements Packet {
+    public readonly id = "CLOSE_WINDOW"
+    public readonly data: any
+
+    constructor(id: string) {
+        this.data = id
+    }
 }
 
 export class UpdateAttribPacket implements Packet {
@@ -294,6 +298,18 @@ export class UpdateLevelPacket implements Packet {
             level: level,
             experience: experience,
             requiredExperience: requiredExperience
+        }
+    }
+}
+
+export class ShopPacket implements Packet {
+    public readonly id = "SHOP"
+    public readonly data: any
+
+    constructor(name: string, items: string[]) {
+        this.data = {
+            name: name,
+            items: items
         }
     }
 }

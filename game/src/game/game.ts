@@ -11,13 +11,16 @@ import { ContextMenuModel } from "./model/context-menu-model";
 import { EquipmentModel, initEquipment } from "./model/equipment-model";
 import { SwingItem } from "./swing-item";
 import { initObjects } from "./init-objects";
-import { DialogueModel, initDialogue } from "./model/dialogue-model";
+import { DialogueModel } from "./model/dialogue-model";
 import { ChatModel, initChat } from "./model/chat-model";
 import { AttributeModel, initAttribs } from "./model/attrib-model";
 import { OverlayAreaModel } from "./model/overlay-model";
 import { StatusModel } from "./model/status-model";
 import { bindIncomingPackets } from "../connection/incoming-packet";
 import { SettingsModel } from "./model/settings-model";
+import { ShopModel } from "./model/shop-model";
+import { Observable } from "./model/observable";
+import { PrimaryWindow, SecondaryWindow } from "./window";
 
 export async function initGame(engine: Engine, connection: Connection) {
     const game = new Game(engine, connection);
@@ -32,7 +35,6 @@ export async function initGame(engine: Engine, connection: Connection) {
     initGroundItems(game)
     initInventory(game)
     initEquipment(game)
-    initDialogue(game)
     initChat(game)
     initAttribs(game)
 
@@ -85,6 +87,10 @@ export class Game {
     public readonly attributes = new AttributeModel()
     public readonly status = new StatusModel()
     public readonly settings: SettingsModel
+    public readonly shop = new ShopModel()
+
+    public readonly primaryWindow = new Observable<PrimaryWindow>("None")
+    public readonly secondaryWindow = new Observable<SecondaryWindow>("TabArea")
 
     constructor(engine: Engine, connection: Connection) {
         this.engine = engine

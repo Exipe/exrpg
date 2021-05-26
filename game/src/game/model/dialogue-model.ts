@@ -2,6 +2,7 @@
 import { Game } from "../game"
 import { Connection } from "../../connection/connection"
 import { DialogueOptionPacket } from "../../connection/packet"
+import { Observable } from "./observable"
 
 export class Dialogue {
 
@@ -19,18 +20,6 @@ export class Dialogue {
 
 }
 
-export function initDialogue(game: Game) {
-    const connection = game.connection
-    
-    connection.on("DIALOGUE", data => {
-        game.dialogue.openDialogue(new Dialogue(data.id, data.name, data.lines, data.options))
-    })
-
-    connection.on("CLOSE_DIALOGUE", _ => {
-        game.dialogue.closeDialogue()
-    })
-}
-
 export class DialogueModel {
 
     private readonly connection: Connection
@@ -39,21 +28,7 @@ export class DialogueModel {
         this.connection = connection
     }
 
-    public onOpenDialogue: (dialogue: Dialogue) => void = null
-
-    public onCloseDialogue: () => void = null
-
-    public openDialogue(dialogue: Dialogue) {
-        if(this.onOpenDialogue != null) {
-            this.onOpenDialogue(dialogue)
-        }
-    }
-
-    public closeDialogue() {
-        if(this.onCloseDialogue != null) {
-            this.onCloseDialogue()
-        }
-    }
+    public readonly observable = new Observable<Dialogue>(null)
 
     public clickOption(id: number, index: number) {
         this.connection.send(new DialogueOptionPacket(id, index))

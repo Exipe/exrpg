@@ -206,7 +206,7 @@ export function Menu(props: MenuProps) {
         const body = document.querySelector("body")
         body.style.backgroundImage = `url('${BACKGROUND}')`
 
-        return () => body.style.backgroundImage = ""
+        return () => { body.style.backgroundImage = "" }
     }, [])
 
     return <div id="menu">
