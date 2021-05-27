@@ -3,7 +3,7 @@ import { loadScene } from "exrpg";
 import { Game } from "../game/game";
 import { Dialogue } from "../game/model/dialogue-model";
 import { TextStyle } from "../game/model/overlay-model";
-import { Shop } from "../game/model/shop-model";
+import { BuySelect, Shop } from "../game/model/shop-model";
 import { SwingItem } from "../game/swing-item";
 
 function onSwingItem(game: Game, data: any) {
@@ -76,11 +76,7 @@ function onLevel(game: Game, data: any) {
     game.status.setLevel(data.level, data.experience, data.requiredExperience)
 }
 
-function onCloseWindow(game: Game, id: string) {
-    if(game.primaryWindow.value != id) {
-        return
-    }
-    
+function onCloseWindow(game: Game, _: any) {
     game.primaryWindow.value = "None"
 }
 
@@ -93,8 +89,14 @@ function onOpenDialogue(game: Game, data: any) {
 function onOpenShop(game: Game, data: any) {
     const shop = new Shop(data.name, data.items.map((id: string) =>
         game.engine.itemHandler.get(id)))
-    game.shop.observable.value = shop
-    game.primaryWindow.value = "Shop"
+    game.shop.open(shop)
+}
+
+function onSelectBuy(game: Game, data: any) {
+    const itemHandler = game.engine.itemHandler
+    const item = itemHandler.get(data.item)
+    const currency = itemHandler.get(data.currency)
+    game.shop.selectedBuy.value = new BuySelect(data.slot, item, currency, data.price)
 }
 
 export function bindIncomingPackets(game: Game) {
@@ -115,4 +117,5 @@ export function bindIncomingPackets(game: Game) {
     bind("CLOSE_WINDOW", onCloseWindow)
     bind("DIALOGUE", onOpenDialogue)
     bind("SHOP", onOpenShop)
+    bind("SELECT_BUY", onSelectBuy)
 }

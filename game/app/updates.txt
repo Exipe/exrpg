@@ -1,6 +1,7 @@
 Alpha 1.0
 - Lighting & shadows
 - Basic pvp and pvm combat
+- Shops
 - Food
 - NPC:s with player appearance
 - NPC- and player name tags

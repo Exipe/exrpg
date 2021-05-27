@@ -23,7 +23,7 @@ export class FoodHandler {
         }
 
         this.timestamp = currentTime()
-        this.player.inventory.remove(slot)
+        this.player.inventory.emptySlot(slot)
 
         this.player.playerCombat.heal(food.heal)
     }

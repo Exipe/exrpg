@@ -109,6 +109,7 @@
         "id": "helm_copper",
         "name": "Copper helmet",
         "sprite": "copper_helm",
+        "value": 88,
         "equip": {
             "slot": "helm",
             "sprite": ["copper", 1],
@@ -123,6 +124,7 @@
         "id": "plate_copper",
         "name": "Copper platebody",
         "sprite": "copper_plate",
+        "value": 106,
         "equip": {
             "slot": "plate",
             "sprite": ["copper", 2],
@@ -137,6 +139,7 @@
         "id": "legs_copper",
         "name": "Copper platelegs",
         "sprite": "copper_legs",
+        "value": 100,
         "equip": {
             "slot": "legs",
             "sprite": ["copper", 3],

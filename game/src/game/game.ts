@@ -87,7 +87,7 @@ export class Game {
     public readonly attributes = new AttributeModel()
     public readonly status = new StatusModel()
     public readonly settings: SettingsModel
-    public readonly shop = new ShopModel()
+    public readonly shop: ShopModel
 
     public readonly primaryWindow = new Observable<PrimaryWindow>("None")
     public readonly secondaryWindow = new Observable<SecondaryWindow>("TabArea")
@@ -101,6 +101,7 @@ export class Game {
         this.overlayArea = new OverlayAreaModel(engine.camera)
         this.chat = new ChatModel(connection)
         this.settings = new SettingsModel(engine)
+        this.shop = new ShopModel(this.primaryWindow, this.connection, engine.itemHandler)
     }
 
     private get map() {

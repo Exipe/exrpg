@@ -1,7 +1,9 @@
+import { Player } from "../player"
+import { PrimaryWindow } from "./p-window"
 
 type DialogueOption = [ string, () => Dialogue ]
 
-export class Dialogue {
+export class Dialogue implements PrimaryWindow {
 
     public readonly name: string
     public readonly lines: string[]
@@ -12,6 +14,12 @@ export class Dialogue {
     constructor(name: string, lines: string[]) {
         this.name = name
         this.lines = lines
+    }
+
+    public readonly id = "Dialogue"
+
+    open(p: Player) {
+        p.sendDialogue(this)
     }
 
     public addOption(option: string, callback: () => Dialogue) {

@@ -69,7 +69,7 @@ function ChatBox(props: ChatProps) {
 }
 
 export function ChatArea(props: ChatAreaProps) {
-    const [viewChat, setViewChat] = React.useState(false)
+    const [viewChat, setViewChat] = React.useState(true)
 
     let content = <OpenChatButton onOpenChat={() => { setViewChat(true) }} />
 

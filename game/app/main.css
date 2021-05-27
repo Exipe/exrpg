@@ -20,6 +20,17 @@
     height: 100%;
 }
 
+.text-icon {
+    display: inline;
+    vertical-align: middle;
+}
+
+.top-right {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+
 .playerName, .npcName {
     transform: translate(-50%, -100%);
     border-radius: 4px;
@@ -261,6 +272,9 @@
 
 .itemContainer > * {
     position: relative;
+}
+
+.scaleIcon, .itemContainer > * {
     background-repeat: no-repeat;
     background-size: cover;
     image-rendering: pixelated;
@@ -274,6 +288,62 @@
 #shopWindow .itemContainer {
     grid-template-columns: repeat(8, 48px);
     grid-template-rows: repeat(6, 48px);
+}
+
+.shopItem:hover {
+    cursor: pointer;
+}
+
+#selectDialog {
+    min-width: 200px;
+    position: absolute;
+    z-index: 1;
+    background-color: var(--bg-solid);
+    border: 2px solid var(--fg-color);
+    border-radius: 4px;
+    color: white;
+    padding: 4px;
+}
+
+#selectDialog:hover {
+    cursor: initial;
+}
+
+.selectDialogRow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.selectDialogRow > *:nth-child(2) {
+    margin: auto;
+}
+
+.selectDialogIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    background-color: var(--fg-color);
+}
+
+.selectDialogAmount {
+    background-color: var(--fg-color);
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    color: white;
+    width: 48px;
+}
+
+.selectDialogIcon {
+    background-color: var(--fg-color);
+}
+
+.selectDialogButton {
+    background-color: var(--fg-color);
+    border-radius: 4px;
+    width: 100%;
+    text-align: center;
 }
 
 #inventory {

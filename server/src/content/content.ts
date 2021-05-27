@@ -1,11 +1,12 @@
 
 import { actionHandler, objDataHandler } from "../world"
 import { Woodcutting, Mining } from "./gathering"
-import { Dialogue } from "../player/dialogue"
+import { Dialogue } from "../player/window/dialogue"
 import { randomChance, randomInt } from "../util/util"
 import { initFood } from "./food"
 import { initDrops } from "./drops"
 import { ShopPacket } from "../connection/outgoing-packet"
+import { Shop } from "../player/window/shop"
 
 export function initContent() {
     initFood()
@@ -63,13 +64,13 @@ export function initContent() {
         ])
 
         dialogue.addOption("Let's trade", () => {
-            player.send(new ShopPacket("Test Shop", ['helm_copper', 'plate_copper', 'legs_copper']))
+            player.window = new Shop("Test Shop", ['helm_copper', 'plate_copper', 'legs_copper'])
             return null
         })
 
         dialogue.addOption("Never mind", () => null)
 
-        player.openDialogue(dialogue)
+        player.window = dialogue
     })
 
     actionHandler.onNpc("cat_white", (player, npc, action) => {
@@ -80,6 +81,6 @@ export function initContent() {
         const dialogue = randomChance(50) ? 
             new Dialogue("猫", [ "にゃー。" ]) :
             new Dialogue(npc.data.name, [ "Meow." ])
-        player.openDialogue(dialogue)
+        player.window = dialogue
     })
 }

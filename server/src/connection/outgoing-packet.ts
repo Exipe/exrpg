@@ -271,10 +271,6 @@ export class DialoguePacket implements Packet {
 export class CloseWindowPacket implements Packet {
     public readonly id = "CLOSE_WINDOW"
     public readonly data: any
-
-    constructor(id: string) {
-        this.data = id
-    }
 }
 
 export class UpdateAttribPacket implements Packet {
@@ -310,6 +306,20 @@ export class ShopPacket implements Packet {
         this.data = {
             name: name,
             items: items
+        }
+    }
+}
+
+export class SelectBuyPacket implements Packet {
+    public readonly id = "SELECT_BUY"
+    public readonly data: any
+
+    constructor(slot: number, item: string, currency: string, price: number) {
+        this.data = {
+            slot: slot,
+            item: item,
+            currency: currency,
+            price: price
         }
     }
 }

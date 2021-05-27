@@ -11,16 +11,19 @@ export class ItemData {
     public readonly equipSlot: EquipSlot
     public readonly equipBonuses: [AttribId, number][]
     public readonly stack: number
+    public readonly value: number
 
     public readonly actions: string[]
 
-    constructor(id: string, name: string, equipSlot: EquipSlot, equipBonuses: [AttribId, number][], actions: string[], stack: number) {
+    constructor(id: string, name: string, equipSlot: EquipSlot, equipBonuses: [AttribId, number][], actions: string[], 
+        stack: number, value: number) {
         this.id = id
         this.name = name
         this.equipSlot = equipSlot
         this.equipBonuses = equipBonuses
         this.actions = actions
         this.stack = stack
+        this.value = value
     }
 
     public get equipable() {
@@ -65,10 +68,12 @@ export async function loadItemData() {
         }
 
         let stack = item.stack ? item.stack : 1
+        let value = item.value ? item.value : 0
         let actions = item.options ? item.options.map((action: string) => 
             action.toLowerCase().replace(" ", "_")) : []
 
-        const itemData = new ItemData(item.id, item.name, equipSlot, equipBonuses, actions, stack)
+        const itemData = new ItemData(item.id, item.name, equipSlot, equipBonuses, actions, 
+            stack, value)
         itemDataMap.set(item.id, itemData)
     })
 

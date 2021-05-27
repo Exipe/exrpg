@@ -6,7 +6,7 @@ import { playerHandler, actionHandler, npcHandler, weatherHandler } from "../wor
 import { Inventory } from "../item/inventory"
 import { Equipment, EquipSlot } from "../item/equipment"
 import { ObjectData } from "../object/object-data"
-import { Dialogue } from "./dialogue"
+import { Dialogue } from "./window/dialogue"
 import { Progress } from "./progress/progress"
 import { loadProgress } from "./progress/load-progress"
 import { PlayerAttribHandler } from "./attrib"
@@ -15,6 +15,7 @@ import { speedBonus } from "../util/formula"
 import { MapId } from "../scene/map-id"
 import { PlayerLevel } from "./player-level"
 import { FoodHandler } from "../item/food-handler"
+import { PrimaryWindow, WindowId } from "./window/p-window"
 
 export function isPlayer(character: Character): character is Player {
     return character.type == "player"
@@ -36,7 +37,8 @@ export class Player extends Character {
     public readonly inventory = new Inventory(this)
     public readonly attributes = new PlayerAttribHandler(this)
 
-    private dialogue = null as Dialogue
+    private _window: PrimaryWindow = null
+
     private dialogueId = -1
 
     public readonly level = new PlayerLevel(this)
@@ -60,40 +62,52 @@ export class Player extends Character {
         this.attributes.onChange('speed_move', value => this.walkSpeed = speedBonus(value))
     }
 
+    public set window(window: PrimaryWindow) {
+        if(this._window != null) {
+            this.closeWindow()
+        }
+
+        this._window = window
+        window.open(this)
+    }
+
+    public closeWindow(id: WindowId | "Any" = "Any") {
+        if(this._window == null || (id != "Any" && this._window.id != id)) {
+            return
+        }
+
+        this._window = null
+        this.send(new CloseWindowPacket())
+    }
+
+    public get window() {
+        return this._window
+    }
+
     public get connectionState() {
         return this.connection.state
     }
 
-    public openDialogue(dialogue: Dialogue) {
-        this.dialogue = dialogue
+    public sendDialogue(dialogue: Dialogue) {
         this.send(new DialoguePacket(++this.dialogueId, dialogue.name, dialogue.lines, dialogue.options))
     }
 
-    public closeDialogue() {
-        if(this.dialogue == null) {
-            return
-        }
-
-        this.dialogue = null
-        this.send(new CloseWindowPacket("Dialogue"))
-    }
-
     public handleDialogueOption(dialogueId: number, index: number) {
-        if(this.dialogueId != dialogueId || this.dialogue == null) {
+        if(this.dialogueId != dialogueId || !(this.window instanceof Dialogue)) {
             return
         }
 
-        const next = this.dialogue.handleOption(index)
+        const next = this.window.handleOption(index)
         if(next != null) {
-            this.openDialogue(next)
+            this.window = next
         } else {
-            this.closeDialogue()
+            this.closeWindow("Dialogue")
         }
     }
 
     public stop() {
         super.stop()
-        this.closeDialogue()
+        this.closeWindow()
     }
 
     public get outgoingPlayer(): OutgoingPlayer {
@@ -191,7 +205,7 @@ export class Player extends Character {
     }
 
     public equipItem(slot: number) {
-        const item = this.inventory.remove(slot).data
+        const item = this.inventory.emptySlot(slot).data
         const unequipped = this.equipment.set(item.equipSlot, item)
         if(unequipped != null) {
             this.inventory.addData(unequipped, 1)
@@ -215,7 +229,7 @@ export class Player extends Character {
     }
 
     public dropItem(slot: number) {
-        const item = this.inventory.remove(slot)
+        const item = this.inventory.emptySlot(slot)
         this.map.dropItem(item.data, item.amount, this.x, this.y, [this])
     }
 

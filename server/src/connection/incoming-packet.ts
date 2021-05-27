@@ -5,6 +5,7 @@ import { INVENTORY_SIZE } from "../item/inventory";
 import { isEquipSlot } from "../item/equipment";
 import { playerHandler, objDataHandler, npcHandler, commandHandler, actionHandler } from "../world";
 import { isAttribId } from "../player/attrib";
+import { Shop } from "../player/window/shop";
 
 /*
 Handle packet spoofing.
@@ -297,7 +298,7 @@ function onObjectAction(conn: Connection, data: any) {
 /*
 FOLLOW_PLAYER packet
 */
-export function onFollowPlayer(conn: Connection, id: number) {
+function onFollowPlayer(conn: Connection, id: number) {
     if(isNaN(id)) {
         report(conn, `Invalid FOLLOW_PLAYER id: ${id}`)
         return
@@ -316,7 +317,7 @@ export function onFollowPlayer(conn: Connection, id: number) {
 /*
 ATTACK_PLAYER packet
 */
-export function onAttackPlayer(conn: Connection, id: number) {
+function onAttackPlayer(conn: Connection, id: number) {
     if(isNaN(id)) {
         report(conn, `Invalid ATTACK_PLAYER id: ${id}`)
         return
@@ -335,7 +336,7 @@ export function onAttackPlayer(conn: Connection, id: number) {
 /*
 NPC_ACTION packet
 */
-export function onNpcAction(conn: Connection, data: any) {
+function onNpcAction(conn: Connection, data: any) {
     if(typeof data != "object") {
         report(conn, `Invalid NPC_ACTION data: ${data}`)
         return
@@ -376,7 +377,7 @@ export function onNpcAction(conn: Connection, data: any) {
 /*
 DIALOGUE_OPTION packet
 */
-export function onDialogueOption(conn: Connection, data: any) {
+function onDialogueOption(conn: Connection, data: any) {
     if(typeof data != "object") {
         report(conn, `Invalid DIALOGUE_OPTION data: ${data}`)
         return
@@ -398,6 +399,55 @@ export function onDialogueOption(conn: Connection, data: any) {
     conn.player.handleDialogueOption(id, index)
 }
 
+/*
+SELECT_BUY packet
+*/
+function onSelectBuy(conn: Connection, slot: any) {
+    if(isNaN(slot) || slot < 0 || slot >= 48) {
+        report(conn, `Invalid SELECT_BUY slot: ${slot}`)
+        return
+    }
+
+    const player = conn.player
+    const shop = player.window
+    if(!(shop instanceof Shop)) {
+        return
+    }
+
+    shop.selectBuy(player, slot)
+}
+
+/*
+CONFIRM_BUY packet
+*/
+function onConfirmBuy(conn: Connection, data: any) {
+    if(typeof data != "object") {
+        report(conn, `Invalid CONFIRM_BUY data: ${data}`)
+        return
+    }
+
+    const slot = data.slot
+    const amount = data.amount
+
+    if(isNaN(slot) || slot < 0 || slot >= 48) {
+        report(conn, `Invalid SELECT_BUY slot: ${slot}`)
+        return
+    }
+
+    if(!Number.isInteger(amount) || amount <= 0) {
+        report(conn, `Invalid SELECT_BUY amount: ${amount}`)
+        return
+    }
+
+    const player = conn.player
+    const shop = player.window
+    if(!(shop instanceof Shop)) {
+        return
+    }
+
+    shop.buy(player, slot, amount)
+}
+
 export function bindIncomingPackets(ch: ConnectionHandler) {
     ch.on("LOGIN", onLogin, "initial")
     ch.on("REGISTER", onRegister, "initial")
@@ -417,4 +467,6 @@ export function bindIncomingPackets(ch: ConnectionHandler) {
     ch.on("ATTACK_PLAYER", onAttackPlayer)
     ch.on("NPC_ACTION", onNpcAction)
     ch.on("DIALOGUE_OPTION", onDialogueOption)
+    ch.on("SELECT_BUY", onSelectBuy)
+    ch.on("CONFIRM_BUY", onConfirmBuy)
 }

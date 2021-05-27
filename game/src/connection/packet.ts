@@ -171,3 +171,24 @@ export class DialogueOptionPacket implements Packet {
         }
     }
 }
+
+export class SelectBuyPacket implements Packet {
+    public readonly id = "SELECT_BUY"
+    public readonly data: any
+
+    constructor(slot: number) {
+        this.data = slot
+    }
+}
+
+export class ConfirmBuyPacket implements Packet {
+    public readonly id = "CONFIRM_BUY"
+    public readonly data: any
+
+    constructor(slot: number, amount: number) {
+        this.data = {
+            slot: slot,
+            amount: amount
+        }
+    }
+}
