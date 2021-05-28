@@ -23,7 +23,7 @@ export function DialogueBox(props: DialogueBoxProps) {
     const options = dialogue.options.map((option, idx) =>
         <p key={idx} onClick={ _ => { clickOption(idx) } }>{option}</p>)
 
-    return <div className="window" id="dialogueBox">
+    return <div className="window box-solid" id="dialogueBox">
         <p id="dialogueName">「{dialogue.name}」</p>
 
         {dialogue.lines.map((line, idx) => <p key={idx}>{line}</p>)}

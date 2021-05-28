@@ -4,6 +4,7 @@ import { Connection } from "../../connection/connection"
 import { ItemData } from "exrpg"
 import { MoveItemPacket, UseItemPacket } from "../../connection/packet"
 import { Game } from "../game"
+import { Observable } from "./observable"
 
 export type Item = [ItemData, number]
 
@@ -12,7 +13,7 @@ export function initInventory(game: Game) {
     const engine = game.engine
 
     connection.on("INVENTORY", (items: [string, number][]) => {
-        game.inventory.items = items.map(item => 
+        game.inventory.observable.value = items.map(item => 
             item != null ? [engine.itemHandler.get(item[0]), item[1]] : null)
     })
 }
@@ -23,25 +24,13 @@ export class InventoryModel {
 
     private readonly connection: Connection
 
-    public onInventoryUpdate: (items: Item[]) => void = null
-    private _items: Item[] = []
+    public readonly observable = new Observable<Item[]>([])
 
     constructor(connection: Connection) {
         this.connection = connection
 
         for(let i = 0; i < INVENTORY_SIZE; i++) {
-            this._items.push(null)
-        }
-    }
-
-    public get items() {
-        return this._items
-    }
-
-    public set items(items: Item[]) {
-        this._items = items
-        if(this.onInventoryUpdate != null) {
-            this.onInventoryUpdate(items)
+            this.observable.value.push(null)
         }
     }
 

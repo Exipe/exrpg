@@ -175,7 +175,7 @@ export function Equipment(props: EquipmentProps) {
     )
 
     return <>
-    <div id="equipment">
+    <div id="equipment" className="box-standard">
         <div id="equipmentGrid">
             <div /> 
             {createSlot("helm")}

@@ -192,3 +192,24 @@ export class ConfirmBuyPacket implements Packet {
         }
     }
 }
+
+export class SelectSellPacket implements Packet {
+    public readonly id = "SELECT_SELL"
+    public readonly data: any
+
+    constructor(slot: number) {
+        this.data = slot
+    }
+}
+
+export class ConfirmSellPacket implements Packet {
+    public readonly id = "CONFIRM_SELL"
+    public readonly data: any
+
+    constructor(item: string, amount: number) {
+        this.data = {
+            item: item,
+            amount: amount
+        }
+    }
+}

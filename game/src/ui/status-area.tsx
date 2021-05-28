@@ -84,7 +84,7 @@ export function StatusArea(props: StatusProps) {
         }
     })
 
-    return <div id="statusArea">
+    return <div id="statusArea" className="box-standard">
         <div id="nameAndLevel">
             <p>{name}</p>
             <p>Level {level}</p>

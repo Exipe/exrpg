@@ -3,7 +3,7 @@ import { loadScene } from "exrpg";
 import { Game } from "../game/game";
 import { Dialogue } from "../game/model/dialogue-model";
 import { TextStyle } from "../game/model/overlay-model";
-import { BuySelect, Shop } from "../game/model/shop-model";
+import { ShopSelect, Shop } from "../game/model/shop-model";
 import { SwingItem } from "../game/swing-item";
 
 function onSwingItem(game: Game, data: any) {
@@ -96,7 +96,14 @@ function onSelectBuy(game: Game, data: any) {
     const itemHandler = game.engine.itemHandler
     const item = itemHandler.get(data.item)
     const currency = itemHandler.get(data.currency)
-    game.shop.selectedBuy.value = new BuySelect(data.slot, item, currency, data.price)
+    game.shop.selectedBuy.value = new ShopSelect(data.slot, item, currency, data.price)
+}
+
+function onSelectSell(game: Game, data: any) {
+    const itemHandler = game.engine.itemHandler
+    const item = itemHandler.get(data.item)
+    const currency = itemHandler.get(data.currency)
+    game.shop.selectedSell.value = new ShopSelect(data.slot, item, currency, data.value)
 }
 
 export function bindIncomingPackets(game: Game) {
@@ -118,4 +125,5 @@ export function bindIncomingPackets(game: Game) {
     bind("DIALOGUE", onOpenDialogue)
     bind("SHOP", onOpenShop)
     bind("SELECT_BUY", onSelectBuy)
+    bind("SELECT_SELL", onSelectSell)
 }

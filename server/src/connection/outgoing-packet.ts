@@ -323,3 +323,17 @@ export class SelectBuyPacket implements Packet {
         }
     }
 }
+
+export class SelectSellPacket implements Packet {
+    public readonly id = "SELECT_SELL"
+    public readonly data: any
+
+    constructor(slot: number, item: string, currency: string, value: number) {
+        this.data = {
+            slot: slot,
+            item: item,
+            currency: currency,
+            value: value
+        }
+    }
+}

@@ -31,6 +31,18 @@
     right: 4px;
 }
 
+.box-standard {
+    border-radius: 5px;
+    background-color: var(--bg-color);
+    border: 3px solid var(--fg-color);
+}
+
+.box-solid {
+    border-radius: 5px;
+    background-color: var(--bg-solid);
+    border: 3px solid var(--fg-color);
+}
+
 .playerName, .npcName {
     transform: translate(-50%, -100%);
     border-radius: 4px;
@@ -147,10 +159,6 @@
     width: 320px;
     top: 4px;
     left: 4px;
-
-    border-radius: 5px;
-    background-color: var(--bg-color);
-    border: 3px solid var(--fg-color);
 }
 
 #statusArea > * {
@@ -213,11 +221,6 @@
 
 #tabArea > * {
     pointer-events: initial;
-
-    background-color: var(--bg-color);
-    border: 3px solid var(--fg-color);
-    border-radius: 5px;
-
     margin: 2px;
 }
 
@@ -294,7 +297,7 @@
     cursor: pointer;
 }
 
-#selectDialog {
+.selectDialog {
     min-width: 200px;
     position: absolute;
     z-index: 1;
@@ -305,7 +308,7 @@
     padding: 4px;
 }
 
-#selectDialog:hover {
+.selectDialog:hover {
     cursor: initial;
 }
 
@@ -494,10 +497,6 @@
     width: fit-content;
     height: fit-content;
 
-    background-color: var(--bg-color);
-    border: 3px solid var(--fg-color);
-    border-radius: 5px;
-
     color: white;
 }
 
@@ -558,10 +557,17 @@
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
+}
 
-    background-color: var(--bg-solid);
-    border: 3px solid var(--fg-color);
-    border-radius: 5px;
+.secondary-window {
+    pointer-events: initial;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
+.secondary-window .selectDialog {
+    right: 0;
 }
 
 #dialogueBox {

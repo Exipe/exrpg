@@ -43,13 +43,9 @@ export function TabArea(props: TabAreaProps) {
     if(tab == "inventory") {
         displayTab = <Inventory 
             heldItem={ props.heldItem }
-            getItems={ () => game.inventory.items } 
-            setOnInventoryUpdate={ onInventoryUpdate => 
-                game.inventory.onInventoryUpdate = onInventoryUpdate } 
             takeItem={ item => { props.setHeldItem(item) } }
-            moveItem={ (from, to) => { game.inventory.moveItem(from, to) } }
             showCtxMenu={ (entries, x, y) => { game.ctxMenu.show(entries, x, y) } }
-            useItem={ (action, id, slot) => { game.inventory.useItem(action, id, slot) } }
+            inventory={ game.inventory }
         />
     } else if(tab == "equipment") {
         displayTab = <Equipment
@@ -64,7 +60,7 @@ export function TabArea(props: TabAreaProps) {
     }
 
     return <div id="tabArea">
-        <div id="tabs">
+        <div className="box-standard" id="tabs">
             <Tab id="inventory" setTab={ openTab } />
             <Tab id="equipment" setTab={ openTab } />
             <Tab id="settings" setTab={ openTab } />

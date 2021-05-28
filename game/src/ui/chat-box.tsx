@@ -51,7 +51,7 @@ function ChatBox(props: ChatProps) {
         setInput("")
     }
 
-    return <div id="chatBox">
+    return <div className="box-standard" id="chatBox">
         <div className="closeButton" id="closeChat" onClick={props.onCloseChat}></div>
 
         <div id="chatBoxMessageArea">

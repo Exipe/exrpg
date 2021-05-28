@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import React = require("react");
 import { MenuEntry } from "../../game/model/context-menu-model";
-import { Item } from "../../game/model/inventory-model";
+import { InventoryModel, Item } from "../../game/model/inventory-model";
 
 export interface HeldItem {
     mouseX: number,
@@ -39,34 +39,31 @@ export function HeldItemPointer(props: { item: HeldItem }) {
 }
 
 interface InventoryProps {
-    setOnInventoryUpdate: (onUpdate: (items: Item[]) => void) => void
-    getItems: () => Item[]
     takeItem: (item: HeldItem) => void
-    moveItem: (fromSlot: number, toSlot: number) => void
     heldItem: HeldItem,
     showCtxMenu: (entries: MenuEntry[], x: number, y: number) => void,
-    useItem: (action: string, id: string, slot: number) => void
+    inventory: InventoryModel
 }
 
 export function Inventory(props: InventoryProps) {
-    const [items, setItems] = useState([] as Item[])
+    const inventory = props.inventory
+    const itemObservable = inventory.observable
+    const [items, setItems] = useState(itemObservable.value)
 
     const heldItem = props.heldItem
 
     useEffect(() => {
-        setItems(props.getItems())
-
-        props.setOnInventoryUpdate(items => {
+        const observer = (items: Item[]) => {
             if(heldItem != null && items[heldItem.slot] != heldItem.item) {
                 props.takeItem(null)
             }
 
             setItems(items)
-        })
-
-        return () => {
-            props.setOnInventoryUpdate(null)
         }
+
+        itemObservable.register(observer)
+
+        return () => itemObservable.unregister(observer)
     }, [])
 
     function contextItem(idx: number, mouseX: number, mouseY: number) {
@@ -83,20 +80,20 @@ export function Inventory(props: InventoryProps) {
         if(data.equipable) {
             ctxMenu.push([
                 "Equip " + data.name, 
-                () => { props.useItem("equip", data.id, idx) }
+                () => { inventory.useItem("equip", data.id, idx) }
             ])
         }
 
         data.options.forEach(option => {
             ctxMenu.push([
                 `${option[0]} ${data.name}`, 
-                () => { props.useItem(option[1], data.id, idx) }
+                () => { inventory.useItem(option[1], data.id, idx) }
             ])
         })
 
         ctxMenu.push([
             "Drop " + data.name, 
-            () => { props.useItem("drop", data.id, idx) }
+            () => { inventory.useItem("drop", data.id, idx) }
         ])
 
         props.showCtxMenu(ctxMenu, mouseX, mouseY)
@@ -105,7 +102,7 @@ export function Inventory(props: InventoryProps) {
     function shiftClickItem(idx: number) {
         const item = items[idx][0]
         if(item.equipable) {
-            props.useItem("equip", item.id, idx)
+            inventory.useItem("equip", item.id, idx)
         }
     }
 
@@ -118,7 +115,7 @@ export function Inventory(props: InventoryProps) {
                 return
             }
 
-            props.moveItem(heldItem.slot, idx)
+            inventory.moveItem(heldItem.slot, idx)
 
             const copyItems = [...items]
             copyItems[heldItem.slot] = oldItem
@@ -167,7 +164,7 @@ export function Inventory(props: InventoryProps) {
         </div>
     })
 
-    return <div className="itemContainer" id="inventory">
+    return <div className="itemContainer box-standard" id="inventory">
         {displayItems}
     </div>
 }

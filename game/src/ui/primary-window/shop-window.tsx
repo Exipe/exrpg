@@ -1,15 +1,15 @@
 
 import { useEffect, useState } from "react";
 import React = require("react");
-import { BuySelect, ShopModel } from "../../game/model/shop-model";
+import { ShopSelect, ShopModel } from "../../game/model/shop-model";
 
-interface BuySelectProps {
-    select: BuySelect
+export interface ShopSelectProps {
+    select: ShopSelect
     onClose: () => void
-    onBuy: (amount: number) => void
+    onConfirm: (amount: number) => void
 }
 
-function BuySelectDialog(props: BuySelectProps) {
+export function ShopSelectDialog(props: ShopSelectProps) {
     const [amount, setAmount] = useState(1)
 
     const select = props.select
@@ -22,17 +22,17 @@ function BuySelectDialog(props: BuySelectProps) {
         setAmount(isNaN(numValue) ? 0 : numValue)
     }
 
-    const buy = () => {
+    const confirm = () => {
         if(amount == 0) {
             return
         }
 
-        props.onBuy(amount)
+        props.onConfirm(amount)
     }
 
     const price = amount*select.price
 
-    return <div id="selectDialog" onClick={e => {e.stopPropagation()}}>
+    return <div className="selectDialog" onClick={e => {e.stopPropagation()}}>
         <div onClick={props.onClose} className="closeButton top-right"></div>
 
         <div className="selectDialogRow">
@@ -45,7 +45,7 @@ function BuySelectDialog(props: BuySelectProps) {
             <input onChange={updateInput} value={amount.toString()} type="number" min="0" max="" className="selectDialogAmount"></input>
         </div>
 
-        <div className="selectDialogButton" onClick={buy}>
+        <div className="selectDialogButton" onClick={confirm}>
             Confirm (<img className="text-icon" src={select.currency.spritePath}/> <span>{price.toLocaleString()}</span>)
         </div>
     </div>
@@ -92,7 +92,7 @@ export function ShopWindow(props: ShopWindowProps) {
         } as React.CSSProperties
 
         const selectDialog = select != null && select.slot == idx ? 
-            <BuySelectDialog onBuy={buy} onClose={closeSelect} select={select} /> : <></>
+            <ShopSelectDialog onConfirm={buy} onClose={closeSelect} select={select} /> : <></>
 
         const onClick = () => selectBuy(idx)
         return <div className="shopItem" key={idx} onClick={onClick} style={style}>
@@ -100,7 +100,7 @@ export function ShopWindow(props: ShopWindowProps) {
         </div>
     })
 
-    return <div className="window" id="shopWindow">
+    return <div className="window box-solid" id="shopWindow">
         <div className="closeButton top-right"
             onClick={close}></div>
         <p id="shopName">{shop.name}</p>

@@ -4,11 +4,11 @@ import { Game } from "../game/game"
 import { useState } from "react"
 import React = require("react")
 import { ContextMenu } from "./context-menu"
-import { TabArea } from "./tab-area/tab-area"
 import { OverlayArea } from "./overlay-area"
 import { StatusArea } from "./status-area"
 import { HeldItem, HeldItemPointer } from "./tab-area/inventory"
 import { PrimaryWindow } from "./primary-window"
+import { SecondaryWindow } from "./secondary-window"
 
 export function UiContainer(props: { game: Game }) {
     const [heldItem, setHeldItem] = useState(null as HeldItem)
@@ -29,11 +29,9 @@ export function UiContainer(props: { game: Game }) {
 
         <StatusArea model={game.status} />
 
-        <TabArea
-            game={game}
+        <SecondaryWindow game={game} 
             heldItem={heldItem}
-            setHeldItem={ item => setHeldItem(item) }
-        />
+            setHeldItem={item => setHeldItem(item)} />
 
         <ChatArea chat={game.chat} />
 

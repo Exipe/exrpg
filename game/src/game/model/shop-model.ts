@@ -2,9 +2,8 @@
 import { ItemData } from "exrpg"
 import { ItemHandler } from "exrpg/dist/item/item-handler"
 import { Connection } from "../../connection/connection"
-import { ConfirmBuyPacket, SelectBuyPacket } from "../../connection/packet"
-import { Game } from "../game"
-import { PrimaryWindow } from "../window"
+import { ConfirmBuyPacket, ConfirmSellPacket, SelectBuyPacket, SelectSellPacket } from "../../connection/packet"
+import { PrimaryWindow } from "../game"
 import { Observable } from "./observable"
 
 export class Shop {
@@ -19,7 +18,7 @@ export class Shop {
 
 }
 
-export class BuySelect {
+export class ShopSelect {
 
     public readonly slot: number
 
@@ -34,30 +33,26 @@ export class BuySelect {
         this.price = price
     }
 
-    public confirm(amount: number) {
-
-    }
-
 }
 
 export class ShopModel {
 
     private readonly primaryWindow: Observable<PrimaryWindow>
     private readonly connection: Connection
-    private readonly itemHandler: ItemHandler
 
     public readonly observable = new Observable<Shop>()
-    public readonly selectedBuy = new Observable<BuySelect>()
+    public readonly selectedBuy = new Observable<ShopSelect>()
+    public readonly selectedSell = new Observable<ShopSelect>()
 
-    constructor(primaryWindow: Observable<PrimaryWindow>, connection: Connection, itemHandler: ItemHandler) {
+    constructor(primaryWindow: Observable<PrimaryWindow>, connection: Connection) {
         this.primaryWindow = primaryWindow
         this.connection = connection
-        this.itemHandler = itemHandler
     }
 
     public open(shop: Shop) {
         this.observable.value = shop
         this.selectedBuy.value = null
+        this.selectedSell.value = null
         this.primaryWindow.value = "Shop"
     }
 
@@ -73,6 +68,16 @@ export class ShopModel {
         const selected = this.selectedBuy.value
         this.selectedBuy.value = null
         this.connection.send(new ConfirmBuyPacket(selected.slot, amount))
+    }
+
+    public selectSell(slot: number) {
+        this.connection.send(new SelectSellPacket(slot))
+    }
+
+    public confirmSell(amount: number) {
+        const selected = this.selectedSell.value
+        this.selectedSell.value = null
+        this.connection.send(new ConfirmSellPacket(selected.item.id, amount))
     }
 
 }

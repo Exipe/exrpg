@@ -46,7 +46,7 @@ export function Settings(props: SettingsProps) {
         container.requestFullscreen()
     }
 
-    return <div id="settings">
+    return <div id="settings" className="box-standard">
         <div className="uiButton" onClick={e => { onZoom(e.nativeEvent) }}>Zoom: {zoom}x</div>
         <div className="uiButton" onClick={e => { onCamera(e.nativeEvent) }}>Camera: {camera}</div>
 

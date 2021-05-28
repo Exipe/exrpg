@@ -3,7 +3,7 @@ import { ConnectionHandler } from "./connection-handler";
 import { Connection } from "./connection";
 import { INVENTORY_SIZE } from "../item/inventory";
 import { isEquipSlot } from "../item/equipment";
-import { playerHandler, objDataHandler, npcHandler, commandHandler, actionHandler } from "../world";
+import { playerHandler, objDataHandler, npcHandler, commandHandler, actionHandler, itemDataHandler } from "../world";
 import { isAttribId } from "../player/attrib";
 import { Shop } from "../player/window/shop";
 
@@ -430,12 +430,12 @@ function onConfirmBuy(conn: Connection, data: any) {
     const amount = data.amount
 
     if(isNaN(slot) || slot < 0 || slot >= 48) {
-        report(conn, `Invalid SELECT_BUY slot: ${slot}`)
+        report(conn, `Invalid CONFIRM_BUY slot: ${slot}`)
         return
     }
 
     if(!Number.isInteger(amount) || amount <= 0) {
-        report(conn, `Invalid SELECT_BUY amount: ${amount}`)
+        report(conn, `Invalid CONFIRM_BUY amount: ${amount}`)
         return
     }
 
@@ -446,6 +446,52 @@ function onConfirmBuy(conn: Connection, data: any) {
     }
 
     shop.buy(player, slot, amount)
+}
+
+/*
+SELECT_SELL packet
+*/
+function onSelectSell(conn: Connection, slot: any) {
+    if(!verifySlot(slot)) {
+        report(conn, `Invalid SELECT_SELL slot: ${slot}`)
+        return
+    }
+
+    const player = conn.player
+    const shop = player.window
+    if(!(shop instanceof Shop)) {
+        return
+    }
+
+    shop.selectSell(player, slot)
+}
+
+function onConfirmSell(conn: Connection, data: any) {
+    if(typeof data != "object") {
+        report(conn, `Invalid CONFIRM_SELL data: ${data}`)
+        return
+    }
+
+    const item = itemDataHandler.get(data.item)
+    const amount = data.amount
+
+    if(item == null || item.value == 0) {
+        report(conn, `Invalid CONFIRM_SELL item: ${item}`)
+        return
+    }
+
+    if(!Number.isInteger(amount) || amount <= 0) {
+        report(conn, `Invalid CONFIRM_SELL amount: ${amount}`)
+        return
+    }
+
+    const player = conn.player
+    const shop = player.window
+    if(!(shop instanceof Shop)) {
+        return
+    }
+
+    shop.sell(player, item, amount)
 }
 
 export function bindIncomingPackets(ch: ConnectionHandler) {
@@ -469,4 +515,6 @@ export function bindIncomingPackets(ch: ConnectionHandler) {
     ch.on("DIALOGUE_OPTION", onDialogueOption)
     ch.on("SELECT_BUY", onSelectBuy)
     ch.on("CONFIRM_BUY", onConfirmBuy)
+    ch.on("SELECT_SELL", onSelectSell)
+    ch.on("CONFIRM_SELL", onConfirmSell)
 }
