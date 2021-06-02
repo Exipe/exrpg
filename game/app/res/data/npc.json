@@ -54,6 +54,23 @@
     },
 
     {
+        "id": "carl_armor",
+        "name": "Carl",
+        "sprite": "man",
+
+        "equip": [
+            "legs_iron",
+            "plate_iron",
+            "helm_iron"
+        ],
+
+        "options": [
+            "Talk-to",
+            "Trade"
+        ]
+    },
+
+    {
         "id": "wizard",
         "name": "Wizard",
         "sprite": "man",

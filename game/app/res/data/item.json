@@ -3,7 +3,7 @@
         "id": "coins",
         "name": "Coins",
         "sprite": "coins",
-        "stack": 100
+        "stack": 1000000000
     },
 
     {
@@ -53,15 +53,49 @@
     }, 
 
     {
+        "id": "recipe_helm_copper",
+        "name": "Recipe (Copper helm)",
+        "sprite": "scroll",
+
+        "options": [
+            "Learn"
+        ]
+    },
+
+    {
+        "id": "ore_gold",
+        "name": "Gold ore",
+        "sprite": "gold/ore"
+    },
+
+    {
+        "id": "ingot_gold",
+        "name": "Gold ingot",
+        "sprite": "gold/ingot"
+    },
+
+    {
+        "id": "ore_iron",
+        "name": "Iron ore",
+        "sprite": "iron/ore"
+    },
+
+    {
+        "id": "ingot_iron",
+        "name": "Iron ingot",
+        "sprite": "iron/ingot"
+    },
+
+    {
         "id": "ore_copper",
         "name": "Copper ore",
-        "sprite": "copper"
+        "sprite": "copper/ore"
     },
 
     {
         "id": "ingot_copper",
         "name": "Copper ingot",
-        "sprite": "copper_ingot"
+        "sprite": "copper/ingot"
     },
 
     {
@@ -92,9 +126,154 @@
     },
 
     {
+        "id": "axe_obsidian",
+        "name": "Obsidian axe",
+        "sprite": "obsidian/axe",
+        "equip": {
+            "slot": "sword"
+        }
+    },
+
+    {
+        "id": "helm_obsidian",
+        "name": "Obsidian helm",
+        "sprite": "obsidian/helm",
+        "equip": {
+            "slot": "helm",
+            "sprite": ["obsidian", 0]
+        }
+    },
+
+    {
+        "id": "plate_obsidian",
+        "name": "Obsidian platebody",
+        "sprite": "obsidian/plate",
+        "equip": {
+            "slot": "plate",
+            "sprite": ["obsidian", 1]
+        }
+    },
+
+    {
+        "id": "legs_obsidian",
+        "name": "Obsidian platelegs",
+        "sprite": "obsidian/legs",
+        "equip": {
+            "slot": "legs",
+            "sprite": ["obsidian", 2]
+        }
+    },
+
+    {
+        "id": "sword_gold",
+        "name": "Gold sword",
+        "sprite": "gold/sword",
+        "equip": {
+            "slot": "sword"
+        }
+    },
+
+    {
+        "id": "helm_gold",
+        "name": "Gold helmet",
+        "sprite": "gold/helm",
+        "value": 42570,
+        "equip": {
+            "slot": "helm",
+            "sprite": ["gold", 1]
+        }
+    },
+
+    {
+        "id": "plate_gold",
+        "name": "Gold platebody",
+        "sprite": "gold/plate",
+        "value": 64550,
+        "equip": {
+            "slot": "plate",
+            "sprite": ["gold", 2]
+        }
+    },
+
+    {
+        "id": "legs_gold",
+        "name": "Gold platelegs",
+        "sprite": "gold/legs",
+        "value": 60225,
+        "equip": {
+            "slot": "legs",
+            "sprite": ["gold", 3]
+        }
+    },
+
+    {
+        "id": "shield_gold",
+        "name": "Gold shield",
+        "sprite": "gold/shield",
+        "value": 43400,
+        "equip": {
+            "slot": "shield",
+            "sprite": ["gold", 0]
+        }
+    },
+
+    {
+        "id": "sword_iron",
+        "name": "Iron sword",
+        "sprite": "iron/sword",
+        "equip": {
+            "slot": "sword"
+        }
+    },
+
+    {
+        "id": "helm_iron",
+        "name": "Iron helmet",
+        "sprite": "iron/helm",
+        "value": 2250,
+        "equip": {
+            "slot": "helm",
+            "sprite": ["iron", 1]
+        }
+    },
+
+    {
+        "id": "plate_iron",
+        "name": "Iron platebody",
+        "sprite": "iron/plate",
+        "value": 3400,
+        "equip": {
+            "slot": "plate",
+            "sprite": ["iron", 2]
+        }
+    },
+
+    {
+        "id": "legs_iron",
+        "name": "Iron platelegs",
+        "sprite": "iron/legs",
+        "value": 3200,
+        "equip": {
+            "slot": "legs",
+            "sprite": ["iron", 3]
+        }
+    },
+
+    {
+        "id": "shield_iron",
+        "name": "Iron shield",
+        "sprite": "iron/shield",
+        "value": 2500,
+        "equip": {
+            "slot": "shield",
+            "sprite": ["iron", 0]
+        }
+    },
+
+    {
         "id": "sword_copper",
         "name": "Copper sword",
-        "sprite": "copper_sword",
+        "sprite": "copper/sword",
         "equip": {
             "slot": "sword",
 
@@ -108,7 +287,7 @@
     {
         "id": "helm_copper",
         "name": "Copper helmet",
-        "sprite": "copper_helm",
+        "sprite": "copper/helm",
         "value": 88,
         "equip": {
             "slot": "helm",
@@ -123,7 +302,7 @@
     {
         "id": "plate_copper",
         "name": "Copper platebody",
-        "sprite": "copper_plate",
+        "sprite": "copper/plate",
         "value": 106,
         "equip": {
             "slot": "plate",
@@ -138,7 +317,7 @@
     {
         "id": "legs_copper",
         "name": "Copper platelegs",
-        "sprite": "copper_legs",
+        "sprite": "copper/legs",
         "value": 100,
         "equip": {
             "slot": "legs",
@@ -153,7 +332,8 @@
     {
         "id": "shield_copper",
         "name": "Copper shield",
-        "sprite": "copper_shield",
+        "sprite": "copper/shield",
+        "value": 93,
         "equip": {
             "slot": "shield",
             "sprite": ["copper", 0],

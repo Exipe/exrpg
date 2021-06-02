@@ -100,10 +100,10 @@ export function ShopWindow(props: ShopWindowProps) {
         </div>
     })
 
-    return <div className="window box-solid" id="shopWindow">
+    return <div className="window box-gradient" id="shopWindow">
         <div className="closeButton top-right"
             onClick={close}></div>
-        <p id="shopName">{shop.name}</p>
+        <p className="windowName">{shop.name}</p>
         <div className="itemContainer">
             {displayItems}
         </div>

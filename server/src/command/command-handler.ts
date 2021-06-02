@@ -3,12 +3,20 @@ import { Player } from "../player/player"
 
 export type CommandCallback = (player: Player, args: string[]) => void
 
+interface CommandDetails {
+    callback: CommandCallback,
+    rank: number
+}
+
 export class CommandHandler {
 
-    private callbacks = new Map<string, CommandCallback>()
+    private commands = new Map<string, CommandDetails>()
 
-    public on(command: string, callback: CommandCallback) {
-        this.callbacks.set(command, callback)
+    public on(command: string, callback: CommandCallback, rank=0) {
+        this.commands.set(command, {
+            callback: callback,
+            rank: rank
+        })
     }
 
     public execute(player: Player, line: string) {
@@ -23,13 +31,13 @@ export class CommandHandler {
         }
         
         const command = args.shift()
-        const callback = this.callbacks.get(command)
+        const details = this.commands.get(command)
 
-        if(callback == null) {
+        if(details == null || player.rank < details.rank) {
             return
         }
 
-        callback(player, args)
+        details.callback(player, args)
     }
 
 }

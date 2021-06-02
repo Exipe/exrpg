@@ -1,4 +1,5 @@
 import { Camera } from "exrpg/dist/camera"
+import { PlayerRank } from "../character/player"
 
 export class OverlayModel {
 
@@ -66,19 +67,30 @@ export class HealthBarModel extends OverlayModel {
 
 }
 
-export type TextStyle = "playerName" | "npcName" | "hitSplat" | "missSplat" | "healSplat"
+export type HitSplatStyle = "hit" | "miss" | "heal"
 
-export class TextModel extends OverlayModel {
+export class HitSplatModel extends OverlayModel {
+    public readonly hit: number
+    public readonly style: HitSplatStyle
 
-    public readonly text: string
-    public readonly textStyle: TextStyle
-
-    constructor(id: number, camera: Camera, text: string, textStyle: TextStyle, x: number, y: number) {
+    constructor(id: number, camera: Camera, hit: number, style: HitSplatStyle, x: number, y: number) {
         super(id, camera, x, y)
-        this.text = text
-        this.textStyle = textStyle
+        this.hit = hit
+        this.style = style
     }
+}
 
+export type NameTagStyle = "npc" | PlayerRank
+
+export class NameTagModel extends OverlayModel {
+    public readonly name: string
+    public readonly style: NameTagStyle
+
+    constructor(id: number, camera: Camera, name: string, style: NameTagStyle, x: number, y: number) {
+        super(id, camera, x, y)
+        this.name = name
+        this.style = style
+    }
 }
 
 export class OverlayAreaModel {
@@ -103,10 +115,16 @@ export class OverlayAreaModel {
         return healthBarModel
     }
 
-    public addText(text: string, textStyle: TextStyle, x: number, y: number, duration: number = undefined) {
-        const textModel = new TextModel(this.idCount++, this.camera, text, textStyle, x, y)
-        this.addOverlay(textModel, duration)
-        return textModel
+    public addHitSplat(hit: number, style: HitSplatStyle, x: number, y: number, duration: number) {
+        const hitSplatModel = new HitSplatModel(this.idCount++, this.camera, hit, style, x, y)
+        this.addOverlay(hitSplatModel, duration)
+        return hitSplatModel
+    }
+
+    public addNameTag(name: string, style: NameTagStyle, x: number, y: number) {
+        const nameTagModel = new NameTagModel(this.idCount++, this.camera, name, style, x, y)
+        this.addOverlay(nameTagModel)
+        return nameTagModel
     }
 
     public addOverlay(overlay: OverlayModel, duration: number = undefined) {

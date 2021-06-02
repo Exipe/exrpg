@@ -1,8 +1,9 @@
 
 import { loadScene } from "exrpg";
 import { Game } from "../game/game";
+import { CraftingStation, Recipe } from "../game/model/crafting-model";
 import { Dialogue } from "../game/model/dialogue-model";
-import { TextStyle } from "../game/model/overlay-model";
+import { HitSplatStyle } from "../game/model/overlay-model";
 import { ShopSelect, Shop } from "../game/model/shop-model";
 import { SwingItem } from "../game/swing-item";
 
@@ -19,26 +20,11 @@ function onSwingItem(game: Game, data: any) {
 function onHitSplat(game: Game, data: any) {
     const character = data.character == "player" ? game.getPlayer(data.characterId) 
         : game.getNpc(data.characterId)
-    let style: TextStyle
-    let text: string
-
-    switch(data.type) {
-        case "hit":
-            style = "hitSplat"
-            text = `-${data.damage}`
-            break
-        case "miss":
-            style = "missSplat"
-            text = `-${data.damage}`
-            break
-        case "heal":
-            style = "healSplat"
-            text = `+${data.damage}`
-            break
-    }
+    let style: HitSplatStyle = data.type
+    let hit = data.damage
 
     const coords = character.centerCoords
-    game.overlayArea.addText(text, style, coords[0], coords[1], 2000)
+    game.overlayArea.addHitSplat(hit, style, coords[0], coords[1], 2000)
 }
 
 function onHealthBar(game: Game, data: any) {
@@ -106,6 +92,16 @@ function onSelectSell(game: Game, data: any) {
     game.shop.selectedSell.value = new ShopSelect(data.slot, item, currency, data.value)
 }
 
+function onOpenCrafting(game: Game, data: any) {
+    const itemHandler = game.engine.itemHandler
+    const station = new CraftingStation(data.name, data.recipes.map((recipe: any) => ({
+        item: itemHandler.get(recipe.item),
+        unlocked: recipe.unlocked,
+        materials: recipe.materials.map((i: any) => [itemHandler.get(i[0]), i[1]])
+    })))
+    game.crafting.open(station)
+}
+
 export function bindIncomingPackets(game: Game) {
     const connection = game.connection
 
@@ -126,4 +122,5 @@ export function bindIncomingPackets(game: Game) {
     bind("SHOP", onOpenShop)
     bind("SELECT_BUY", onSelectBuy)
     bind("SELECT_SELL", onSelectSell)
+    bind("CRAFTING", onOpenCrafting)
 }

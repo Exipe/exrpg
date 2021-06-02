@@ -1,12 +1,12 @@
 import { Entity } from "exrpg";
 import { Component } from "exrpg/dist/entity/component";
-import { OverlayAreaModel, TextModel, TextStyle } from "../../model/overlay-model";
+import { NameTagModel, NameTagStyle, OverlayAreaModel } from "../../model/overlay-model";
 
 export const NAME_TAG_COMPONENT = "NAME_TAG"
 
 export class NameTagComponent extends Component {
 
-    private nameTag = null as TextModel
+    private nameTag = null as NameTagModel
     private readonly overlayArea = null as OverlayAreaModel
     private readonly entity: Entity
 
@@ -16,12 +16,12 @@ export class NameTagComponent extends Component {
         this.entity = entity
     }
 
-    public setNameTag(style: TextStyle, name: string) {
+    public setNameTag(style: NameTagStyle, name: string) {
         if(this.nameTag != null) {
             this.overlayArea.removeOverlay(this.nameTag)
         }
 
-        this.nameTag = this.overlayArea.addText(name, style, ...this.entity.centerAboveCoords)
+        this.nameTag = this.overlayArea.addNameTag(name, style, ...this.entity.centerAboveCoords)
     }
 
     movePx() {

@@ -6,6 +6,8 @@
 }
 
 #ui {
+    font-family: 'Roboto Slab', serif;
+
     pointer-events: none;
     user-select: none;
     overflow: hidden;
@@ -40,6 +42,12 @@
 .box-solid {
     border-radius: 5px;
     background-color: var(--bg-solid);
+    border: 3px solid var(--fg-color);
+}
+
+.box-gradient {
+    border-radius: 5px;
+    background: radial-gradient(rgb(75, 50, 25), rgb(60, 35, 10));
     border: 3px solid var(--fg-color);
 }
 
@@ -270,7 +278,9 @@
 .itemContainer {
     display: grid;
     column-gap: 4px;
-    row-gap: 4px;   
+    row-gap: 4px;
+
+    grid-auto-rows: 48px;
 }
 
 .itemContainer > * {
@@ -283,9 +293,18 @@
     image-rendering: pixelated;
 }
 
-#shopName {
+.windowName {
     text-align: center;
     color: yellow;
+}
+
+#craftingWindow .itemContainer {
+    grid-template-columns: repeat(8, 48px);
+    grid-template-rows: repeat(6, 48px)
+}
+
+.recipeLocked {
+    filter: opacity(0.5) brightness(0.5)
 }
 
 #shopWindow .itemContainer {
@@ -293,7 +312,7 @@
     grid-template-rows: repeat(6, 48px);
 }
 
-.shopItem:hover {
+.shopItem:hover, .recipeUnlocked:hover {
     cursor: pointer;
 }
 
@@ -502,6 +521,7 @@
 
 .closeButton {
     background-image: url('ui/close.png');
+    image-rendering: initial !important;
     width: 20px;
     height: 20px;
     border-radius: 2px;

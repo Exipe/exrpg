@@ -21,6 +21,8 @@ export interface Progress {
     level: number
     experience: number
 
+    rank: number,
+
     health: number
 
     position: {

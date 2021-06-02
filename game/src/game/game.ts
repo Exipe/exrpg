@@ -20,6 +20,7 @@ import { bindIncomingPackets } from "../connection/incoming-packet";
 import { SettingsModel } from "./model/settings-model";
 import { ShopModel } from "./model/shop-model";
 import { Observable } from "./model/observable";
+import { CraftingModel } from "./model/crafting-model";
 
 export async function initGame(engine: Engine, connection: Connection) {
     const game = new Game(engine, connection);
@@ -64,7 +65,7 @@ export async function initGame(engine: Engine, connection: Connection) {
     return game
 }
 
-export type PrimaryWindow = "None" | "Shop" | "Dialogue"
+export type PrimaryWindow = "None" | "Shop" | "Dialogue" | "Crafting"
 
 export class Game {
 
@@ -89,6 +90,7 @@ export class Game {
     public readonly status = new StatusModel()
     public readonly settings: SettingsModel
     public readonly shop: ShopModel
+    public readonly crafting = new CraftingModel(this)
 
     public readonly primaryWindow = new Observable<PrimaryWindow>("None")
 
@@ -101,7 +103,7 @@ export class Game {
         this.overlayArea = new OverlayAreaModel(engine.camera)
         this.chat = new ChatModel(connection)
         this.settings = new SettingsModel(engine)
-        this.shop = new ShopModel(this.primaryWindow, this.connection)
+        this.shop = new ShopModel(this.primaryWindow, connection)
     }
 
     private get map() {

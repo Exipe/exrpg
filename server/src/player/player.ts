@@ -46,6 +46,8 @@ export class Player extends Character {
 
     public readonly playerCombat: PlayerCombatHandler
 
+    public rank = 0
+
     constructor(connection: Connection, id: number, name: string, password: string, progress = null as Progress) {
         super("player", id)
         this.combatHandler = this.playerCombat = new PlayerCombatHandler(this)
@@ -60,6 +62,15 @@ export class Player extends Character {
         this.progress = progress
 
         this.attributes.onChange('speed_move', value => this.walkSpeed = speedBonus(value))
+    }
+
+    public get title() {
+        switch(this.rank) {
+            case 1:
+                return "dev"
+            default:
+                return "player"
+        }
     }
 
     public set window(window: PrimaryWindow) {
@@ -114,6 +125,7 @@ export class Player extends Character {
         return {
             id: this.id,
             name: this.name,
+            rank: this.title,
             x: this.x,
             y: this.y,
             equipment: this.equipment.appearanceValues

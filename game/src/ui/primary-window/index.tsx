@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import React = require("react");
 import { Game } from "../../game/game";
+import { CraftingStation } from "./crafting-station";
 import { DialogueBox } from "./dialogue-box";
 import { ShopWindow } from "./shop-window";
 
@@ -26,5 +27,7 @@ export function PrimaryWindow(props: PrimaryWindowProps) {
             return <DialogueBox model={game.dialogue} />
         case "Shop":
             return <ShopWindow model={game.shop} />
+        case "Crafting":
+            return <CraftingStation model={game.crafting} />
     }
 }

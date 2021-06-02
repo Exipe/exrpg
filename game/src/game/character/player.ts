@@ -6,21 +6,33 @@ import { Goal } from "./path-finder"
 import { AttackPlayerPacket, FollowPlayerPacket } from "../../connection/packet"
 import { Character } from "./character"
 
+export type PlayerRank = "player" | "dev"
+
+export interface PlayerInfo {
+    id: number,
+    name: string,
+    x: number,
+    y: number,
+    rank: PlayerRank
+}
+
 export class Player extends Character {
 
     public readonly id: number
     public readonly name: string
     public readonly sprite: PlayerSprite
 
+    public readonly rank: PlayerRank
+
     private _onContext: (player: Player) => void
 
-    constructor(game: Game, playerSprite: PlayerSprite, id: number, name: string, x: number, y: number, onContext: (player: Player) => void) {
-        super(game, x, y, playerSprite.width, playerSprite.height)
-        this.nameTagComponent.setNameTag("playerName", name)
+    constructor(game: Game, playerSprite: PlayerSprite, onContext: (player: Player) => void, info: PlayerInfo) {
+        super(game, info.x, info.y, playerSprite.width, playerSprite.height)
+        this.nameTagComponent.setNameTag(info.rank, info.name)
         this.componentHandler.add(new LightComponent(this, game.engine.lightHandler, 48))
 
-        this.id = id
-        this.name = name
+        this.id = info.id
+        this.name = info.name
         this.sprite = playerSprite
         this._onContext = onContext
     }
@@ -90,7 +102,7 @@ export async function initPlayers(game: Game) {
             const sprite = new PlayerSprite(engine, baseSprite, 
                 getAppearanceValues(p.equipment)
             )
-            const player = new Player(game, sprite, p.id, p.name, p.x, p.y, onContext)
+            const player = new Player(game, sprite, onContext, p)
             game.addPlayer(player)
         });
     })

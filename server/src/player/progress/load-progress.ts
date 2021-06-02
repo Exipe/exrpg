@@ -11,6 +11,8 @@ export function loadProgress(player: Player, progress: Progress) {
     player.level.setLevel(progress.level, false)
     player.level.experience = progress.experience
 
+    player.rank = progress.rank
+
     player.combatHandler.health = progress.health
 
     for(let i = 0; i < progress.inventory.length; i++) {

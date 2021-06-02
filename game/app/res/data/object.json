@@ -118,7 +118,11 @@
     {
         "id": "anvil",
         "name": "Anvil",
-        "sprite": "anvil"
+        "sprite": "anvil",
+
+        "options": [
+            "Smith"
+        ]
     },
 
     {
@@ -126,7 +130,11 @@
         "name": "Furnace",
         "sprite": "furnace",
         "width": 2,
-        "light": 32
+        "light": 32,
+
+        "options": [
+            "Smelt"
+        ]
     },
 
     {

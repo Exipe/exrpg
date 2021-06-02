@@ -57,7 +57,7 @@ export function ShopInventory(props: ShopInventoryProps) {
         </div>
     })
 
-    return <div className="itemContainer box-solid secondary-window" id="inventory">
+    return <div className="itemContainer box-gradient secondary-window" id="inventory">
         {displayItems}
     </div>
 }

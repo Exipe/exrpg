@@ -4,6 +4,7 @@ import { ATTRIBUTES, isAttribId } from "../player/attrib";
 import { Player } from "../player/player";
 import { formatStrings } from "../util/util";
 import { playerHandler, itemDataHandler, commandHandler, weatherHandler, sceneHandler } from "../world";
+import { CommandCallback } from "./command-handler";
 
 function onMeTo(player: Player, args: string[]) {
     if(args.length == 0) {
@@ -172,13 +173,24 @@ function onTele(player: Player, args: string[]) {
 
 export function initCommands() {
     const ch = commandHandler
-    ch.on("item", onItem)
-    ch.on("empty", onEmpty)
-    ch.on("pos", onPos)
-    ch.on("set", onSet)
-    ch.on("meto", onMeTo)
-    ch.on("tome", onToMe)
-    ch.on("brightness", onBrightness)
-    ch.on("clock", onClock)
-    ch.on("tele", onTele)
+    const playerCommand = (command: string, callback: CommandCallback) => {
+        ch.on(command, callback, 0)
+    }
+    const devCommand = (command: string, callback: CommandCallback) => {
+        ch.on(command, callback, 1)
+    }
+
+    playerCommand("players", p => {
+        p.sendMessage(`There are ${playerHandler.count} players online`)
+    })
+
+    devCommand("item", onItem)
+    devCommand("empty", onEmpty)
+    devCommand("pos", onPos)
+    devCommand("set", onSet)
+    devCommand("meto", onMeTo)
+    devCommand("tome", onToMe)
+    devCommand("brightness", onBrightness)
+    devCommand("clock", onClock)
+    devCommand("tele", onTele)
 }

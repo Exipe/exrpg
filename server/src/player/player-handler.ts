@@ -48,6 +48,10 @@ export class PlayerHandler {
         return this.players.find(p => p.name.toLowerCase() == name.toLowerCase())
     }
 
+    public get count() {
+        return this.players.length
+    }
+
     public remove(removePlayer: Player) {
         if(removePlayer.connectionState == "playing") {
             const progress = saveProgress(removePlayer)

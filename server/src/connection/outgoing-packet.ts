@@ -54,6 +54,7 @@ export class LoadMapPacket implements Packet {
 export interface OutgoingPlayer {
     id: number,
     name: string,
+    rank: string,
     x: number,
     y: number,
     equipment: string[]
@@ -334,6 +335,24 @@ export class SelectSellPacket implements Packet {
             item: item,
             currency: currency,
             value: value
+        }
+    }
+}
+
+export interface OutgoingRecipe {
+    item: string,
+    unlocked: boolean,
+    materials: OutgoingItem[]
+}
+
+export class CraftingPacket implements Packet {
+    public readonly id = "CRAFTING"
+    public readonly data: any
+
+    constructor(name: string, recipes: OutgoingRecipe[]) {
+        this.data = {
+            name: name,
+            recipes: recipes
         }
     }
 }

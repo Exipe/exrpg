@@ -99,7 +99,7 @@ function PointSpendContainer(props: PointSpendProps) {
         }))
     }
 
-    return <div id="pointSpendContainer">
+    return <div id="pointSpendContainer" className="box-standard">
         <div id="pointSpendHeader">
             <div>Remaining points: {points}</div>
             <div onClick={props.onClose} className="closeButton" />
