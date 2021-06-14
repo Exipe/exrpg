@@ -11,16 +11,17 @@ interface ShopInventoryProps {
 }
 
 export function ShopInventory(props: ShopInventoryProps) {
-    const itemObservable = props.inventory.observable
+    const observable = props.inventory.observable
     const selectObservable = props.shop.selectedSell
-    const [items, setItems] = useState(itemObservable.value)
+    const [inventory, setInventory] = useState(observable.value)
+    const items = inventory.items
     const [select, setSelect] = useState(selectObservable.value)
 
     useEffect(() => {
-        itemObservable.register(setItems)
+        observable.register(setInventory)
         selectObservable.register(setSelect)
         return () => {
-            itemObservable.unregister(setItems)
+            observable.unregister(setInventory)
             selectObservable.unregister(setSelect)
         }
     }, [])

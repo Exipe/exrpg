@@ -298,9 +298,26 @@
     color: yellow;
 }
 
+#craftingFilter {
+    margin-right: 4px;
+    background-color: var(--fg-color);
+    color: white;
+    font-size: 12px;
+    padding: 2px;
+    border-radius: 2px;
+}
+
 #craftingWindow .itemContainer {
     grid-template-columns: repeat(8, 48px);
     grid-template-rows: repeat(6, 48px)
+}
+
+.hasMaterial {
+    color: yellowgreen;
+}
+
+.lacksMaterial {
+    color: orangered;
 }
 
 .recipeLocked {

@@ -56,6 +56,8 @@ export class HealthBarComponent extends Component {
 
     animate(_dt: number) {}
 
+    draw() {}
+
     initialize() {}
 
 

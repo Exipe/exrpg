@@ -1,4 +1,4 @@
-import { Entity } from "exrpg";
+import { Entity, Sprite } from "exrpg";
 import { Game } from "../game";
 import { HealthBarComponent } from "./component/health-bar";
 import { NameTagComponent } from "./component/name-tag";
@@ -22,6 +22,8 @@ export abstract class Character extends Entity {
         this.componentHandler.add(this.nameTagComponent)
         this.componentHandler.add(this.healthBarComponent)
     }
+
+    public abstract getSprite(): Sprite
 
     public animate(dt: number) {
         if(this.walking != null && this.walking.animate(dt)) {

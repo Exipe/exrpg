@@ -1,7 +1,7 @@
 
 import { Game } from "../../game/game";
 
-import { HeldItem, Inventory } from "./inventory";
+import { HeldItem, InventoryTab } from "./inventory";
 import React = require("react");
 import { Equipment } from "./equipment";
 import { Settings } from "./settings";
@@ -41,7 +41,7 @@ export function TabArea(props: TabAreaProps) {
     let displayTab = <></>
 
     if(tab == "inventory") {
-        displayTab = <Inventory 
+        displayTab = <InventoryTab 
             heldItem={ props.heldItem }
             takeItem={ item => { props.setHeldItem(item) } }
             showCtxMenu={ (entries, x, y) => { game.ctxMenu.show(entries, x, y) } }

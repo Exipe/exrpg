@@ -1,0 +1,86 @@
+
+[
+    {
+        "name": "Furnace",
+
+        "recipes": [
+            {
+                "unlockable": false,
+                "delay": 500,
+                "item": "ingot_copper",
+                "materials": [
+                    ["ore_copper", 1]
+                ]
+            },
+
+            {
+                "unlockable": false,
+                "delay": 1000,
+                "item": "ingot_iron",
+                "materials": [
+                    ["ore_iron", 1]
+                ]
+            },
+
+            {
+                "unlockable": false,
+                "delay": 2000,
+                "item": "ingot_gold",
+                "materials": [
+                    ["ore_gold", 1]
+                ]
+            }
+        ]
+    },
+
+    {
+        "name": "Anvil",
+
+        "recipes": [
+            {
+                "unlockable": false,
+                "delay": 1000,
+                "item": "helm_copper",
+                "materials": [
+                    ["ingot_copper", 3]
+                ]
+            },
+
+            {
+                "unlockable": false,
+                "delay": 2000,
+                "item": "plate_copper",
+                "materials": [
+                    ["ingot_copper", 5]
+                ]
+            },
+
+            {
+                "unlockable": false,
+                "delay": 1500,
+                "item": "legs_copper",
+                "materials": [
+                    ["ingot_copper", 4]
+                ]
+            },
+
+            {
+                "unlockable": false,
+                "delay": 1000,
+                "item": "shield_copper",
+                "materials": [
+                    ["ingot_copper", 3]
+                ]
+            },
+
+            {
+                "unlockable": false,
+                "delay": 1000,
+                "item": "sword_copper",
+                "materials": [
+                    ["ingot_copper", 3]
+                ]
+            }
+        ]
+    }
+]

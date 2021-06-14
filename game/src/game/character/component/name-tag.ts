@@ -40,6 +40,8 @@ export class NameTagComponent extends Component {
 
     animate(_dt: number) {}
 
+    draw() {}
+
     initialize() {}
 
 }

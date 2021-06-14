@@ -1,5 +1,5 @@
 
-import { EntityShadow, NpcData, Sprite } from "exrpg";
+import { EntityShadow, NpcData, OutlineComponent, Sprite } from "exrpg";
 import { Game } from "../game";
 import { Goal } from "./path-finder";
 import { NpcActionPacket } from "../../connection/packet";
@@ -29,10 +29,26 @@ export class Npc extends Character {
             this.setDimensions(sprite.width, sprite.height)
             this.nameTagComponent.setNameTag("npc", this.data.name)
 
+            if(this.data.options.length > 0) {
+                const action = this.data.options[0][1]
+                const color: [number, number, number, number] = 
+                    action == "__attack" ? [1, 0.25, 0.25, 1] : [1, 1, 1, 1]
+                
+                this.componentHandler.add(new OutlineComponent(this.sprite, game.engine.shaderHandler, color))
+            }
+
             if(this.data.shadowData != null) {
                 this.shadow = new EntityShadow(this, sprite, this.data.shadowData)
             }
         })
+    }
+
+    public get interactable() {
+        return this.data.options.length > 0
+    }
+
+    public getSprite() {
+        return this.sprite
     }
 
     protected onContext(_: any) {
@@ -53,6 +69,8 @@ export class Npc extends Character {
     }
 
     public draw() {
+        super.draw()
+
         if(this.sprite == null) {
             return
         }

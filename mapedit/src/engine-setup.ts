@@ -95,6 +95,7 @@ export async function setupEngine(resPath: string) {
     engine.inputHandler.onMouseDrag = mouseDrag
     engine.inputHandler.onTileHover = tileHover
     engine.inputHandler.onTileClick = tileClick
+    engine.inputHandler.clickOnDrag = true
 
     window.onresize = () => windowResize(canvas)
 }

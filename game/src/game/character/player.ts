@@ -1,7 +1,6 @@
 
-import { EquipmentData, LightComponent, Sprite } from "exrpg"
+import { EquipmentData, LightComponent, PlayerSprite, Sprite } from "exrpg"
 import { Game } from "../game"
-import { PlayerSprite } from "./player-sprite"
 import { Goal } from "./path-finder"
 import { AttackPlayerPacket, FollowPlayerPacket } from "../../connection/packet"
 import { Character } from "./character"
@@ -37,11 +36,16 @@ export class Player extends Character {
         this._onContext = onContext
     }
 
+    public getSprite() {
+        return this.sprite.sprite
+    }
+
     protected onContext(_: any) {
         this._onContext(this)
     }
 
     public draw() {
+        super.draw()
         this.sprite.draw(this.drawX, this.drawY)
     }
 

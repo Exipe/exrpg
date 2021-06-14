@@ -1,12 +1,11 @@
 
-import { actionHandler, objDataHandler } from "../world"
+import { actionHandler, craftingHandler, itemDataHandler, objDataHandler } from "../world"
 import { Woodcutting, Mining } from "./gathering"
 import { Dialogue } from "../player/window/dialogue"
 import { randomChance, randomInt } from "../util/util"
 import { initFood } from "./food"
 import { initDrops } from "./drops"
 import { Shop } from "../player/window/shop"
-import { Crafting } from "../player/window/crafting"
 
 export function initContent() {
     initFood()
@@ -21,7 +20,11 @@ export function initContent() {
     })
 
     actionHandler.onObject("anvil", player => {
-        player.window = new Crafting("Anvil", ["helm_copper", "plate_copper", "legs_copper", "shield_copper"])
+        player.window = craftingHandler.get("Anvil")
+    })
+
+    actionHandler.onObject("furnace", player => {
+        player.window = craftingHandler.get("Furnace")
     })
 
     actionHandler.onObject("car", (player, action) => {

@@ -56,7 +56,11 @@ export abstract class Entity {
         this.updateDrawCoords()
     }
 
-    private inClickBox(x: number, y: number) {
+    public get interactable() {
+        return false
+    }
+
+    public inClickBox(x: number, y: number) {
         x -= this.drawX
         y -= this.drawY
 
@@ -105,7 +109,9 @@ export abstract class Entity {
         this.componentHandler.forEach(c => c.animate(dt))
     }
 
-    public abstract draw(): any
+    public draw() {
+        this.componentHandler.forEach(c => c.draw(this.drawX, this.drawY))
+    }
 
     public moveTile(x: number, y: number) {
         this.tileX = x

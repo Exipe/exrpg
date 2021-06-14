@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import React = require("react");
 import { MenuEntry } from "../../game/model/context-menu-model";
-import { InventoryModel, Item } from "../../game/model/inventory-model";
+import { Inventory, InventoryModel, Item } from "../../game/model/inventory-model";
 
 export interface HeldItem {
     mouseX: number,
@@ -45,15 +45,16 @@ interface InventoryProps {
     inventory: InventoryModel
 }
 
-export function Inventory(props: InventoryProps) {
+export function InventoryTab(props: InventoryProps) {
     const inventory = props.inventory
-    const itemObservable = inventory.observable
-    const [items, setItems] = useState(itemObservable.value)
+    const observable = inventory.observable
+    const [items, setItems] = useState(observable.value.items)
 
     const heldItem = props.heldItem
 
     useEffect(() => {
-        const observer = (items: Item[]) => {
+        const observer = (inventory: Inventory) => {
+            const items = inventory.items
             if(heldItem != null && items[heldItem.slot] != heldItem.item) {
                 props.takeItem(null)
             }
@@ -61,9 +62,9 @@ export function Inventory(props: InventoryProps) {
             setItems(items)
         }
 
-        itemObservable.register(observer)
+        observable.register(observer)
 
-        return () => itemObservable.unregister(observer)
+        return () => observable.unregister(observer)
     }, [])
 
     function contextItem(idx: number, mouseX: number, mouseY: number) {

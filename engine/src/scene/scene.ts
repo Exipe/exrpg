@@ -87,13 +87,42 @@ export class Scene {
         return this._decoLayer
     }
 
+    private hoveringEntity: Entity
+
+    public updateHover(x: number, y: number) {
+        let hovering: Entity = null
+        this.entityList.fromFront(e => {
+            if(hovering != null) {
+                return
+            }
+
+            if(e.interactable && e.inClickBox(x, y)) {
+                hovering = e
+            }
+        })
+
+        if(hovering == this.hoveringEntity) {
+            return
+        }
+
+        if(this.hoveringEntity != null) {
+            this.hoveringEntity.componentHandler.forEach(c => c.stopHover())
+        }
+
+        if(hovering != null) {
+            hovering.componentHandler.forEach(c => c.startHover())
+        }
+
+        this.hoveringEntity = hovering
+    }
+
     private inBounds(x: number, y: number) {
         return x >= 0 && y >= 0 && x < this._width && y < this._height
     }
 
     public click(inputHandler: InputHandler, x: number, y: number, altKey: boolean) {
         let clickEntity = false
-        this.entityList.fromBack(e => {
+        this.entityList.fromFront(e => {
             if(clickEntity) {
                 return
             }

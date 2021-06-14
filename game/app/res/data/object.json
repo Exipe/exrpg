@@ -4,7 +4,7 @@
         "name": "Door",
         "sprite": "door/closed",
 
-        "offsetY": 1,
+        "offsetY": 2,
         "door": true,
 
         "options": [
@@ -18,7 +18,7 @@
         "sprite": "door/open",
 
         "offsetX": 6,
-        "offsetY": 1,
+        "offsetY": 2,
         "door": true,
         "block": false,
 

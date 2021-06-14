@@ -24,11 +24,14 @@ import { LightHandler } from "./light/light-handler"
 import { Light } from "./light/light"
 import { LightComponent } from "./light/light-component"
 import { EntityShadow } from "./entity/entity-shadow"
+import { PlayerSprite } from "./texture/player-sprite"
+import { OutlineComponent } from "./entity/outline-component"
 
 export { Camera }
 export { EntityShadow }
+export { OutlineComponent}
 
-export { Scene, SceneBuilder, Sprite, MergeTexture, loadScene, saveScene, feetCoords, 
+export { Scene, SceneBuilder, Sprite, PlayerSprite, MergeTexture, loadScene, saveScene, feetCoords, 
     Entity, NpcData, NpcEntity, ItemData, EquipmentData, Item, ObjectEntity, Light, LightComponent }
 
 export const TILE_SIZE = 16
@@ -163,6 +166,9 @@ export class Engine {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT)
 
         if(this.scene != null) {
+            const [mouseX, mouseY] = this.camera.translateClick(
+                this.inputHandler.mouseX, this.inputHandler.mouseY)
+            this.scene.updateHover(mouseX, mouseY)
             this.scene.animate(dt)
 
             this.lightHandler.render(this, this.scene)

@@ -1,4 +1,5 @@
 import { ItemData } from "exrpg"
+import { CraftPacket } from "../../connection/packet"
 import { Game, PrimaryWindow } from "../game"
 import { Observable } from "./observable"
 
@@ -34,11 +35,17 @@ export class CraftingModel {
         this.game = game
     }
 
-    public select(slot: number) {
-        const recipe = this.observable.value.recipes[slot]
+    public select(recipe: Recipe) {
         if(!recipe.unlocked) {
             this.game.chat.addMessage(`You have not unlocked the recipe for: ${recipe.item.name}`)
+            return null
         }
+
+        return recipe
+    }
+
+    public craft(recipe: Recipe, amount: number) {
+        this.game.connection.send(new CraftPacket(recipe.item.id, amount))
     }
 
     public open(station: CraftingStation) {

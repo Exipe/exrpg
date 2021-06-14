@@ -47,5 +47,6 @@ export class LightComponent extends Component {
 
     public moveTile() {}
     public animate(_dt: number) {}
+    public draw() {}
 
 }

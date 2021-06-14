@@ -7,14 +7,20 @@ export abstract class Component {
         this.id = id
     }
 
-    public abstract movePx(): void
+    public movePx() {}
 
-    public abstract moveTile(): void
+    public moveTile() {}
 
-    public abstract animate(_dt: number): void
+    public startHover() {}
 
-    public abstract initialize(): void
+    public stopHover() {}
 
-    public abstract destroy(): void
+    public animate(_dt: number) {}
+
+    public draw(x: number, y: number) {}
+
+    public initialize() {}
+
+    public destroy() {}
 
 }

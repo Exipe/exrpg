@@ -12,13 +12,18 @@ export class TaskHandler {
         this.timeout = setTimeout(() => this.executeTask(), timer)
     }
 
-    public setTask(task: Task) {
+    public setTask(task: Task, instant=true) {
         if(this.task == task) {
             return
         }
 
         clearTimeout(this.timeout)
         this.task = task
+
+        if(!instant) {
+            this.setTimeout(task.delay)
+            return
+        }
 
         const timePassed = currentTime() - task.lastExecution
         if(timePassed >= task.delay) {

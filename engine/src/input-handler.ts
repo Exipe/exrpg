@@ -12,6 +12,9 @@ export class InputHandler {
         this._scene = scene
     }
 
+    public mouseX: number
+    public mouseY: number
+
     private camera: Camera
 
     public onMouseDrag: (dx: number, dy: number, altKey: boolean) => any
@@ -27,6 +30,8 @@ export class InputHandler {
     public onNpcContext: (npc: NpcEntity) => any
     public onTileContext: (x: number, y: number) => any
     public onContext: (clientX: number, clientY: number) => any
+
+    public clickOnDrag = false
 
     private mouseDrag: {
         altKey: boolean,
@@ -90,14 +95,18 @@ export class InputHandler {
         this.mouseDrag.lastX = x
         this.mouseDrag.lastY = y
 
-        this.registerClick()
+        if(this.clickOnDrag) {
+            this.registerClick()
+        }
     }
 
     private mouseMove(e: MouseEvent) {
         this.handleMouseDrag(e.clientX, e.clientY)
 
+        this.mouseX = e.clientX
+        this.mouseY = e.clientY
+        const [x, y] = this.camera.translateClick(e.clientX, e.clientY)
         if(this.onTileHover) {
-            const [x, y] = this.camera.translateClick(e.clientX, e.clientY)
             this.onTileHover(Math.floor(x / TILE_SIZE), Math.floor(y / TILE_SIZE))
         }
     }

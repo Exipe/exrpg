@@ -1,7 +1,7 @@
 
 import { Entity } from "../entity/entity";
 import { NpcData } from "./npc-data";
-import { Sprite, Engine } from "..";
+import { Sprite, Engine, OutlineComponent } from "..";
 import { InputHandler } from "../input-handler";
 import { EntityShadow } from "../entity/entity-shadow";
 
@@ -20,11 +20,16 @@ export class NpcEntity extends Entity {
         .then(sprite => {
             this.sprite = sprite
             this.setDimensions(sprite.width, sprite.height)
+            this.componentHandler.add(new OutlineComponent(sprite, engine.shaderHandler))
 
             if(npcData.shadowData != null) {
                 this.shadow = new EntityShadow(this, sprite, npcData.shadowData)
             }
         })
+    }
+
+    public get interactable() {
+        return this.data.options.length > 0
     }
 
     protected onClick(inputHandler: InputHandler) {

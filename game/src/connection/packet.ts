@@ -213,3 +213,15 @@ export class ConfirmSellPacket implements Packet {
         }
     }
 }
+
+export class CraftPacket implements Packet {
+    public readonly id = "CRAFT"
+    public readonly data: any
+
+    constructor(item: string, amount: number) {
+        this.data = {
+            item: item,
+            amount: amount
+        }
+    }
+}

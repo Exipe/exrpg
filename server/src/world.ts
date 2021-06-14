@@ -10,10 +10,13 @@ import { initContent } from "./content/content"
 import { CommandHandler } from "./command/command-handler"
 import { initCommands } from "./command/command"
 import { initWeather, WeatherHandler } from "./weather"
+import { CraftingStationHandler, loadCraftingData } from "./crafting/crafting-data"
 
 export let npcDataHandler: NpcDataHandler = null
 export let objDataHandler: ObjectDataHandler = null
 export let itemDataHandler: ItemDataHandler = null
+
+export let craftingHandler: CraftingStationHandler
 
 export let playerHandler: PlayerHandler = null
 export let npcHandler: NpcHandler = null
@@ -61,6 +64,8 @@ export async function initWorld() {
     console.log(`Finished loading maps. Took: ${currTime() - start} ms`)
 
     npcHandler.spawnAll()
+
+    craftingHandler = loadCraftingData()
 
     playerHandler = new PlayerHandler()
     actionHandler = new ActionHandler()

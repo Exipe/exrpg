@@ -6,6 +6,7 @@ import { isEquipSlot } from "../item/equipment";
 import { playerHandler, objDataHandler, npcHandler, commandHandler, actionHandler, itemDataHandler } from "../world";
 import { isAttribId } from "../player/attrib";
 import { Shop } from "../player/window/shop";
+import { CraftingStation } from "../crafting/crafting-station";
 
 /*
 Handle packet spoofing.
@@ -476,7 +477,7 @@ function onConfirmSell(conn: Connection, data: any) {
     const amount = data.amount
 
     if(item == null || item.value == 0) {
-        report(conn, `Invalid CONFIRM_SELL item: ${item}`)
+        report(conn, `Invalid CONFIRM_SELL item: ${data.item}`)
         return
     }
 
@@ -492,6 +493,34 @@ function onConfirmSell(conn: Connection, data: any) {
     }
 
     shop.sell(player, item, amount)
+}
+
+function onCraft(conn: Connection, data: any) {
+    if(typeof data != "object") {
+        report(conn, `Invalid CRAFT data: ${data}`)
+        return
+    }
+
+    const item = itemDataHandler.get(data.item)
+    const amount = data.amount
+
+    if(item == null) {
+        report(conn, `Invalid CRAFT item: ${data.item}`)
+        return
+    }
+
+    if(!Number.isInteger(amount) || amount <= 0) {
+        report(conn, `Invalid CRAFT amount: ${amount}`)
+        return
+    }
+
+    const player = conn.player
+    const station = player.window
+    if(!(station instanceof CraftingStation)) {
+        return
+    }
+
+    station.craft(player, item, amount)
 }
 
 export function bindIncomingPackets(ch: ConnectionHandler) {
@@ -517,4 +546,5 @@ export function bindIncomingPackets(ch: ConnectionHandler) {
     ch.on("CONFIRM_BUY", onConfirmBuy)
     ch.on("SELECT_SELL", onSelectSell)
     ch.on("CONFIRM_SELL", onConfirmSell)
+    ch.on("CRAFT", onCraft)
 }

@@ -1,6 +1,6 @@
 
 import { Sprite } from "../texture/sprite";
-import { Engine } from "..";
+import { Engine, OutlineComponent } from "..";
 import { ObjectData } from "./object-data";
 import { Entity } from "../entity/entity";
 import { InputHandler } from "../input-handler";
@@ -27,11 +27,16 @@ export class ObjectEntity extends Entity {
         .then(sprite => {
             this.sprite = sprite
             this.setDimensions(sprite.width, sprite.height)
+            this.componentHandler.add(new OutlineComponent(sprite, engine.shaderHandler))
 
             if(objectData.shadowData != null) {
                 this.shadow = new EntityShadow(this, sprite, objectData.shadowData)
             }
         })
+    }
+
+    public get interactable() {
+        return this.data.options.length > 0
     }
 
     protected onClick(inputHandler: InputHandler) {
@@ -50,6 +55,8 @@ export class ObjectEntity extends Entity {
     }
 
     public draw() {
+        super.draw()
+
         if(this.sprite == null) {
             return
         }

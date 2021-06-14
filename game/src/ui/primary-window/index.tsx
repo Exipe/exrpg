@@ -28,6 +28,6 @@ export function PrimaryWindow(props: PrimaryWindowProps) {
         case "Shop":
             return <ShopWindow model={game.shop} />
         case "Crafting":
-            return <CraftingStation model={game.crafting} />
+            return <CraftingStation model={game.crafting} inventory={game.inventory} />
     }
 }
