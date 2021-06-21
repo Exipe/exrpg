@@ -1,27 +1,27 @@
 
-import { SelectBuyPacket, SelectSellPacket, ShopPacket } from "../../connection/outgoing-packet";
-import { ItemData } from "../../item/item-data";
-import { itemDataHandler, playerHandler } from "../../world";
-import { Player } from "../player";
-import { PrimaryWindow } from "./p-window";
+import { SelectBuyPacket, SelectSellPacket, ShopPacket } from "../connection/outgoing-packet";
+import { ItemData } from "../item/item-data";
+import { itemDataHandler, playerHandler } from "../world";
+import { Player } from "../player/player";
+import { PrimaryWindow } from "../player/window/p-window";
 
 export class Shop implements PrimaryWindow {
 
     public readonly id = "Shop"
 
     private readonly name: string
-    private readonly items: string[]
+    private readonly items: ItemData[]
 
     private readonly buyFactor: number
     private readonly sellFactor: number
 
     /**
      * @param name name of the shop
-     * @param items ids of items that are offered in shop
+     * @param items items that are offered in shop
      * @param buyFactor a factor that is added to the price, when player buys
      * @param sellFactor a factor that is added to the value, when player sells
      */
-    constructor(name: string, items: string[], buyFactor=1.25, sellFactor=0.75) {
+    constructor(name: string, items: ItemData[], buyFactor=1.25, sellFactor=0.75) {
         this.name = name
         this.items = items
         this.buyFactor = buyFactor
@@ -37,7 +37,7 @@ export class Shop implements PrimaryWindow {
     }
 
     public open(p: Player) {
-        p.send(new ShopPacket(this.name, this.items))
+        p.send(new ShopPacket(this.name, this.items.map(i => i.id)))
     }
 
     public selectBuy(p: Player, slot: number) {
@@ -45,7 +45,7 @@ export class Shop implements PrimaryWindow {
             return
         }
 
-        const item = itemDataHandler.get(this.items[slot])
+        const item = this.items[slot]
         const price = this.buyPrice(item)
         p.send(new SelectBuyPacket(slot, item.id, "coins", price))
     }
@@ -55,7 +55,7 @@ export class Shop implements PrimaryWindow {
             return
         }
 
-        const item = itemDataHandler.get(this.items[slot])
+        const item = this.items[slot]
         p.sendMessage(`Buying ${amount}x ${item.name}`) 
 
         const inv = p.inventory

@@ -1,11 +1,10 @@
 
-import { actionHandler, craftingHandler, itemDataHandler, objDataHandler } from "../world"
+import { actionHandler, craftingHandler, itemDataHandler, objDataHandler, shopHandler } from "../world"
 import { Woodcutting, Mining } from "./gathering"
 import { Dialogue } from "../player/window/dialogue"
 import { randomChance, randomInt } from "../util/util"
 import { initFood } from "./food"
 import { initDrops } from "./drops"
-import { Shop } from "../player/window/shop"
 
 export function initContent() {
     initFood()
@@ -71,7 +70,7 @@ export function initContent() {
         ])
 
         dialogue.addOption("Let's trade", () => {
-            player.window = new Shop("Test Shop", ['helm_copper', 'plate_copper', 'legs_copper'])
+            player.window = shopHandler.get("Test Shop")
             return null
         })
 
@@ -81,13 +80,7 @@ export function initContent() {
     })
 
     actionHandler.onNpc("carl_armor", (player, npc, action) => {
-        const items = [
-            'helm_copper', 'plate_copper', 'legs_copper', 'shield_copper',
-            'helm_iron', 'plate_iron', 'legs_iron', 'shield_iron',
-            'helm_gold', 'shield_gold'
-        ]
-
-        const shop = new Shop("Carl's Armor", items)
+        const shop = shopHandler.get("Carl's Armor")
         
         const dialoge = new Dialogue(npc.data.name, [
             "Greetings adventurer.",

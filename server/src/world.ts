@@ -10,13 +10,18 @@ import { initContent } from "./content/content"
 import { CommandHandler } from "./command/command-handler"
 import { initCommands } from "./command/command"
 import { initWeather, WeatherHandler } from "./weather"
-import { CraftingStationHandler, loadCraftingData } from "./crafting/crafting-data"
+import { loadCraftingData } from "./crafting/crafting-data"
+import { ReadOnlyMap } from "./util/readonly-map"
+import { CraftingStation } from "./crafting/crafting-station"
+import { Shop } from "./shop/shop"
+import { loadShopData } from "./shop/shop-data"
 
 export let npcDataHandler: NpcDataHandler = null
 export let objDataHandler: ObjectDataHandler = null
 export let itemDataHandler: ItemDataHandler = null
 
-export let craftingHandler: CraftingStationHandler
+export let craftingHandler: ReadOnlyMap<string, CraftingStation>
+export let shopHandler: ReadOnlyMap<string, Shop>
 
 export let playerHandler: PlayerHandler = null
 export let npcHandler: NpcHandler = null
@@ -66,6 +71,7 @@ export async function initWorld() {
     npcHandler.spawnAll()
 
     craftingHandler = loadCraftingData()
+    shopHandler = loadShopData()
 
     playerHandler = new PlayerHandler()
     actionHandler = new ActionHandler()

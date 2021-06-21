@@ -3,6 +3,7 @@
     --bg-color: rgba(100, 50, 0, 0.85);
     --bg-solid: rgb(100, 50, 0);
     --fg-color: rgb(50, 25, 0);
+    --fg-color-bright: rgb(125, 75, 0);
 }
 
 #ui {
@@ -37,6 +38,8 @@
     border-radius: 5px;
     background-color: var(--bg-color);
     border: 3px solid var(--fg-color);
+    border-top-color: var(--fg-color-bright);
+    border-left-color: var(--fg-color-bright);
 }
 
 .box-solid {

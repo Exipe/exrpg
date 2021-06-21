@@ -3,6 +3,7 @@ import { itemDataHandler } from "../world";
 import { CraftingStation } from "./crafting-station";
 import { Recipe } from "./recipe";
 import fs from "fs"
+import { ReadOnlyMap } from "../util/readonly-map";
 
 export function loadCraftingData() {
     const stationMap = new Map<string, CraftingStation>()
@@ -37,20 +38,5 @@ export function loadCraftingData() {
         stationMap.set(station.name, new CraftingStation(station.name, recipes))
     });
 
-    return new CraftingStationHandler(stationMap)
-}
-
-export class CraftingStationHandler {
-
-    private readonly stationMap: Map<string, CraftingStation>
-
-    constructor(stationMap: Map<string, CraftingStation>) {
-        this.stationMap = stationMap
-    }
-
-    public get(name: string) {
-        const station = this.stationMap.get(name)
-        return station ? station : null
-    }
-
+    return new ReadOnlyMap(stationMap)
 }

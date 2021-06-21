@@ -111,10 +111,17 @@ export abstract class Character {
     }
 
     private getBehind(other: Character, x = this.walking.goalX, y = this.walking.goalY) {
-        const distX = Math.abs(other.x - x)
-        const distY = Math.abs(other.y - y)
+        const diffX = other.x - x
+        const diffY = other.y - y
+        const distX = Math.abs(diffX)
+        const distY = Math.abs(diffY)
 
-        if((distX == 0 && distY == 0) || distX > 1 || distY > 1) {
+        /*
+        stop if u already reach the other character
+        how ever, to prevent the follower from getting trapped behind walls,
+        make sure you can walk to the target's position
+        */
+        if((distX == 0 && distY == 0) || distX > 1 || distY > 1 || !this.walkable(x, y, diffX, diffY)) {
             this.walking.followStep(other.lastX, other.lastY)
         }
     }
@@ -194,8 +201,14 @@ export abstract class Character {
         this.move(x, y, true)
     }
 
-    public walkable(x: number, y: number) {
+    public tileWalkable(x: number, y: number) {
         return !this._map.isBlocked(x, y)
+    }
+
+    public walkable(x: number, y: number, diffX: number, diffY: number) {
+        return this.tileWalkable(x+diffX, y+diffY) && 
+            (diffX == 0 || this.tileWalkable(x+diffX, y)) && 
+            (diffY == 0 || this.tileWalkable(x, y+diffY))
     }
 
     public stop() {

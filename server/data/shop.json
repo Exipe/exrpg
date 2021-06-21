@@ -1,0 +1,24 @@
+
+[
+    {
+        "name": "Test Shop",
+        "buyFactor": 100,
+        "sellFactor": 0.1,
+
+        "items": [
+            "helm_copper",
+            "plate_copper",
+            "legs_copper"
+        ]
+    },
+
+    {
+        "name": "Carl's Armor",
+
+        "items": [
+            "helm_copper", "plate_copper", "legs_copper", "shield_copper",
+            "helm_iron", "plate_iron", "legs_iron", "shield_iron",
+            "helm_gold", "shield_gold"
+        ]
+    }
+]

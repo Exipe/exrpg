@@ -126,12 +126,6 @@ export class Walking implements Task {
         this.addSteps(x, y)
     }
 
-    private walkable(x: number, y: number, diffX: number, diffY: number) {
-        return this.character.walkable(x+diffX, y+diffY) && 
-            (diffX == 0 || this.character.walkable(x+diffX, y)) && 
-            (diffY == 0 || this.character.walkable(x, y+diffY))
-    }
-
     public addSteps(goalX: number, goalY: number) {
         if(goalX < 0 || goalY < 0 || goalX >= this.map.width || goalY >= this.map.height) {
             return
@@ -154,7 +148,7 @@ export class Walking implements Task {
             let diffX = compare(x, goalX)
             let diffY = compare(y, goalY)
 
-            if(!this.walkable(x, y, diffX, diffY)) {
+            if(!this.character.walkable(x, y, diffX, diffY)) {
                 break
             }
 

@@ -5,7 +5,7 @@ import { INVENTORY_SIZE } from "../item/inventory";
 import { isEquipSlot } from "../item/equipment";
 import { playerHandler, objDataHandler, npcHandler, commandHandler, actionHandler, itemDataHandler } from "../world";
 import { isAttribId } from "../player/attrib";
-import { Shop } from "../player/window/shop";
+import { Shop } from "../shop/shop";
 import { CraftingStation } from "../crafting/crafting-station";
 
 /*

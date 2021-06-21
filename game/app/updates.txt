@@ -1,11 +1,13 @@
 Alpha 1.0
 - Lighting & shadows
 - Basic pvp and pvm combat
+- Basic crafting system
 - Shops
 - Food
 - Player ranks
 - NPC:s with player appearance
 - NPC- and player name tags
+- A lot of bug fixes
 
 Demo 1.3
 - Stackable items

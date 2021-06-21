@@ -69,7 +69,7 @@ export class Npc extends Character {
         return this.map != null
     }
 
-    public walkable(x: number, y: number) {
+    public tileWalkable(x: number, y: number) {
         return !this.map.isNpcBlocked(x, y)
     }
 
