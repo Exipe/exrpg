@@ -22,6 +22,7 @@ A base for a browser based, online RPG.
    * Shadows
  * Path finding
  * Inventory / equipment
+ * Crafting and shops
  * NPC:s, with basic dialogues
  * PvP - / PvM combat
    * Level up / attributes
