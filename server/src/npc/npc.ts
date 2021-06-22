@@ -1,19 +1,20 @@
 
 import { Character } from "../character/character";
-import { NpcDataHandler, NpcData } from "./npc-data";
+import { NpcData } from "./npc-data";
 import { MoveNpcPacket } from "../connection/outgoing-packet";
 import { MapId } from "../scene/map-id";
 import { randomChance, randomOffset } from "../util/util";
 import { NpcCombatHandler } from "../combat/npc-combat";
+import { ReadOnlyMap } from "../util/readonly-map";
 
 export class NpcHandler {
 
     private idCount = 0
     private npcMap = new Map<number, Npc>()
 
-    private readonly npcDataHandler: NpcDataHandler
+    private readonly npcDataHandler: ReadOnlyMap<string, NpcData>
 
-    constructor(npcDataHandler: NpcDataHandler) {
+    constructor(npcDataHandler: ReadOnlyMap<string, NpcData>) {
         this.npcDataHandler = npcDataHandler
     }
 

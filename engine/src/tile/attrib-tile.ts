@@ -104,7 +104,9 @@ export class ObjectTile extends AttribTile {
         }
 
         for(let i = 0; i < obj.data.width; i++) {
-            this.scene.block(x + i, y)
+            for(let j = 1-obj.data.depth; j < 1; j++) {
+                this.scene.block(x + i, y + j)
+            }
         }
     }
 
@@ -118,7 +120,9 @@ export class ObjectTile extends AttribTile {
         }
 
         for(let i = 0; i < obj.data.width; i++) {
-            this.scene.unBlock(x + i, y)
+            for(let j = 1-obj.data.depth; j < 1; j++) {
+                this.scene.unBlock(x + i, y + j)
+            }
         }
     }
 

@@ -148,7 +148,7 @@ export class IslandMap extends MetaMap<string> {
     }
 
     private flood(id: string, x: number, y: number) {
-        if(this.get(x, y) == id || this.scene.isBlocked(x, y)) {
+        if(this.get(x, y) == id || this.scene.isHardBlocked(x, y)) {
             return
         }
 

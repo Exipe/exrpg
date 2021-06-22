@@ -26,6 +26,12 @@ export function initContent() {
         player.window = craftingHandler.get("Furnace")
     })
 
+    actionHandler.onObject("fountain", player => {
+        const ch = player.combatHandler
+        ch.heal(ch.maxHealth-ch.health)
+        player.sendMessage("You drink from the fountain and feel rejuvenated")
+    })
+
     actionHandler.onObject("car", (player, action) => {
         if(action == "drive") {
             player.sendMessage("Car racing - coming soon™!")

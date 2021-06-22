@@ -35,7 +35,9 @@ export class ObjectMap {
         }
 
         for(let i = 0; i < objData.width; i++) {
-            this.blockMap.block(x+i, y)
+            for(let j = 1-objData.depth; j < 1; j++) {
+                this.blockMap.block(x+i, y+j)
+            }
         }
 
         return old
@@ -47,10 +49,10 @@ export class ObjectMap {
         }
 
         const distX = Math.abs(x + (objData.width - 1) / 2 - fromX)
-        const distY = Math.abs(y - fromY)
+        const distY = Math.abs(y - (objData.depth - 1) / 2 - fromY)
 
         const reqX = objData.width / 2 + 1
-        const reqY = 1.5
+        const reqY = objData.depth / 2 + 1
 
         return ((distX < reqX && distY < reqY - 1) || (distX < reqX - 1 && distY < reqY))
     }

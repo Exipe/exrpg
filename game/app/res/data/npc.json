@@ -97,7 +97,6 @@
         },
 
         "combat": {
-            "weapon": "log_common",
             "maxHit": 50,
             "accuracy": 25,
             "defence": 25,

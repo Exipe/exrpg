@@ -7,7 +7,7 @@ import { WallLayer } from "./layer/wall-layer"
 import { Layer } from "./layer/layer"
 import { OverlayTile } from "../tile/overlay-tile"
 import { WallTile } from "../tile/wall-tile"
-import { AttribTile } from "../tile/attrib-tile"
+import { AttribTile, BLOCK_ID } from "../tile/attrib-tile"
 import { AttribLayer } from "./layer/attrib-layer"
 import { ObjectEntity } from "../object/object-entity"
 import { EntityList } from "../entity/entity-list"
@@ -178,6 +178,15 @@ export class Scene {
                 inputHandler.onTileContext(tileX, tileY)
             }
         }
+    }
+
+    public isHardBlocked(x: number, y: number) {
+        if(!this.inBounds(x, y)) {
+            return true
+        }
+
+        const attrib = this.attribLayer.get(x, y)
+        return attrib != null && attrib.id == BLOCK_ID
     }
 
     public isBlocked(x: number, y: number) {

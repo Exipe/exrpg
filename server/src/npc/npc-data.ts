@@ -1,6 +1,7 @@
 
 import fetch from "node-fetch"
 import { RES_PATH } from ".."
+import { ReadOnlyMap } from "../util/readonly-map"
 
 const DEFAULT_RESPAWN_TIME = 15
 const DEFAULT_ATTACK_SPEED = 1
@@ -71,19 +72,5 @@ export async function loadNpcData() {
         npcDataMap.set(npc.id, npcData)
     })
 
-    return new NpcDataHandler(npcDataMap)
-}
-
-export class NpcDataHandler {
-
-    private readonly npcDataMap: Map<string, NpcData>
-
-    constructor(npcDataMap: Map<string, NpcData>) {
-        this.npcDataMap = npcDataMap
-    }
-
-    public get(id: string) {
-        return this.npcDataMap.get(id)
-    }
-
+    return new ReadOnlyMap(npcDataMap)
 }

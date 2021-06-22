@@ -2,6 +2,7 @@
 import fetch from "node-fetch"
 import { RES_PATH } from ".."
 import { AttribId, isAttribId } from "../player/attrib"
+import { ReadOnlyMap } from "../util/readonly-map"
 import { EquipSlot, isEquipSlot } from "./equipment"
 
 export class ItemData {
@@ -77,24 +78,5 @@ export async function loadItemData() {
         itemDataMap.set(item.id, itemData)
     })
 
-    return new ItemDataHandler(itemDataMap)
-}
-
-export class ItemDataHandler {
-
-    private readonly itemDataMap: Map<string, ItemData>
-
-    constructor(itemDataMap: Map<string, ItemData>) {
-        this.itemDataMap = itemDataMap
-    }
-
-    public get(id: string) {
-        if(id == "") {
-            return null
-        }
-
-        const itemData = this.itemDataMap.get(id)
-        return itemData ? itemData : null
-    }
-
+    return new ReadOnlyMap(itemDataMap)
 }

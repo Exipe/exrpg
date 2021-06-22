@@ -8,6 +8,10 @@ export class ReadOnlyMap<K, V> {
     }
 
     public get(key: K) {
+        if(typeof key == "string" && key == "") {
+            return null
+        }
+
         const value = this.map.get(key)
         return value ? value : null
     }

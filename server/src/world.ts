@@ -1,10 +1,10 @@
 
-import { loadNpcData, NpcDataHandler } from "./npc/npc-data"
+import { loadNpcData, NpcData } from "./npc/npc-data"
 import { loadScenes, SceneHandler } from "./scene/scene-handler"
 import { NpcHandler } from "./npc/npc"
 import { PlayerHandler } from "./player/player-handler"
-import { ObjectDataHandler, loadObjectData } from "./object/object-data"
-import { ItemDataHandler, loadItemData } from "./item/item-data"
+import { loadObjectData, ObjectData } from "./object/object-data"
+import { ItemData, loadItemData } from "./item/item-data"
 import { ActionHandler } from "./action-handler"
 import { initContent } from "./content/content"
 import { CommandHandler } from "./command/command-handler"
@@ -16,9 +16,9 @@ import { CraftingStation } from "./crafting/crafting-station"
 import { Shop } from "./shop/shop"
 import { loadShopData } from "./shop/shop-data"
 
-export let npcDataHandler: NpcDataHandler = null
-export let objDataHandler: ObjectDataHandler = null
-export let itemDataHandler: ItemDataHandler = null
+export let npcDataHandler: ReadOnlyMap<string, NpcData> = null
+export let objDataHandler: ReadOnlyMap<string, ObjectData> = null
+export let itemDataHandler: ReadOnlyMap<string, ItemData> = null
 
 export let craftingHandler: ReadOnlyMap<string, CraftingStation>
 export let shopHandler: ReadOnlyMap<string, Shop>

@@ -43,6 +43,21 @@
     },
 
     {
+        "id": "fountain",
+        "name": "Fountain",
+        "sprite": "fountain",
+
+        "offsetY": -6,
+
+        "width": 4,
+        "depth": 3,
+
+        "options": [
+            "Drink from"
+        ]
+    },
+
+    {
         "id": "tree_apple",
         "name": "Apple tree",
         "sprite": "apple_tree",

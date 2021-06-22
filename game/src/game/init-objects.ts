@@ -11,9 +11,9 @@ export function initObjects(game: Game) {
         const data = obj.data
         const goal: Goal = {
             x: obj.tileX + (data.width - 1) / 2,
-            y: obj.tileY,
+            y: obj.tileY - (data.depth - 1) / 2,
             width: data.width,
-            height: 1,
+            height: data.depth,
             distance: 1
         }
 
